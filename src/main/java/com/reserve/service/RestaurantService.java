@@ -50,6 +50,11 @@ public class RestaurantService {
 		return restaurantDao.getRestaurantId(restaurantName);
 	}
 	
+	// 查詢餐廳名稱由餐廳編號
+	public String getRestaurantName(String restaurantId) {
+		return restaurantDao.getRestaurantName(restaurantId);
+	}
+	
 	//查詢所有餐廳名稱
 	public List<String> getAllRestaurantName() {
 		return restaurantDao.getAllRestaurantName();

@@ -73,9 +73,6 @@ public class ReserveController extends HttpServlet {
 		case "getAllRestaurantName":
 			getAllRestaurantName(request, response);
 			break;
-		case "add":
-//			addReserve(request, response);
-			break;
 		case "addNew":
 			addReserveNew(request, response);
 			break;
@@ -121,9 +118,6 @@ public class ReserveController extends HttpServlet {
 	private void getAllRestaurantNameForList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		TableTypeService tableTypeService = new TableTypeService(session);
-//		RestaurantService restaurantService = new RestaurantService(session);
 		List<String> restaurantNames = restaurantService.getAllRestaurantName();
 		List<TableType> allTableType = tableTypeService.selectAll();
 		request.setAttribute("tableTypes", allTableType);
@@ -136,10 +130,6 @@ public class ReserveController extends HttpServlet {
 	private void getReserveList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
-//		ReserveService reserveService = new ReserveService(session);
-
 		String memberId = request.getParameter("memberId");
 	    String memberName = request.getParameter("memberName");
 	    String phone = request.getParameter("phone");
@@ -171,16 +161,6 @@ public class ReserveController extends HttpServlet {
 	    	finishedTime = LocalDateTime.parse(request.getParameter("finishedTime"));
 	    }
 	    
-	    System.out.println(memberId);
-	    System.out.println(memberName);
-	    System.out.println(phone);
-	    System.out.println(restaurantId);
-	    System.out.println(tableTypeId);
-	    System.out.println(restaurantAddress);
-	    System.out.println(reserveTime);
-	    System.out.println(finishedTime);
-	    
-	    
 	    List<Reserve> reserves = reserveService.getReserveByCriteria(memberName, phone, memberId, restaurantId, tableTypeId, restaurantAddress, reserveTime, finishedTime);
 	    List<ReserveDTO> reserveDTOs = new ArrayList<ReserveDTO>();
 	    ReserveDTO reserveDTO = null;
@@ -189,8 +169,6 @@ public class ReserveController extends HttpServlet {
 	    	reserveDTO =new ReserveDTO(reserve);
 	    	reserveDTOs.add(reserveDTO);
 	    }
-	    
-	    
 	    
 		GsonBuilder gsonBuilder = new GsonBuilder();
 	    Converters.registerLocalDateTime(gsonBuilder);
@@ -207,10 +185,6 @@ public class ReserveController extends HttpServlet {
 	
 	private void checkReserveTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
-//		ReserveService reserveService = new ReserveService(session);
 		
 		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
 		String reserveSeat = request.getParameter("reserveSeat");
@@ -245,10 +219,6 @@ public class ReserveController extends HttpServlet {
 			throws ServletException, IOException {
 		
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
-//		ReserveService reserveService = new ReserveService(session);
-		
 		// 餐廳
 		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
 		// 座位數
@@ -276,8 +246,6 @@ public class ReserveController extends HttpServlet {
 	private void delReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-//		Session session = sessionFactory.getCurrentSession();
-//		ReserveService reserveService = new ReserveService(session);
 		reserveService.delete(request.getParameter("reserveId"));
 		request.getRequestDispatcher("/Reserve/listName").forward(request, response);
 
@@ -286,8 +254,6 @@ public class ReserveController extends HttpServlet {
 	private void getReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		ReserveService reserveService = new ReserveService(session);
 		Reserve reserve = reserveService.selectById(request.getParameter("reserveId"));
 		request.setAttribute("reserve", reserve);
 		request.getRequestDispatcher("/reserve/GetReserve.jsp").forward(request, response);
@@ -297,8 +263,6 @@ public class ReserveController extends HttpServlet {
 	private void getAllReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		ReserveService reserveService = new ReserveService(session);
 		List<Reserve> reserves = reserveService.selectAll();
 		request.setAttribute("reserves", reserves);
 		request.getRequestDispatcher("/reserve/GetAllReserve.jsp").forward(request, response);
@@ -308,10 +272,7 @@ public class ReserveController extends HttpServlet {
 	private void setReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		ReserveService reserveService = new ReserveService(session);
 		Reserve reserve = reserveService.selectById(request.getParameter("reserveId"));
-		
 		request.setAttribute("reserve", reserve);
 		request.getRequestDispatcher("/reserve/SetReserveNew.jsp").forward(request, response);
 
@@ -320,10 +281,6 @@ public class ReserveController extends HttpServlet {
 	private void setReserve2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		ReserveService reserveService = new ReserveService(session);
-//		RestaurantService restaurantService = new RestaurantService(session);
-
 		Reserve reserve = reserveService.selectById(request.getParameter("reserveId"));
 		
 		// 餐廳

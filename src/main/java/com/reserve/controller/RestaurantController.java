@@ -133,8 +133,6 @@ public class RestaurantController extends HttpServlet {
 	private void delRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
 		restaurantService.delete(request.getParameter("restaurantId"));
 		request.getRequestDispatcher("/Restaurant/getAll").forward(request, response);
 
@@ -143,8 +141,6 @@ public class RestaurantController extends HttpServlet {
 	private void getRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
 		Restaurant restaurant = restaurantService.selectById(request.getParameter("restaurantId"));
 		request.setAttribute("restaurant", restaurant);
 		request.getRequestDispatcher("/reserve/GetRestaurant.jsp").forward(request, response);
@@ -154,8 +150,6 @@ public class RestaurantController extends HttpServlet {
 	private void getAllRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
 		List<Restaurant> restaurants = restaurantService.selectAll();
 		request.setAttribute("restaurants", restaurants);
 		request.getRequestDispatcher("/reserve/GetAllRestaurants.jsp").forward(request, response);
@@ -164,9 +158,6 @@ public class RestaurantController extends HttpServlet {
 	
 	private void getRestaurantList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
 		
 	    String restaurantName = request.getParameter("restaurantName");
 	    String restaurantAddress = request.getParameter("restaurantAddress");
@@ -179,7 +170,6 @@ public class RestaurantController extends HttpServlet {
 	    Converters.registerLocalTime(gsonBuilder);
 	    Gson gson = gsonBuilder.create();
         String json = gson.toJson(restaurants);
-
 	    
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -190,8 +180,6 @@ public class RestaurantController extends HttpServlet {
 	private void setRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
 		String restaurantId = request.getParameter("restaurantId");
 		Restaurant restaurant = restaurantService.selectById(restaurantId);
 		request.setAttribute("restaurant", restaurant);
@@ -202,10 +190,7 @@ public class RestaurantController extends HttpServlet {
 	private void setRestaurant2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		RestaurantService restaurantService = new RestaurantService(session);
 		Restaurant restaurant = new Restaurant();
-		
 		String restaurantId = request.getParameter("restaurantId");
 		
 		restaurant.setRestaurantId(restaurantId);

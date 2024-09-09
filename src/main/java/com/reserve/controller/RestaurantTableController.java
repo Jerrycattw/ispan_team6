@@ -65,9 +65,6 @@ public class RestaurantTableController extends HttpServlet {
 		case "getAll":
 			getAllTable(request, response);
 			break;
-		case "set":
-//			setTable(request, response);
-			break;
 		case "set1":
 			setTable1(request, response);
 			break;

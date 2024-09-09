@@ -28,7 +28,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TableTypeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-//	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 	Session session = null;
 	TableTypeService tableTypeService = null;
 	RestaurantService restaurantService = null;
@@ -71,9 +70,6 @@ public class TableTypeController extends HttpServlet {
 	private void addTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		TableTypeService tableTypeService = new TableTypeService(session);
-		
 		String tableTypeId = request.getParameter("tableTypeId");
 		String tableTypeName = request.getParameter("tableTypeName");
 		TableType tableType = new TableType(tableTypeId, tableTypeName);
@@ -86,8 +82,6 @@ public class TableTypeController extends HttpServlet {
 	private void delTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-//		Session session = sessionFactory.getCurrentSession();
-//		TableTypeService tableTypeService = new TableTypeService(session);
 		String tableTypeId = request.getParameter("tableTypeId");
 		tableTypeService.delete(tableTypeId);
 		request.getRequestDispatcher("/TableType/getAllType").forward(request, response);
@@ -98,10 +92,7 @@ public class TableTypeController extends HttpServlet {
 	private void getAllTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-//		Session session = sessionFactory.getCurrentSession();
-//		TableTypeService tableTypeService = new TableTypeService(session);
 		List<TableType> tableTypes = tableTypeService.selectAll();
-		
 		request.setAttribute("tableTypes", tableTypes);
 		request.getRequestDispatcher("/reserve/GetAllTableTypes.jsp").forward(request, response);
 

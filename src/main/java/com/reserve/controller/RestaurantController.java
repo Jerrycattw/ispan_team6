@@ -47,7 +47,7 @@ public class RestaurantController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		System.out.println("測試git Reserve branch");
+		
 		session = (Session) request.getAttribute("hibernateSession");
 		tableTypeService = new TableTypeService(session);
 		restaurantService = new RestaurantService(session);

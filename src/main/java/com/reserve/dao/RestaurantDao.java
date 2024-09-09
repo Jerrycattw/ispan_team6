@@ -98,6 +98,15 @@ public class RestaurantDao {
 	}
 	
 	
+	// 查詢餐廳名稱由餐廳編號
+	public String getRestaurantName(String restaurantId) {
+		String hql = "SELECT r.restaurantName FROM Restaurant r WHERE r.restaurantId = :restaurantId";
+		Query<String> query = session.createQuery(hql, String.class);
+		query.setParameter("restaurantId", restaurantId);
+		return query.uniqueResult();
+	}
+	
+	
 	// 查詢所有餐廳名稱 (Hibernate 寫法)
 	public List<String> getAllRestaurantName() {
 	    List<String> restaurantNames = null;

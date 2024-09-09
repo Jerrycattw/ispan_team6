@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- 
+		<property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<property name="hibernate.connection.password">Passw0rd</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=LeonPower;encrypt=true;trustServerCertificate=true</property>
+		<property name="hibernate.connection.username">watcher</property>
+		 -->
+		 
+		<property name="hibernate.connection.datasource">java:comp/env/hibernate/EEIT187-6</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+		
+		<!-- current session: 一個執行續只能產生一個session一個transaction (不需自行建立和關閉) -->
+		<property name="hibernate.current_session_context_class">thread</property>
+		
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		
+		<mapping class="com.reserve.bean.Restaurant" />
+		<mapping class="com.reserve.bean.Reserve" />
+		<mapping class="com.reserve.bean.RestaurantTable" />
+		<mapping class="com.reserve.bean.TableType" />
+		
+		
+		<mapping class="com.coupon.bean.CouponBean"/>
+		<mapping class="com.coupon.bean.CouponMemberBean"/>
+		<mapping class="com.coupon.bean.TagBean"/>
+		
+		
+		<mapping class="com.point.bean.PointSetBean"/>
+		<mapping class="com.point.bean.PointBean"/>
+		
+		
+		<mapping class="com.TogoOrder.bean.MenuBean"></mapping>
+		<mapping class="com.TogoOrder.bean.TogoBean"></mapping>
+		<mapping class="com.TogoOrder.bean.TogoItemBean"></mapping>
+		
+		
+		<mapping class="com.rent.bean.Rent"></mapping>
+		
+		
+		
+		<mapping class="com.coupon.bean.ProductTypeBean"/>
+		
+		
+		<mapping class="com.members.bean.Member" />
+		
+		
+		
+		
+	</session-factory>
+</hibernate-configuration> 

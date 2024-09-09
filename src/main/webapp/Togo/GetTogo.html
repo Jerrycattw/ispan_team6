@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>訂單查詢</title>
+<link rel="stylesheet" href="../template/template.css">
+<script src="../template/template.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<!-- 上方選單 -->
+    <div class="top-menu">
+        <a href="#" onclick="showSidebar('member')">會員管理</a>
+        <a href="#" onclick="showSidebar('store')">商城管理</a>
+        <a href="#" onclick="showSidebar('order')">訂餐管理</a>
+        <a href="#" onclick="showSidebar('rental')">租借用具管理</a>
+        <a href="#" onclick="showSidebar('reservation')">餐廳訂位管理</a>
+        <a href="#" onclick="showSidebar('points')">會員積分優惠券管理</a>
+    </div>
+<div class="sidebar" id="sidebar"></div>
+<div class="content" id="content">
+<h2>查詢單筆訂單</h2>
+<button onclick="window.location.href='/EEIT187-6/TogoController/getAll'">返回全部訂單</button><p>
+<form method="get" action="/EEIT187-6/TogoController/get" onsubmit="return validatePhone()" >
+	輸入電話 : <input type="text" name="tgPhone" id="tgPhone" /><p>
+	<input type="submit" value="確定" />
+</form>
+</div>
+<script>
+    function validatePhone() {
+        const phoneInput = document.getElementById("tgPhone").value;
+        const phonePattern = /^\d+$/; 
+        
+        if (phoneInput === "") {
+       		Swal.fire({
+            	icon: 'error',
+             	title: '格式錯誤',
+             	text: '電話不能為空白'
+         	});
+         	return false; // 阻止表單提交
+     	}
+        if (!phonePattern.test(phoneInput)) {
+            Swal.fire({
+                icon: 'error',
+                title: '格式錯誤',
+                text: '請輸入正確的電話號碼格式'
+            });
+            return false; // 阻止表單提交
+        }
+        return true; // 允許表單提交
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showSidebar('order');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>發送優惠券</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        select, input[type="datetime-local"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .info {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .checkbox-group {
+            margin-bottom: 10px;
+        }
+        .result {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .result h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            float: right;
+        }
+        .result a{
+        	margin-left:20px;
+       	}
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script><!-- EXCEL CDN -->
+</head>
+<body>
+
+    <p>優惠券將發送給 <label id="memberAmount"></label> 位顧客</p>
+    
+    <input type="text" name="couponInput" list="coupon_list" id="couponInput" placeholder="搜尋優惠券編號、代碼、名稱、">
+        <datalist id="coupon_list">
+        </datalist>
+    
+    <p>優惠券僅適用「所有顧客」且尚可領取次數大於名單人數</p>
+    
+    <div class="info">
+        <p><strong>優惠券資訊</strong></p>
+        <p>優惠名稱：<label id="couponDescription" class="couponInfo"></label></p>
+        <p>優惠代碼：<label id="couponCode" class="couponInfo"></label></p>
+        <p>使用期間：<label id="couponStartDate" class="couponInfo"></label> - <label id="couponEndDate" class="couponInfo"></label></p>
+        <p>每人可領取次數：<label  id="perMaxCoupon" class="couponInfo"></label></p>
+        <p>狀態：<label id="couponStatus"></label></p>
+    </div>
+    <label></label>
+    <p>預計發送時間</p>
+    <input type="datetime-local" value="2022-12-06T15:00">
+    
+    <p>發送時間須設定 2 小時後</p>
+    
+
+    <div class="result" id="result" style="visibility:hidden">
+        <h3>優惠券發送結果</h3>
+        <p>共<label id="distribute"></label>筆（成功<label id="success"></label>筆／失敗<label id="fail"></label>筆）<a href="#" id="print"><i class="fa-solid fa-print"></i>下載結果</a></p>
+    </div>
+    
+    <button id="btn">確認</button>
+
+    <script>
+    	//初次加載頁面顯示option
+    	const urlParams = new URLSearchParams(window.location.search);
+		const memberIds = urlParams.get('memberIds');
+    	
+        fetch('/EEIT187-6/Coupon/distribute', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'text/plain'
+	        },
+	        body: memberIds
+	    })
+        .then(response => response.json())
+        .then(data => {
+	    	console.log(data);
+	    	//產生option
+	    	let couponList=document.getElementById("coupon_list") 
+	    	
+	    	data.forEach(coupon => {
+	            let cell=document.createElement('option');
+	            cell.textContent=coupon.selectOption
+	            cell.value=coupon.couponId
+	            couponList.appendChild(cell); 
+	        });
+	    	//label產生發送人數
+	    	let label=document.getElementById("memberAmount");
+	    	label.textContent=memberIds.split(",").length;    	
+    	})
+    	
+    	//關閉視窗重整原本視窗
+    	window.onunload = function() {
+		    if (window.opener && !window.opener.closed) {
+		        window.opener.location.reload(); // 重新加载父页面
+		    }
+		};
+    </script>
+    <script>
+    	//更新coupon資訊
+    	let perMaxCoupon=0;
+		document.getElementById("couponInput").addEventListener('change',function(){
+			fetch('/EEIT187-6/Coupon/getOneCoupon', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'text/plain'
+		        },
+		        body: this.value
+		    })
+	        .then(response => response.json())
+	        .then(data => {
+		    	console.log(data);
+		    	
+		    	Object.keys(data[0]).forEach(key => {
+		    	    let element = document.getElementById(key);
+		    	    if (element) {
+		    	        element.textContent = data[0][key];
+		    	    }
+		    	});
+		    	perMaxCoupon=data[0].perMaxCoupon;
+		    	
+	    	})  
+		})    
+    </script>
+    <script>
+    	//點擊送出
+    	let resultData;
+    	document.getElementById("btn").addEventListener('click',function(){
+    		console.log(perMaxCoupon);
+    		let couponId=document.getElementById("couponInput").value
+    		//fetch
+    		fetch('/EEIT187-6/Coupon/distributeExcute', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({
+		        	memberIds:memberIds,
+		        	couponId:couponId,
+		        	perMaxCoupon:perMaxCoupon
+		        })
+		    })
+	        .then(response => response.json())
+	        .then(data => {
+		    	console.log(data);
+		    	resultData=data;//結果賦值給resultData for打印(如需)
+		    	//計算發放結果
+		    	let distributeAmount=0;
+		    	let successAmount=0;
+		    	let failAmount=0;
+		    	data.forEach(member=>{
+		    		if(member.distributeStatus=="成功"){
+		    			successAmount++;
+		    		}else{
+		    			failAmount++;
+		    		}
+		    		distributeAmount++;
+		    	})
+		    	document.getElementById('distribute').textContent=distributeAmount;
+		    	document.getElementById('success').textContent=successAmount;
+		    	document.getElementById('fail').textContent=failAmount;	    	
+	    	})
+	    	
+	    	//顯示優惠券result div`,隱藏確認btn
+	    	const resultDiv=document.getElementById('result');
+   			resultDiv.style.visibility="visible";
+   			document.getElementById("btn").style.visibility="hidden"
+    	})
+    	
+    	//點擊結果列印
+    	document.getElementById('print').addEventListener('click',function(){
+    		event.preventDefault();
+    		 // 通过 SheetJS 创建 Excel 工作簿
+    	    const worksheet = XLSX.utils.json_to_sheet(resultData);
+    	    const workbook = XLSX.utils.book_new();
+    	    XLSX.utils.book_append_sheet(workbook, worksheet, "發放結果");
+
+    	    // 生成 Excel 文件并触发下载
+    	    XLSX.writeFile(workbook, "data.xlsx");
+    	})
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+@charset "UTF-8";
+.btn{
+	display:inline;
+}
+
+input[type="submit"] {
+        background-color:BurlyWood ;
+        color: white;
+    }
+
+input[type="submit"]:hover {
+     background-color:BurlyWood ;
+}
+
+th{
+	font-size:11px;
+}
+
+
+

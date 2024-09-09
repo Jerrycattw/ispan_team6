@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../template/template.css">
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td .togo{
+        	background-color: lightblue;
+        }
+        td .product{
+        	background-color: lightgreen;
+        }
+        
+        .thTag{
+        	width:100px;
+        }
+        
+        #searchInput{
+        	width:60%;
+        	margin-bottom:10px;
+        }
+        
+        #divAdd {
+		    display: flex;
+		    justify-content: flex-end; /* Aligns the button to the right */
+		    margin-bottom: 10px; /* Adds some space below the div */
+		}
+
+		#divAdd button {
+		    margin-left: 10px; /* Ensures the button aligns to the right inside the div */
+		}
+    </style>
+		<script src="../template/template.js"></script>
+</head>
+<body>
+	<div class="top-menu">
+        <a href="#" onclick="showSidebar('member')">會員管理</a>
+        <a href="#" onclick="showSidebar('store')">商城管理</a>
+        <a href="#" onclick="showSidebar('order')">訂餐管理</a>
+        <a href="#" onclick="showSidebar('rental')">租借用具管理</a>
+        <a href="#" onclick="showSidebar('reservation')">餐廳訂位管理</a>
+        <a href="#" onclick="showSidebar('points')">會員積分優惠券管理</a>
+    </div>
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="content">
+    <h1>優惠券查詢</h1>
+    <input type="text" id="searchInput" placeholder="搜尋優惠券編號、代碼、名稱、使用開始及結束日期等"><button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div id="divAdd" >
+    	<button id="distrubute"><i class="fa-solid fa-arrow-up-from-bracket"></i>&nbsp;發送優惠券</button><button id="add"><i class="fa-solid fa-plus"></i>&nbsp;新增優惠券</button>
+	</div>
+    <table id="couponsTable">
+        <thead>
+            <tr>
+                <th>優惠券編號</th>
+                <th>優惠券代碼</th>
+                <th>優惠券名稱</th>
+                <th>使用開始日期</th>
+                <th>使用結束日期 </th>
+                <th>優惠券最大數量</th>
+                <th>每人限領數量</th>
+                <th>狀態</th>
+                <th>優惠使用規則</th>
+                <th>折扣種類<br>(固定金額、百分比)</th>
+                <th>金額</th>
+                <th>滿額多少才能使用 </th>
+                <th>最多可折扣多少金額</th>
+                <th class="thTag">綁定標籤</th>
+                <th>已領取數量</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be inserted here -->
+        </tbody>
+    </table>
+    </div>
+
+    <script>
+    fetch('/EEIT187-6/Coupon/Home')
+    .then(response => response.json())
+    .then(data => {
+    	console.log(data);
+    	// Call the function to generate the table
+        generateTable(data);
+    })
+    </script>
+    <script>
+        // Function to generate table rows dynamically
+        function generateTable(data) {
+            const tableBody = document.querySelector('#couponsTable tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(coupon => {
+                // Create a new row
+                const row = document.createElement('tr');
+                
+                // Create and append cells for each field
+                Object.keys(coupon).forEach(key => {
+                    if (key === 'tags') {
+                        const cell = document.createElement('td');
+                        cell.innerHTML = coupon.tags
+	                        .filter(tag => tag.tagName && tag.tagType)
+	                        .map(tag => `<label class="${tag.tagType}" data-type-"${tag.tagType}">${tag.tagName}</label>`)
+	                        .join('<br>');
+                        row.appendChild(cell);
+                    } else {
+                        const cell = document.createElement('td');
+                        cell.textContent = coupon[key];
+                        cell.setAttribute(`data-${key}`, coupon[key]);
+                        row.appendChild(cell);
+                    }
+                });
+                
+                
+            	// Create button
+	           	const actionCell = document.createElement('td');
+            	//檢視
+				const updateButton = document.createElement('button');
+				updateButton.innerHTML = `<i class="fa-solid fa-wrench"></i>`;
+				updateButton.addEventListener('click', (event) => {
+					const couponId = coupon.couponId;
+		                window.location.href = `UpdateCoupon.html?couponId=${couponId}`;
+				 });	
+				actionCell.appendChild(updateButton);
+				//刪除
+				const deleteButton = document.createElement('button');
+				deleteButton.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
+				deleteButton.addEventListener('click', (event) => {
+					if (confirm("您確定執行刪除嗎?刪除後無法復原!")) {
+					    // 用戶按下“確定”後執行的動作
+					const couponId = coupon.couponId;
+		                window.location.href = `/EEIT187-6/Coupon/deleteCoupon?couponId=${couponId}`;
+					}
+				 });
+				actionCell.appendChild(deleteButton);
+				//add cell,add row
+				row.appendChild(actionCell);
+                tableBody.appendChild(row);
+            });
+        }       
+    </script>
+    <script>
+    	//點擊新增
+    	document.getElementById("add").addEventListener('click',function(){
+    		window.location.href = `InsertCoupon.html`;	
+    	})
+    	
+    	//
+    	document.getElementById("distrubute").addEventListener('click',function(){
+    		var userInput = prompt("請輸入發送之會員編號：", "");
+    		if (userInput !== null) {
+	    		const screenWidth = window.screen.width;
+	    	    const screenHeight = window.screen.height;
+	    	    const width = 600;
+	    	    const height = 800;
+	    	    const left = (screenWidth - width) / 2;
+	    	    const top = (screenHeight - height) / 3;
+	    	    
+	    		window.open(`/EEIT187-6/coupon/DistributeCoupon.html?memberIds=${userInput}`, "popup", `width=${width},height=${height},left=${left},top=${top}`);
+    		}
+    	})
+    	
+    	
+    	//調整新增按鍵的DIV
+    	const table = document.getElementById('couponsTable');
+    	const tableWidth = table.offsetWidth;
+    	const div = document.getElementById('divAdd');
+    	div.style.width = tableWidth + 'px';
+    	
+    	//
+    	document.getElementById("searchBtn").addEventListener('click',function(){
+    		let keyWord=document.getElementById("searchInput").value
+    		 
+            fetch(`/EEIT187-6/Coupon/search?search=${keyWord}`, {
+                method: 'GET',
+                headers: {
+                'Content-Type': 'text/plain'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                generateTable(data);
+            })
+    	})
+    	
+    </script>
+</body>
+</html>

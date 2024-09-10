@@ -15,6 +15,7 @@ import jakarta.persistence.Transient;
 @Entity @Table(name = "member_coupon")
 public class CouponMemberBean {
 	
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // 虚拟主键

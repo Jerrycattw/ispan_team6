@@ -23,8 +23,13 @@ public class TagId implements Serializable {
         this.couponId = couponId;
         this.tagName = tagName;
     }
+    
+    public TagId(String tagName) {
+		super();
+		this.tagName = tagName;
+	}
 
-    // Getter 和 Setter
+	// Getter 和 Setter
     public Integer getCouponId() { return couponId; }
     public void setCouponId(Integer couponId) { this.couponId = couponId; }
 

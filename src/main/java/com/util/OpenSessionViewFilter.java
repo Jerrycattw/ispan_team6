@@ -28,6 +28,7 @@ public class OpenSessionViewFilter implements Filter {
 			System.out.println("Transaction Begin");
 			
 			request.setAttribute("hibernateSession", session);
+			request.setAttribute("hibernateSessionFactory", sessionFactory);
 			
 			chain.doFilter(request, respones);
 			

@@ -13,7 +13,6 @@ import jakarta.persistence.Table;
 
 @Entity @Table(name = "restaurant_table")
 public class RestaurantTable {
-	@Expose
     @EmbeddedId
     private RestaurantTableId id; // 嵌入的複合主鍵
 
@@ -25,7 +24,6 @@ public class RestaurantTable {
     @JoinColumn(name = "table_type_id", insertable = false, updatable = false)
     private TableType tableType; // 與 TableType 的關聯
     
-    @Expose
     @Column(name = "table_type_number")
     private Integer tableTypeNumber; // 桌子數量
 	

@@ -3,6 +3,7 @@ package com.reserve.controller;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -12,6 +13,7 @@ import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.reserve.bean.Restaurant;
+import com.reserve.bean.RestaurantDTO;
 import com.reserve.service.ReserveService;
 import com.reserve.service.RestaurantService;
 import com.reserve.service.RestaurantTableService;
@@ -164,12 +166,19 @@ public class RestaurantController extends HttpServlet {
 	    String restaurantStatus = request.getParameter("restaurantStatus");
 
 	    List<Restaurant> restaurants = restaurantService.selectList(restaurantName, restaurantAddress, restaurantStatus);
+	    List<RestaurantDTO> restaurantDTOs = new ArrayList<RestaurantDTO>();
+	    RestaurantDTO restaurantDTO = null;
+	    for(Restaurant restaurant : restaurants) {
+	    	restaurantDTO = new RestaurantDTO(restaurant);
+	    	restaurantDTOs.add(restaurantDTO);
+	    }
+	    
 	    
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.excludeFieldsWithoutExposeAnnotation();
+//		gsonBuilder.excludeFieldsWithoutExposeAnnotation();
 	    Converters.registerLocalTime(gsonBuilder);
 	    Gson gson = gsonBuilder.create();
-        String json = gson.toJson(restaurants);
+        String json = gson.toJson(restaurantDTOs);
 	    
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

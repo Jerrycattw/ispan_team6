@@ -16,10 +16,8 @@ import jakarta.persistence.Table;
 
 @Entity @Table(name = "table_type")
 public class TableType {
-	@Expose
 	@Id @Column(name = "table_type_id")
 	private String tableTypeId;
-	@Expose
 	@Column(name = "table_type_name")
 	private String tableTypeName;
 	

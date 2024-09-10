@@ -19,28 +19,20 @@ import jakarta.persistence.Table;
 
 @Entity @Table(name = "reserve")
 public class Reserve {
-	@Expose
 	@Id @Column(name = "reserve_id") @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String reserveId;
-	@Expose
 	@Column(name = "member_id")
 	private String memberId;
-	@Expose
 	@Column(name = "restaurant_id")
 	private String restaurantId;
-	@Expose
 	@Column(name = "reserve_create_time")
 	private LocalDateTime reserveCreateTime;
-	@Expose
 	@Column(name = "reserve_seat")
 	private Integer reserveSeat;
-	@Expose
 	@Column(name = "table_type_id")
 	private String tableTypeId;
-	@Expose
 	@Column(name = "reserve_time")
 	private LocalDateTime reserveTime;
-	@Expose
 	@Column(name = "finished_time")
 	private LocalDateTime finishedTime;
 	

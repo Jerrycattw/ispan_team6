@@ -19,52 +19,35 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity @Table(name = "restaurant")
-public class Restaurant {
+public class RestaurantDTO {
 	
-	@Id @Column(name = "restaurant_id") @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String restaurantId;
-	@Column(name = "restaurant_name")
 	private String restaurantName;
-	@Column(name = "restaurant_address")
 	private String restaurantAddress;
-	@Column(name = "restaurant_phone")
 	private String restaurantPhone;
-	@Column(name = "restaurant_opentime")
 	private LocalTime restaurantOpentime;
-	@Column(name = "restaurant_closetime")
 	private LocalTime restaurantClosetime;
-	@Column(name = "eattime")
 	private Integer eattime;
-	@Column(name = "restaurant_status")
 	private Integer restaurantStatus;
-	@Column(name = "restaurant_img")
 	private String restaurantImg;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL)
-	private List<RestaurantTable> restaurantTables = new ArrayList<RestaurantTable>();
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL)
-	private List<Reserve> reserves = new ArrayList<Reserve>();
-	
 	
 
 
-	public Restaurant() {
+	public RestaurantDTO() {
 	}
 
 
-	public Restaurant(String restaurantName, String restaurantAddress, String restaurantPhone,
-			LocalTime restaurantOpentime, LocalTime restaurantClosetime, Integer eattime, Integer restaurantStatus,
-			String restaurantImg) {
-		this.restaurantName = restaurantName;
-		this.restaurantAddress = restaurantAddress;
-		this.restaurantPhone = restaurantPhone;
-		this.restaurantOpentime = restaurantOpentime;
-		this.restaurantClosetime = restaurantClosetime;
-		this.eattime = eattime;
-		this.restaurantStatus = restaurantStatus;
-		this.restaurantImg = restaurantImg;
+	public RestaurantDTO(Restaurant restaurant) {
+		this.restaurantId = restaurant.getRestaurantId();
+		this.restaurantName = restaurant.getRestaurantName();
+		this.restaurantAddress = restaurant.getRestaurantAddress();
+		this.restaurantPhone = restaurant.getRestaurantPhone();
+		this.restaurantOpentime = restaurant.getRestaurantOpentime();
+		this.restaurantClosetime = restaurant.getRestaurantClosetime();
+		this.eattime = restaurant.getEattime();
+		this.restaurantStatus = restaurant.getRestaurantStatus();
+		this.restaurantImg = restaurant.getRestaurantImg();
 	}
 
 
@@ -158,24 +141,6 @@ public class Restaurant {
 	}
 	
 	
-	public List<RestaurantTable> getRestaurantTables() {
-		return restaurantTables;
-	}
-	
-	
-	public void setRestaurantTables(List<RestaurantTable> restaurantTables) {
-		this.restaurantTables = restaurantTables;
-	}
-	
-	
-	public List<Reserve> getReserves() {
-		return reserves;
-	}
-	
-	
-	public void setReserves(List<Reserve> reserves) {
-		this.reserves = reserves;
-	}
 	
 	
 	

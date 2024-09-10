@@ -1,6 +1,7 @@
 package com.reserve.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -8,6 +9,7 @@ import org.hibernate.SessionFactory;
 
 import com.reserve.bean.RestaurantTable;
 import com.reserve.bean.RestaurantTableId;
+import com.reserve.bean.TableDTO;
 import com.reserve.bean.TableType;
 import com.reserve.dao.TableTypeDao;
 import com.reserve.service.ReserveService;
@@ -136,9 +138,15 @@ public class RestaurantTableController extends HttpServlet {
 		}
 		
 		List<RestaurantTable> tableTypes = restaurantTableService.selectAll(restaurantId);
+		List<TableDTO> tableDTOs = new ArrayList<TableDTO>();
+		TableDTO tableDTO = null;
+		for(RestaurantTable restaurantTable : tableTypes) {
+			tableDTO = new TableDTO(restaurantTable);
+			tableDTOs.add(tableDTO);
+		}
 		
 		request.setAttribute("name", restaurantName);
-		request.setAttribute("tableTypes", tableTypes);
+		request.setAttribute("tableTypes", tableDTOs);
 		request.getRequestDispatcher("/reserve/GetAllTables.jsp").forward(request, response);
 
 	}

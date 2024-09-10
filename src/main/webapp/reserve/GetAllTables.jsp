@@ -34,22 +34,22 @@ i{
 	<c:forEach items="${tableTypes}" var="table" varStatus="r">
 		<tr>
 			<td>${name}
-			<td>${table.id.tableTypeId}
-			<td>${table.tableType.tableTypeName}
+			<td>${table.tableTypeId}
+			<td>${table.tableTypeName}
 			<td>${table.tableTypeNumber}
 			<td><form action="/EEIT187-6/Table/set1" method="get">
-                    <input type="hidden" name="restaurantId" value="${table.id.restaurantId}">
+                    <input type="hidden" name="restaurantId" value="${table.restaurantId}">
                     <input type="hidden" name="restaurantName" value="${name}">
-                    <input type="hidden" name="tableTypeId" value="${table.id.tableTypeId}">
+                    <input type="hidden" name="tableTypeId" value="${table.tableTypeId}">
 
                     <input type="hidden" name="tableTypeNumber" value="${table.tableTypeNumber}">
                     <input type="submit" value="修改">
                 </form>
 			<td><form action="/EEIT187-6/Table/del" method="get">
-                    <input type="hidden" name="restaurantId" value="${table.id.restaurantId}">
+                    <input type="hidden" name="restaurantId" value="${table.restaurantId}">
                     <input type="hidden" name="restaurantName" value="${name}">
                     
-                    <input type="hidden" name="tableTypeId" value="${table.id.tableTypeId}">
+                    <input type="hidden" name="tableTypeId" value="${table.tableTypeId}">
                     <input type="submit" value="刪除">
                 </form>
 		</tr>

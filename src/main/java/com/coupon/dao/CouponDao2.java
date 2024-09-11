@@ -34,7 +34,7 @@ public class CouponDao2 {
 	// 取得productType選項
 	public List<String> getProductTypeTagsOption() {
 		// "SELECT product_type_name FROM product_type"
-		String hql = "SELECT p.product_type_name FROM ProductTypeBean p";
+		String hql = "SELECT p.product_type_name FROM ProductType p";
 		Query<String> query = session.createQuery(hql, String.class);
 		return query.list();
 	}

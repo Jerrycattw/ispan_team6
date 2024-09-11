@@ -51,19 +51,19 @@ public class ItemDao {
 	
 	// 刪除全部
 	public boolean deleteAllItem(Integer shoppingId) {
-		
-		Query<ItemBean> query = session.createQuery("from ItemBean", ItemBean.class);
-		List<ItemBean> list = query.list();
-		
-		if(list!=null) {
-			for(ItemBean itemBean : list) {
-				session.remove(itemBean);
-			}
-			return true;
-		}
-		return false;
-		
+	    Query<ItemBean> query = session.createQuery("from ItemBean where shoppingId = :shoppingId", ItemBean.class);
+	    query.setParameter("shoppingId", shoppingId);
+	    List<ItemBean> list = query.list();
+	    
+	    if(list != null && !list.isEmpty()) {
+	        for(ItemBean itemBean : list) {
+	            session.remove(itemBean);
+	        }
+	        return true;
+	    }
+	    return false;
 	}
+
 	
 
 	// 更新

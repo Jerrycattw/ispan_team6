@@ -44,12 +44,16 @@
 		
 		
 		
-		<mapping class="com.coupon.bean.ProductTypeBean"/>
+		
 		
 		
 		<mapping class="com.members.bean.Member" />
 		
-		
+		<mapping class="com.shopping.bean.ProductBean"/> 
+		<mapping class="com.shopping.bean.ProductType"/> 
+		<mapping class="com.shopping.bean.ShoppingBean"/> 
+		<mapping class="com.shopping.bean.ItemBean"/> 
+		<mapping class="com.shopping.bean.ItemId"/> 
 		
 		
 	</session-factory>

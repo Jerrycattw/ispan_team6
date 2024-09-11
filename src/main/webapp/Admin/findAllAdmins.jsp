@@ -6,8 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>管理員一覽</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/template/template.css">
-<script src="${pageContext.request.contextPath}/template/template.js"></script>
+<link rel="stylesheet" href="/EEIT187-6/template/template.css">
+<script src="/EEIT187-6/template/template.js"></script>
 </head>
 <body>
 	<jsp:include page="../HomePage.html"></jsp:include>

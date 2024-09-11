@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>UpdateProduct</title>
+	<link rel="stylesheet" href="../template/template.css">
+	<link rel="stylesheet" href="../template/table.css">
+	<script src="../template/template.js"></script>
+	<style>
+	p{
+	  justify-content: center;
+	}
+	</style>
+</head>
+ <div class="top-menu">
+        <a href="#" onclick="showSidebar('member')">會員管理</a>
+        <a href="#" onclick="showSidebar('store')">商城管理</a>
+        <a href="#" onclick="showSidebar('order')">訂餐管理</a>
+        <a href="#" onclick="showSidebar('rental')">租借用具管理</a>
+        <a href="#" onclick="showSidebar('reservation')">餐廳訂位管理</a>
+        <a href="#" onclick="showSidebar('points')">會員積分優惠券管理</a>
+    </div>
+<div class="sidebar" id="sidebar"></div>
+<body style="background-color: #ACD6FF">
+    <div align="center">
+<h2>更新商品資料</h2>
+<form method="post" action="/EEIT187-6/ProductController/UpdateProduct" enctype="multipart/form-data">
+	請輸入以下資料 :<p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品名稱: <input type="text" name="product_name" /><p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品金額: <input type="text" name="product_price" /><p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品照片: <input type="file" name="product_picture" /><p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品庫存: <input type="text" name="product_stock" /><p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品狀態: <input type="text" name="product_status" /><p>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;商品描述: <input type="text" name="product_description" /><p>
+	商品類別編號  : <input type="text" name="product_type_id"/><p>
+	商品類別名稱  : <input type="text" name="product_type_name"/><p>
+	<input type="submit" value="確定" />
+</form>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    showSidebar('store');
+    
+});
+</script>
+</body>
+</html>

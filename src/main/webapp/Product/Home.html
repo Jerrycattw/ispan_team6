@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Home</title>
+	<style>
+ .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+	
+	</style>
+</head>
+<body style="background-color: #ACD6FF">
+    <div align="center">
+<h2>Home</h2>
+	請輸入選擇欲使用功能 :<br><br>
+
+<div class="button-container">
+
+	<form method="post" action="AddProduct.html">
+	<!-- <input type="hidden" name="action" value="AddProduct" /> --> 
+     <input type="submit" value="新增商品" />
+	</form>
+
+     &nbsp;&nbsp;&nbsp;&nbsp;
+	<form method="post" action="/EEIT187-6/ProductController/SearchAllProduct">
+    <!--  <input type="hidden" name="action" value="SearchAllProduct" /> --> 
+     <input type="submit" value="查詢所有商品" />
+     </form>
+     
+     &nbsp;&nbsp;&nbsp;&nbsp;
+     <form method="post" action="SearchByCategory.html">
+    <!--  <input type="hidden" name="action" value="SearchByCategory" /> --> 
+     <input type="submit" value="依產品類別查詢商品" />
+	</form>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<form method="post" action="../Shopping/AddShopping.jsp">
+	 <input type="submit" value="新增訂單" />
+	</form>
+	
+	 &nbsp;&nbsp;&nbsp;&nbsp;
+	<form method="post" action="/EEIT187-6/ShoppingController/SearchAllShopping">
+	 <input type="submit" value ="查詢所有訂單" />
+	</form>
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    showSidebar('store');
+    
+});
+</script>
+</body>
+</html>

@@ -7,9 +7,9 @@ function showSidebar(menu) {
                     menuItems = `
 						<a href="/EEIT187-6/Admin/addAdmin.jsp">新增管理員</a>
 						<a href="/EEIT187-6/Admin/AdminController/findAllAdmins">查詢管理員</a>
-						<a href="/EEIT187-6/Admin/AdminController/allAdminsAndPermissions">修改管理員權限</a>
 	                    <a href="/EEIT187-6/Admin/searchMembers.jsp">查詢會員資料</a>
                     `;
+						//<a href="/EEIT187-6/Admin/AdminController/allAdminsAndPermissions">修改管理員權限</a>
                     break;
                 case 'store':
                     menuItems = `

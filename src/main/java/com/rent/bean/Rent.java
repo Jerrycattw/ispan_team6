@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.TogoOrder.bean.TogoBean;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -46,16 +43,14 @@ public class Rent implements Serializable {
 	private String rentMemo;
 	@Column(name = "return_restaurant_id")
 	private Integer returnRestaurantId;
-	@OneToOne(mappedBy = "rent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private TogoBean togo;
-//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rent")
-//	private List<RentItem> rentItems = new ArrayList<RentItem>();
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rent")
+	private List<RentItem> rentItems = new ArrayList<RentItem>();
 	
 	public Rent() {
 		super();
 	}
 	public Rent(int rentDeposit, Date rentDate, int restaurantId, int memberId, Date dueDate, Date returnDate,
-			int rentStatus, String rentMemo, int returnRestaurantId) {
+			int rentStatus, String rentMemo) {
 		super();
 		this.rentDeposit = rentDeposit;
 		this.rentDate = rentDate;
@@ -65,7 +60,6 @@ public class Rent implements Serializable {
 		this.returnDate = returnDate;
 		this.rentStatus = rentStatus;
 		this.rentMemo = rentMemo;
-		this.returnRestaurantId = returnRestaurantId;
 	}
 	public int getRentId() {
 		return rentId;
@@ -131,20 +125,11 @@ public class Rent implements Serializable {
 	public String toString() {
 		return "Rent [rentDate=" + rentDate + ", dueDate=" + dueDate + ", returnDate=" + returnDate + "]";
 	}
-//	public List<RentItem> getRentItems() {
-//		return rentItems;
-//	}
-//	public void setRentItems(List<RentItem> rentItems) {
-//		this.rentItems = rentItems;
-//	}
-	public TogoBean getTogo() {
-		return togo;
+	public List<RentItem> getRentItems() {
+		return rentItems;
 	}
-	public void setTogo(TogoBean togo) {
-		this.togo = togo;
-	}
-	public void setReturnRestaurantId(Integer returnRestaurantId) {
-		this.returnRestaurantId = returnRestaurantId;
+	public void setRentItems(List<RentItem> rentItems) {
+		this.rentItems = rentItems;
 	}
 	
 	

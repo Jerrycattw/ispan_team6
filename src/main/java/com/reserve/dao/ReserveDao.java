@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
+import com.google.protobuf.TextFormatParseInfoTree;
 import com.reserve.bean.Reserve;
 import com.reserve.bean.ReserveCheckBean;
 import com.util.HibernateUtil;
@@ -98,9 +99,8 @@ public class ReserveDao {
 	            + "ORDER BY ts.slot_start";
 
 	    List<ReserveCheckBean> reservechecks = new ArrayList<>();
-	    Session session = null;
-	    try {
-	        session = HibernateUtil.getSessionFactory().openSession();
+//	    Session session = null;
+//	        session = HibernateUtil.getSessionFactory().openSession();
 	        NativeQuery<Object[]> query = session.createNativeQuery(sql);
 	        query.setParameter("restaurantId", restaurantId);
 	        query.setParameter("tableTypeId", tableTypeId);
@@ -111,19 +111,13 @@ public class ReserveDao {
 	        for (Object[] result : results) {
 	            LocalTime startTime = ((java.sql.Time) result[0]).toLocalTime();
 	            LocalTime endTime = ((java.sql.Time) result[1]).toLocalTime();
-	            Integer totalTableNumber = ((Number) result[2]).intValue();
-	            Integer reservedTableNumber = ((Number) result[3]).intValue();
+//	            Integer totalTableNumber = result[2]==null? 0 : Integer.parseInt(result[2].toString());
+//	            Integer reservedTableNumber = result[3]==null? 0 : Integer.parseInt(result[2].toString());
+	            Integer totalTableNumber = result[2]==null? 0 : ((Number)result[2]).intValue();
+	            Integer reservedTableNumber = result[3]==null? 0 : ((Number)result[3]).intValue();
 
 	            ReserveCheckBean bean = new ReserveCheckBean(startTime, endTime, totalTableNumber, reservedTableNumber);
 	            reservechecks.add(bean);
-	        }
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        if (session != null) {
-	            session.close();
-	        }
 	    }
 
 	    return reservechecks;

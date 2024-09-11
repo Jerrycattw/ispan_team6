@@ -46,7 +46,6 @@ public class CouponDao2 {
 		Query<String> query = session.createQuery(hql, String.class);
 		return query.list();
 	}
-	
 
 	// 新增coupon
 	public void insertCoupon(String couponCode, String couponDescription, LocalDate couponStartDate,
@@ -56,28 +55,27 @@ public class CouponDao2 {
 
 		CouponBean couponBean = new CouponBean(couponCode, couponDescription, couponStartDate, couponEndDate, maxCoupon,
 				perMaxCoupon, couponStatus, rulesDescription, discountType, discount, minOrderDiscount, maxDiscount);
-		
-		
+
 		int couponId = (int) session.save(couponBean);
-		
-		if(togoTags!=null) {
+
+		if (togoTags != null) {
 			for (String togoTag : togoTags) {
 				TagBean tagBean = new TagBean();
 				tagBean.setTagType("togo");
-				tagBean.setTagId(new TagId(couponId,togoTag));
+				tagBean.setTagId(new TagId(couponId, togoTag));
 				couponBean.getTags().add(tagBean);
-			}			
+			}
 		}
-		
-		if(productTags!=null) {
+
+		if (productTags != null) {
 			for (String productTag : productTags) {
 				TagBean tagBean = new TagBean();
 				tagBean.setTagType("product");
-				tagBean.setTagId(new TagId(couponId,productTag));
+				tagBean.setTagId(new TagId(couponId, productTag));
 				couponBean.getTags().add(tagBean);
-			}		
+			}
 		}
-		
+
 //		// 由于持久化操作会更新 CouponBean 的 ID
 //		int couponId = couponBean.getCouponId();
 //		
@@ -120,66 +118,30 @@ public class CouponDao2 {
 			couponBean.setDiscount(maxDiscount);
 			couponBean.setMinOrderDiscount(minOrderDiscount);
 			couponBean.setMaxDiscount(maxDiscount);
-			
-//			session.remove(couponBean.getTags());
-//			session.flush();
-//			session.clear();
-//			
-//			couponBean = session.get(CouponBean.class, couponId);
-//			if(togoTags!=null) {
-//				for (String togoTag : togoTags) {
-//					TagBean tagBean = new TagBean();
-//					tagBean.setTagType("togo");
-//					tagBean.setTagId(new TagId(couponId,togoTag));
-//					couponBean.getTags().add(tagBean);
-//				}				
-//			}
-//			
-//			if(productTags!=null) {
-//				for (String productTag : productTags) {
-//					TagBean tagBean = new TagBean();
-//					tagBean.setTagType("product");
-//					tagBean.setTagId(new TagId(couponId,productTag));
-//					couponBean.getTags().add(tagBean);
-//				}				
-//			}
-//			
-//			session.update(couponBean);
-			
-			// 清除现有标签
-	        List<TagBean> tagsToRemove = new ArrayList<>(couponBean.getTags());
-	        for (TagBean tag : tagsToRemove) {
-	            couponBean.removeTag(tag);
-	            session.delete(tag);
-	        }
-	        session.flush();
-	        session.clear();
 
-	        // 重新加载 CouponBean
-	        couponBean = session.get(CouponBean.class, couponId);
+			couponBean.getTags().clear();
 
-	        // 添加新标签
-	        if (togoTags != null) {
-	            for (String togoTag : togoTags) {
-	                TagBean tagBean = new TagBean();
-	                tagBean.setTagType("togo");
-	                tagBean.setTagId(new TagId(couponId, togoTag));
-	                tagBean.setCoupon(couponBean);
-	                couponBean.addTag(tagBean);
-	            }
-	        }
-	        if (productTags != null) {
-	            for (String productTag : productTags) {
-	                TagBean tagBean = new TagBean();
-	                tagBean.setTagType("product");
-	                tagBean.setTagId(new TagId(couponId, productTag));
-	                tagBean.setCoupon(couponBean);
-	                couponBean.addTag(tagBean);
-	            }
-	        }
+			if (togoTags != null) {
+				for (String togoTag : togoTags) {
+					TagBean tagBean = new TagBean();
+					tagBean.setTagType("togo");
+					tagBean.setTagId(new TagId(couponId, togoTag));
+					tagBean.setCoupon(couponBean);
+					couponBean.getTags().add(tagBean);
+				}
+			}
+			if (productTags != null) {
+				for (String productTag : productTags) {
+					TagBean tagBean = new TagBean();
+					tagBean.setTagType("product");
+					tagBean.setTagId(new TagId(couponId, productTag));
+					tagBean.setCoupon(couponBean);
+					couponBean.getTags().add(tagBean);
+				}
+			}
 
-	        session.update(couponBean);
-			
+			session.merge(couponBean);
+
 		}
 
 	}

@@ -13,11 +13,15 @@ import com.util.HibernateUtil;
 public class TogoDaoImpl implements TogoDao {
 	private Session session;
 	
-	public TogoDaoImpl() {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		session = factory.getCurrentSession();
+//	public TogoDaoImpl() {
+//		SessionFactory factory = HibernateUtil.getSessionFactory();
+//		session = factory.getCurrentSession();
+//	}
+
+	public TogoDaoImpl(Session session) {
+		this.session = session;
 	}
-	
+
 	@Override
 	public TogoBean addTogo(TogoBean togo) {
 		togo.setTogoCreateTime(LocalDateTime.now());

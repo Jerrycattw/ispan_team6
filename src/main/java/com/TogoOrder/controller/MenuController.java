@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.hibernate.Session;
+
 import com.TogoOrder.bean.MenuBean;
 import com.TogoOrder.service.MenuServiceImpl;
 
@@ -24,6 +26,8 @@ public class MenuController extends HttpServlet {
 	private MenuServiceImpl menuService;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Session session = (Session) request.getAttribute("hibernateSession");
+		menuService = new MenuServiceImpl(session);		
 		// 獲取URL中的操作名稱
 		String action = request.getPathInfo().substring(1);
 		System.out.println(action);
@@ -53,7 +57,7 @@ public class MenuController extends HttpServlet {
 	}
 	
 	protected void addMenu(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		menuService = new MenuServiceImpl();
+//		menuService = new MenuServiceImpl();
 		String foodName = request.getParameter("foodName");
 		Part filePart = request.getPart("foodPicture");
 		String foodPicture = "";
@@ -94,7 +98,7 @@ public class MenuController extends HttpServlet {
 	}
 
 	protected void deleteMenu(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		menuService = new MenuServiceImpl();
+//		menuService = new MenuServiceImpl();
 		int foodId = Integer.parseInt(request.getParameter("foodId"));
 		MenuBean food = new MenuBean();
 		boolean deleteFood = menuService.deleteFoodById(foodId);
@@ -109,7 +113,7 @@ public class MenuController extends HttpServlet {
 	}
 
 	protected void getMenu(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		menuService = new MenuServiceImpl();
+//		menuService = new MenuServiceImpl();
 		String foodName = request.getParameter("foodName");		
 		List<MenuBean> foodList = menuService.getFoodByName(foodName);
 		request.setAttribute("menu", foodList);		
@@ -117,7 +121,7 @@ public class MenuController extends HttpServlet {
 	}
 	
 	protected void getMenuForUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-		menuService = new MenuServiceImpl();
+//		menuService = new MenuServiceImpl();
 		int foodId = Integer.parseInt(request.getParameter("foodId"));	
 		MenuBean foods = menuService.getFoodById(foodId);
 		request.setAttribute("menu", foods);	
@@ -125,14 +129,14 @@ public class MenuController extends HttpServlet {
 	}
 	
 	protected void getAllMenu(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		menuService = new MenuServiceImpl();
+//		menuService = new MenuServiceImpl();
  		List<MenuBean> foodList = menuService.getAllFoods();		
 		request.setAttribute("foods", foodList);
 		request.getRequestDispatcher("/Togo/GetAllMenu.jsp").forward(request, response);
  	}
 	
 	protected void updateMenu(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {				
-		menuService = new MenuServiceImpl();
+//		menuService = new MenuServiceImpl();
 		int foodId = Integer.parseInt(request.getParameter("foodId"));
 		String foodName = request.getParameter("foodName");		
 		Part filePart = request.getPart("foodPicture");

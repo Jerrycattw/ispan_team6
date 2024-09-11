@@ -12,11 +12,15 @@ import com.util.HibernateUtil;
 public class TogoItemDaoImpl implements TogoItemDao {
 	private Session session;
 	
-	public TogoItemDaoImpl() {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		session = factory.getCurrentSession();
-	}
+//	public TogoItemDaoImpl() {
+//		SessionFactory factory = HibernateUtil.getSessionFactory();
+//		session = factory.getCurrentSession();
+//	}
 	
+	public TogoItemDaoImpl(Session session) {
+		this.session = session;
+	}
+
 	@Override
 	public TogoItemBean addTogoItem(TogoItemBean togoItem) {
 		session.persist(togoItem);

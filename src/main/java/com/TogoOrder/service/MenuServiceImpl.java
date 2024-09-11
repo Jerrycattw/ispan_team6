@@ -2,6 +2,7 @@ package com.TogoOrder.service;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import com.TogoOrder.bean.MenuBean;
@@ -11,8 +12,8 @@ import com.TogoOrder.dao.MenuDaoImpl;
 public class MenuServiceImpl implements MenuService {
 	private MenuDaoImpl menuDao;
 	
-	public MenuServiceImpl() {
-		menuDao = new MenuDaoImpl();
+	public MenuServiceImpl(Session session) {
+		menuDao = new MenuDaoImpl(session);
 	}
 	
 	@Override

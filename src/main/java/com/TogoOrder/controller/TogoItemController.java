@@ -10,11 +10,14 @@ import java.util.List;
 
 import javax.xml.transform.Source;
 
+import org.hibernate.Session;
+
 import com.TogoOrder.bean.MenuBean;
 import com.TogoOrder.bean.TogoItemBean;
 import com.TogoOrder.dao.MenuDaoImpl;
 import com.TogoOrder.dao.TogoDaoImpl;
 import com.TogoOrder.dao.TogoItemDaoImpl;
+import com.TogoOrder.service.MenuServiceImpl;
 import com.TogoOrder.service.TogoItemServiceImpl;
 import com.TogoOrder.service.TogoServiceImpl;
 import com.util.TogoCalculateUtils;
@@ -26,8 +29,14 @@ public class TogoItemController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TogoItemServiceImpl togoItemService;
 	private TogoServiceImpl togoService;
+	private MenuServiceImpl menuService;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Session session = (Session) request.getAttribute("hibernateSession");
+		togoItemService = new TogoItemServiceImpl(session);
+		togoService = new TogoServiceImpl(session);
+		menuService = new MenuServiceImpl(session);
+		
 		// 獲取URL中的操作名稱
 		String action = request.getPathInfo().substring(1);
 		System.out.println(action);
@@ -54,12 +63,12 @@ public class TogoItemController extends HttpServlet {
 	}
 	
 	protected void addTogoItem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoItemService = new TogoItemServiceImpl();
-		MenuDaoImpl menuDao = new MenuDaoImpl();
+//		togoItemService = new TogoItemServiceImpl();
+//		MenuDaoImpl menuDao = new MenuDaoImpl();
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		int foodId = Integer.parseInt(request.getParameter("foodId"));
 		// 檢查 foodId 是否存在於菜單中
-	    MenuBean food = menuDao.getFoodById(foodId);   
+	    MenuBean food = menuService.getFoodById(foodId);   
 	    if (food == null || food.getFoodPrice() == null) {	
 	        // 如果 foodId 不存在，設置錯誤消息並轉發到錯誤頁面或回到訂單頁面
 	        request.setAttribute("errorMessage", "無效的餐點編號：" + foodId);
@@ -73,20 +82,20 @@ public class TogoItemController extends HttpServlet {
 		TogoItemBean togoItem = new TogoItemBean(togoId, foodId, foodName, foodPrice, amount, togoItemPrice);
 		togoItemService.addTogoItem(togoItem);
 		//更新總金額
-		TogoDaoImpl togoDao = new TogoDaoImpl();
+//		togoService = new TogoServiceImpl();
 		int totalPrice = TogoCalculateUtils.sumOfTotalPrice(togoId);
-		togoDao.updateTotalPrice(togoId, totalPrice);	
+		togoService.updateTotalPrice(togoId, totalPrice);	
 		request.setAttribute("togoItem", togoItem);
 		request.getRequestDispatcher("/TogoItemController/get").forward(request, response);
 	}
 
 	protected void deleteTogoItem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoItemService = new TogoItemServiceImpl();
+//		togoItemService = new TogoItemServiceImpl();
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		int foodId = Integer.parseInt(request.getParameter("foodId"));
 		togoItemService.deleteTogoItemByTogoIdFoodId(togoId, foodId);
 		//更新總金額
-		togoService = new TogoServiceImpl();
+//		togoService = new TogoServiceImpl();
 		int totalPrice = TogoCalculateUtils.sumOfTotalPrice(togoId);
 		togoService.updateTotalPrice(togoId, totalPrice);	
 		request.setAttribute("deleteSuccess", true); // 添加成功標籤
@@ -95,7 +104,7 @@ public class TogoItemController extends HttpServlet {
 	}
 	
 	protected void getTogoItem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoItemService = new TogoItemServiceImpl();
+//		togoItemService = new TogoItemServiceImpl();
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		List<TogoItemBean> togoItemList = togoItemService.getTogoItemByTogoId(togoId);
 		// 获取可能的错误消息
@@ -106,16 +115,16 @@ public class TogoItemController extends HttpServlet {
 	}
 
 	protected void getTogoItemForUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		TogoItemDaoImpl togoItemDao = new TogoItemDaoImpl();
+//		TogoItemDaoImpl togoItemDao = new TogoItemDaoImpl();
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		int foodId = Integer.parseInt(request.getParameter("foodId"));		
-		TogoItemBean togoItem = togoItemDao.getTogoItemByTogoIdFoodId(togoId, foodId);		
+		TogoItemBean togoItem = togoItemService.getTogoItemByTogoIdFoodId(togoId, foodId);		
 		request.setAttribute("togoItem", togoItem);
 		request.getRequestDispatcher("/Togo/UpdateTogoItem.jsp").forward(request, response);
 	}
 	
 	protected void updateTogoItem(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoItemService = new TogoItemServiceImpl();
+//		togoItemService = new TogoItemServiceImpl();
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		int foodId = Integer.parseInt(request.getParameter("foodId"));
 		String foodName = request.getParameter("foodName");
@@ -125,7 +134,7 @@ public class TogoItemController extends HttpServlet {
 		TogoItemBean togoItem = new TogoItemBean(togoId, foodId, foodName, foodPrice, amount, togoItemPrice);		
 		togoItemService.updateTogoItemByTogoIdFoodId(togoItem);
 		//更新總金額
-		togoService = new TogoServiceImpl();
+//		togoService = new TogoServiceImpl();
 		int totalPrice = TogoCalculateUtils.sumOfTotalPrice(togoId);
 		togoService.updateTotalPrice(togoId, totalPrice);	
 		request.setAttribute("togoItem", togoItem);

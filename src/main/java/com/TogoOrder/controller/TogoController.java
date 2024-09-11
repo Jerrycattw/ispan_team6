@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import org.hibernate.Session;
+
 import com.TogoOrder.bean.TogoBean;
 import com.TogoOrder.service.TogoServiceImpl;
 
@@ -19,6 +21,9 @@ public class TogoController extends HttpServlet {
     private TogoServiceImpl togoService;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Session session = (Session) request.getAttribute("hibernateSession");
+		togoService = new TogoServiceImpl(session);
+		
 		// 獲取URL中的操作名稱
 		String action = request.getPathInfo().substring(1);
 		System.out.println(action);
@@ -49,14 +54,14 @@ public class TogoController extends HttpServlet {
 	
 
 	protected void getAllTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoService = new TogoServiceImpl();
+//		togoService = new TogoServiceImpl();
 		List<TogoBean> togoList = togoService.getAllTogo();	
 		request.setAttribute("togoList", togoList);
 		request.getRequestDispatcher("/Togo/GetAllTogo.jsp").forward(request, response);
  	}
 	
 	protected void addTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-		togoService = new TogoServiceImpl();
+//		togoService = new TogoServiceImpl();
 		int memberId = Integer.parseInt(request.getParameter("memberId"));
 		String tgName = request.getParameter("tgName");
 		String tgPhone = request.getParameter("tgPhone");
@@ -72,7 +77,7 @@ public class TogoController extends HttpServlet {
 	}
 	
 	protected void deleteTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-		togoService = new TogoServiceImpl();
+//		togoService = new TogoServiceImpl();
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		TogoBean togoDelete = togoService.getTogoById(togoId);
 		togoService.deleteTogoById(togoDelete.getTogoId());	
@@ -81,7 +86,7 @@ public class TogoController extends HttpServlet {
 	}
 	
 	protected void getTogoForUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoService = new TogoServiceImpl();		
+//		togoService = new TogoServiceImpl();		
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		TogoBean togo = togoService.getTogoById(togoId);
 		request.setAttribute("togo", togo);	
@@ -89,7 +94,7 @@ public class TogoController extends HttpServlet {
 	}
 	
 	protected void getTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoService = new TogoServiceImpl();		
+//		togoService = new TogoServiceImpl();		
 		String tgPhone =request.getParameter("tgPhone");		
 		List<TogoBean> togoList = togoService.getTogoByPhone(tgPhone);
 	    request.setAttribute("togoList", togoList);	    
@@ -97,7 +102,7 @@ public class TogoController extends HttpServlet {
 	}
 
 	protected void updateTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		togoService = new TogoServiceImpl();	
+//		togoService = new TogoServiceImpl();	
 		int togoId = Integer.parseInt(request.getParameter("togoId"));
 		int memberId = Integer.parseInt(request.getParameter("memberId"));
 		String tgName = request.getParameter("tgName");

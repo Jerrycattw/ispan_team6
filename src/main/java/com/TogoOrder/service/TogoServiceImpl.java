@@ -2,16 +2,18 @@ package com.TogoOrder.service;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
 import com.TogoOrder.bean.TogoBean;
 import com.TogoOrder.dao.TogoDaoImpl;
 
 public class TogoServiceImpl implements TogoService {
 	private TogoDaoImpl togoDao;
 	
-	public TogoServiceImpl() {
-		togoDao = new TogoDaoImpl();
+	public TogoServiceImpl(Session session) {
+		togoDao = new TogoDaoImpl(session);
 	}
-	
+
 	@Override
 	public TogoBean addTogo(TogoBean togo) {
 		

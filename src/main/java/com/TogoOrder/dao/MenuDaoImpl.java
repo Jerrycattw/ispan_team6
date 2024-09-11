@@ -12,11 +12,15 @@ import com.util.HibernateUtil;
 public class MenuDaoImpl implements MenuDao {
 	private Session session;
 	
-	public MenuDaoImpl() {
-		SessionFactory factory = HibernateUtil.getSessionFactory();
-		session = factory.getCurrentSession();
-	}
+//	public MenuDaoImpl() {
+//		SessionFactory factory = HibernateUtil.getSessionFactory();
+//		session = factory.getCurrentSession();
+//	}
 	
+	public MenuDaoImpl(Session session) {
+		this.session = session;
+	}
+
 	@Override
 	public MenuBean addFood(MenuBean food) {
 		session.persist(food);		

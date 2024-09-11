@@ -2,12 +2,14 @@ package com.coupon.bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import com.google.gson.annotations.Expose;
+import com.members.bean.Member;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +18,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -82,12 +87,18 @@ public class CouponBean implements Serializable{
 	private int receivedAmount;
 	
 	@Expose(serialize = false)//Gson
-	@OneToMany(fetch = FetchType.LAZY,cascade={CascadeType.PERSIST, CascadeType.MERGE},mappedBy = "coupon")
-	private List<TagBean> tags=new LinkedList<TagBean>();
+	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon",orphanRemoval=true)
+	private List<TagBean> tags=new ArrayList<TagBean>();
 	
-	@Expose(serialize = false)//Gson
-	@OneToMany(fetch = FetchType.LAZY, cascade ={CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "coupon")
-	private Set<CouponMemberBean> couponMember = new HashSet<CouponMemberBean>(); 
+//	@Expose(serialize = false)//Gson
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
+//	private Set<CouponMemberBean> couponMember = new HashSet<CouponMemberBean>();
+	
+	@ManyToMany
+	@JoinTable(name = "member_coupon",
+	joinColumns = @JoinColumn(name="coupon_id"),
+	inverseJoinColumns = @JoinColumn(name="member_id"))
+	private Set<Member> members; // 关联的 MemberBean 实体集合
 	
 	
 	public CouponBean() {
@@ -197,8 +208,6 @@ public class CouponBean implements Serializable{
 		this.tags = tags;
 	}
 	
-	
-	
 	public int getReceivedAmount() {
 		return receivedAmount;
 	}
@@ -217,7 +226,41 @@ public class CouponBean implements Serializable{
 				+ ", rulesDescription=" + rulesDescription + ", discountType=" + discountType + ", discount=" + discount
 				+ ", minOrderDiscount=" + minOrderDiscount + ", maxDiscount=" + maxDiscount + ", tags=" + tags +", receivedAmount="+receivedAmount+ "]\r\n";
 	}
+
+
+	public Set<Member> getMembers() {
+		return members;
+	}
+
+
+	public void setMembers(Set<Member> members) {
+		this.members = members;
+	}
+
+
+//	public Set<CouponMemberBean> getCouponMember() {
+//		return couponMember;
+//	}
+//
+//
+//	public void setCouponMember(Set<CouponMemberBean> couponMember) {
+//		this.couponMember = couponMember;
+//	}
 	
-	
+	// 添加一个辅助方法来管理双向关系
+    public void addTag(TagBean tag) {
+    	if (tags == null) {
+            tags = new ArrayList<>();
+        }
+        tags.add(tag);
+        tag.setCoupon(this);
+    }
+
+    public void removeTag(TagBean tag) {
+    	if (tags != null) {
+            tags.remove(tag);
+            tag.setCoupon(null);
+        }
+    }
 	
 }

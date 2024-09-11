@@ -37,8 +37,8 @@ public class PointService {
 		Date createDate = DateUtils.GetDateFromString(createDateString);// creatDate轉型
 
 		currentPointSet = pointSetService.getPointSet();// 取得點數設定
-		String isExpiry = currentPointSet.getIsExpiry();// 判斷有無到期
-		switch (isExpiry) {
+		String Expiry = currentPointSet.getIsExpiry();// 判斷有無到期
+		switch (Expiry) {
 		case ("isExpiry"):
 			int yearInt = Integer.parseInt(createDateString.substring(0, 4)) + 1;// 到期日為隔年
 			String year = String.valueOf(yearInt);

@@ -64,7 +64,7 @@ public class Point extends HttpServlet {
  			Session session = (Session) request.getAttribute("hibernateSession");
  			pointServiceFactory = new PointServiceFactory(session);
  			pointSetService = pointServiceFactory.getPointSetService();
- 			pointService = pointServiceFactory.createPointService();
+ 			pointService = pointServiceFactory.getPointService();
  			
  			
  	// 獲取URL中的操作名稱

@@ -20,7 +20,7 @@ import com.TogoOrder.dao.TogoItemDaoImpl;
 import com.TogoOrder.service.MenuServiceImpl;
 import com.TogoOrder.service.TogoItemServiceImpl;
 import com.TogoOrder.service.TogoServiceImpl;
-import com.util.TogoCalculateUtils;
+import com.TogoOrder.util.TogoCalculateUtils;
 
 
 

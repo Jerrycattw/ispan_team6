@@ -9,6 +9,7 @@ import java.util.Set;
 import com.coupon.bean.CouponBean;
 import com.google.gson.annotations.Expose;
 import com.reserve.bean.Reserve;
+import com.shopping.bean.ShoppingBean;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -72,7 +73,10 @@ public class Member {
 	inverseJoinColumns = @JoinColumn(name="coupon_id"))
 	private Set<CouponBean> Coupons = new HashSet<CouponBean>();
 	
-	
+	//新增Shopping關聯
+		@OneToMany(mappedBy = "member") // 修改: 一對多關聯
+		private List<ShoppingBean> shoppingOrders;
+
 
 	public Member() {
 	}

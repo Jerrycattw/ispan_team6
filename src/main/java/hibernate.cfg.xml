@@ -48,7 +48,8 @@
 		
 		
 		<mapping class="com.members.bean.Member" />
-		
+		<mapping class="com.admin.bean.Admin" />
+		<mapping class="com.admin.bean.Permission" />
 		
 		
 		

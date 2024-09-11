@@ -52,11 +52,9 @@ public class ReserveService {
 		
 	}
 	
-	
+	//查詢可預訂時間
 	public List<ReserveCheckBean> getReserveCheck(String restaurantId, String tableTypeId, LocalDate checkDate) {
-		
 		return reserveDao.getReserveCheck(restaurantId, tableTypeId, checkDate);
-		
 	}
 	
 	

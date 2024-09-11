@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理員登入</title>
+    <link rel="stylesheet" href="css/adminLogin.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>管理員登入</h1>
+        <form id="login-form" action="/EEIT187-6/Admin/AdminController/login" method="post">
+            <div class="form-group">
+                <label for="account">帳號：</label>
+                <input type="text" id="account" name="account" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密碼：</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">登入</button>
+        </form>
+    </div>
+<script>
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // 阻止表單的默認提交行為
+
+    var account = document.getElementById('account').value;
+    var password = document.getElementById('password').value;
+
+    fetch('/EEIT187-6/Admin/AdminController/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `account=${encodeURIComponent(account)}&password=${encodeURIComponent(password)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert('登入成功');
+            // 重定向到管理員後台首頁或其他頁面
+            window.location.href = 'HomePage.html';
+        } else if (data.error) {
+            alert('登入失敗：' + data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script>
+</body>
+</html>

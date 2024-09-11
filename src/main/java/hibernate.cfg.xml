@@ -40,7 +40,10 @@
 		<mapping class="com.TogoOrder.bean.TogoItemBean"></mapping>
 		
 		
-		<mapping class="com.rent.bean.Rent"></mapping>
+		<mapping class="com.rent.bean.Rent" />
+		<mapping class="com.rent.bean.RentItem" />
+		<mapping class="com.rent.bean.Tableware" />
+		<mapping class="com.rent.bean.TablewareStock" />
 		
 		
 		

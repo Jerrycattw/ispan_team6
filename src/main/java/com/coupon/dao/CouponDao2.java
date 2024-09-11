@@ -1,6 +1,7 @@
 package com.coupon.dao;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -119,25 +120,66 @@ public class CouponDao2 {
 			couponBean.setDiscount(maxDiscount);
 			couponBean.setMinOrderDiscount(minOrderDiscount);
 			couponBean.setMaxDiscount(maxDiscount);
-
-			couponBean.getTags().clear();
-			if(togoTags!=null) {
-				for (String togoTag : togoTags) {
-					TagBean tagBean = new TagBean();
-					tagBean.setTagType("togo");
-					tagBean.setTagId(new TagId(couponId,togoTag));
-					couponBean.getTags().add(tagBean);
-				}				
-			}
 			
-			if(productTags!=null) {
-				for (String productTag : productTags) {
-					TagBean tagBean = new TagBean();
-					tagBean.setTagType("product");
-					tagBean.setTagId(new TagId(couponId,productTag));
-					couponBean.getTags().add(tagBean);
-				}				
-			}
+//			session.remove(couponBean.getTags());
+//			session.flush();
+//			session.clear();
+//			
+//			couponBean = session.get(CouponBean.class, couponId);
+//			if(togoTags!=null) {
+//				for (String togoTag : togoTags) {
+//					TagBean tagBean = new TagBean();
+//					tagBean.setTagType("togo");
+//					tagBean.setTagId(new TagId(couponId,togoTag));
+//					couponBean.getTags().add(tagBean);
+//				}				
+//			}
+//			
+//			if(productTags!=null) {
+//				for (String productTag : productTags) {
+//					TagBean tagBean = new TagBean();
+//					tagBean.setTagType("product");
+//					tagBean.setTagId(new TagId(couponId,productTag));
+//					couponBean.getTags().add(tagBean);
+//				}				
+//			}
+//			
+//			session.update(couponBean);
+			
+			// 清除现有标签
+	        List<TagBean> tagsToRemove = new ArrayList<>(couponBean.getTags());
+	        for (TagBean tag : tagsToRemove) {
+	            couponBean.removeTag(tag);
+	            session.delete(tag);
+	        }
+	        session.flush();
+	        session.clear();
+
+	        // 重新加载 CouponBean
+	        couponBean = session.get(CouponBean.class, couponId);
+
+	        // 添加新标签
+	        if (togoTags != null) {
+	            for (String togoTag : togoTags) {
+	                TagBean tagBean = new TagBean();
+	                tagBean.setTagType("togo");
+	                tagBean.setTagId(new TagId(couponId, togoTag));
+	                tagBean.setCoupon(couponBean);
+	                couponBean.addTag(tagBean);
+	            }
+	        }
+	        if (productTags != null) {
+	            for (String productTag : productTags) {
+	                TagBean tagBean = new TagBean();
+	                tagBean.setTagType("product");
+	                tagBean.setTagId(new TagId(couponId, productTag));
+	                tagBean.setCoupon(couponBean);
+	                couponBean.addTag(tagBean);
+	            }
+	        }
+
+	        session.update(couponBean);
+			
 		}
 
 	}

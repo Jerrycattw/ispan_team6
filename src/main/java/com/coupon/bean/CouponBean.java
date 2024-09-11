@@ -2,6 +2,7 @@ package com.coupon.bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,8 +87,8 @@ public class CouponBean implements Serializable{
 	private int receivedAmount;
 	
 	@Expose(serialize = false)//Gson
-	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon")
-	private List<TagBean> tags=new LinkedList<TagBean>();
+	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon",orphanRemoval=true)
+	private List<TagBean> tags=new ArrayList<TagBean>();
 	
 //	@Expose(serialize = false)//Gson
 //	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
@@ -246,6 +247,20 @@ public class CouponBean implements Serializable{
 //		this.couponMember = couponMember;
 //	}
 	
-	
+	// 添加一个辅助方法来管理双向关系
+    public void addTag(TagBean tag) {
+    	if (tags == null) {
+            tags = new ArrayList<>();
+        }
+        tags.add(tag);
+        tag.setCoupon(this);
+    }
+
+    public void removeTag(TagBean tag) {
+    	if (tags != null) {
+            tags.remove(tag);
+            tag.setCoupon(null);
+        }
+    }
 	
 }

@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 import org.hibernate.Session;
 
 import com.members.bean.Member;
+import com.members.bean.MemberDTO;
 import com.members.dao.MemberDao;
 import com.members.service.MemberService;
 import com.util.HibernateUtil;
@@ -68,8 +69,22 @@ public class MemberInfoController extends HttpServlet {
                 
 
                 if (member != null) {
+                    // 將 Member 轉換為 MemberDTO
+                    MemberDTO memberDTO = new MemberDTO(
+                        member.getMemberId(),
+                        member.getMemberName(),
+                        member.getAccount(),
+                        member.getPassword(),
+                        member.getBirthday(),
+                        member.getEmail(),
+                        member.getAddress(),
+                        member.getPhone(),
+                        member.getRegisterDate(),
+                        member.getStatus()
+                    );
+                    
                     Gson gson = new Gson();
-                    String memberJson = gson.toJson(member);
+                    String memberJson = gson.toJson(memberDTO);
                     out.print(memberJson);
                 } else {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);

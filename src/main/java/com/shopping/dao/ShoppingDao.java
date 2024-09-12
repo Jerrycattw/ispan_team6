@@ -17,14 +17,6 @@ public class ShoppingDao {
 		this.session = session;
 	}
 
-//	// 新增
-//	public ShoppingBean addShopping(ShoppingBean bean) {
-//		if (bean != null) {
-//			session.persist(bean);
-//			return bean;
-//		}
-//		return null;
-//	}
 
 	// 新增
 	public ShoppingBean addOrder(ShoppingBean bean) {
@@ -137,7 +129,6 @@ public class ShoppingDao {
 
 	// 查詢全部
 	public List<ShoppingBean> searchAllShopping() {
-//		Query<ShoppingBean> query = session.createQuery("from ShoppingBean", ShoppingBean.class);
 		Query<ShoppingBean> query = session.createQuery("SELECT s FROM ShoppingBean s JOIN FETCH s.member",
 				ShoppingBean.class);
 		return query.list();

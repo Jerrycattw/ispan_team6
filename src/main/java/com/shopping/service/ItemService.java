@@ -31,6 +31,14 @@ public class ItemService {
         itemDao.updateItem(shoppingItemQuantity, productId, shoppingId);
     }
 
+    public boolean deleteAllItem(int shoppingId) {
+        return itemDao.deleteAllItem(shoppingId);
+    }
+    
+    public Integer calculateTotalAmount(Integer shoppingId) {
+        return itemDao.calculateTotalAmount(shoppingId);
+    }
+    
     public ItemBean searchItem(int shoppingId, int productId) {
         return itemDao.searchItem(shoppingId, productId);
     }

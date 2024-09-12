@@ -1,9 +1,5 @@
 package com.shopping.bean;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity @Table(name="shopping_item")
@@ -26,11 +21,9 @@ public class ItemBean {
 	@Id
 	@Column(name = "product_id")
 	private Integer productId;
-//	private String product_name;
 	
 	@Column(name = "shopping_item_quantity")
 	private Integer shoppingItemQuantity;
-//	private Integer product_price;
 	
 	@Column(name = "shopping_item_price")
 	private Integer shoppingItemPrice;

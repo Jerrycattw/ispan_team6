@@ -28,9 +28,6 @@ public class ProductBean {
 	@Column(name = "product_name")
 	private String productName;
 	
-//	@Column(name = "product_type_id")
-//	private Integer productTypeId;
-	
 	@Column(name = "product_price")
 	private Integer productPrice;
 	

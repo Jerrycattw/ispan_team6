@@ -15,6 +15,7 @@ public class ProductService {
 	
 	public ProductService(Session session) {
 		pDao = new ProductDao(session);
+		iDao = new ItemDao(session); 
 		
 	}
 	
@@ -30,6 +31,10 @@ public class ProductService {
 		return pDao.updateProduct(bean);
 	}
 	
+	public ProductBean searchProductName(String productName) {
+        return pDao.searchProductName(productName);
+    }
+	
 	public ProductBean searchByProductId(Integer productId) {
 		return pDao.searchByProductId(productId);
 	}
@@ -37,6 +42,7 @@ public class ProductService {
 	public List<ProductBean> searchAllProduct() {
 		return pDao.searchAllProduct();
 	}
+	
 	public Integer calculateTotalAmount(Integer shoppingId) {
 	    return iDao.calculateTotalAmount(shoppingId);
 	}

@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header styling */
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Navigation styling */
+nav {
+    margin-top: 10px;
+}
+
+nav button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+nav button:hover {
+    background-color: #555;
+}
+
+/* Main content styling */
+main {
+    padding: 20px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="email"],
+input[type="tel"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+/* Address group styling */
+.address-group {
+    display: flex;
+    gap: 10px; /* 元素間的間距 */
+    margin-bottom: 15px;
+}
+
+.address-group select,
+.address-group input[type="text"] {
+    width: 100px; /* 保持選單和地址欄的寬度 */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 24px; /* 確保文本垂直居中 */
+    height: 40px; /* 設置相同的高度 */
+}
+
+.address-group input[type="text"] {
+    flex-grow: 1; /* 讓地址欄自適應寬度 */
+}
+
+/* Login button styling */
+.login-button {
+    background-color: #4CAF50; /* 綠色背景 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.login-button:hover {
+    background-color: #45a049; /* 深綠色背景 */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    main {
+        margin: 10px;
+        padding: 15px;
+    }
+    .address-group {
+        flex-direction: column;
+    }
+}

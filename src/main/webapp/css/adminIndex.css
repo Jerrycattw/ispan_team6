@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* 深黑色背景 */
+    color: #e0e0e0; /* 淺灰色文字 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.homepage-container {
+    background-color: #1f1f1f; /* 深灰色背景 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* 白色陰影 */
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #ffffff; /* 白色文字 */
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 按鈕之間的間距 */
+}
+
+.button {
+    display: inline-block;
+    width: 100%;
+    padding: 15px;
+    background-color: #333; /* 深灰色按鈕背景 */
+    border: none;
+    border-radius: 4px;
+    color: #ffffff; /* 白色文字 */
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box; /* 包含邊框和內邊距在總寬度內 */
+}
+
+.button:hover {
+    background-color: #444; /* 按鈕懸停時變為較淺的灰色 */
+}

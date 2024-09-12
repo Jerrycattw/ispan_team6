@@ -34,7 +34,7 @@ public class CouponDao2 {
 	// 取得productType選項
 	public List<String> getProductTypeTagsOption() {
 		// "SELECT product_type_name FROM product_type"
-		String hql = "SELECT p.product_type_name FROM ProductType p";
+		String hql = "SELECT p.productTypeName FROM ProductType p";
 		Query<String> query = session.createQuery(hql, String.class);
 		return query.list();
 	}
@@ -63,6 +63,8 @@ public class CouponDao2 {
 				TagBean tagBean = new TagBean();
 				tagBean.setTagType("togo");
 				tagBean.setTagId(new TagId(couponId, togoTag));
+//				tagBean.setTagId(new TagId(togoTag));
+				tagBean.setCoupon(couponBean);
 				couponBean.getTags().add(tagBean);
 			}
 		}
@@ -72,18 +74,14 @@ public class CouponDao2 {
 				TagBean tagBean = new TagBean();
 				tagBean.setTagType("product");
 				tagBean.setTagId(new TagId(couponId, productTag));
+//				tagBean.setTagId(new TagId(productTag));
+				tagBean.setCoupon(couponBean);
 				couponBean.getTags().add(tagBean);
 			}
 		}
+		
+//		session.persist(couponBean);
 
-//		// 由于持久化操作会更新 CouponBean 的 ID
-//		int couponId = couponBean.getCouponId();
-//		
-//		for (TagBean tagBean : couponBean.getTags()) {
-//	        tagBean.setTagId(new TagId(couponId, tagBean.getTagId().getTagName()));  // 使用 couponId 更新 TagId
-//	        // 将 TagBean 持久化到数据库
-//	        session.persist(tagBean);
-//		}
 	}
 
 	// 刪除Coupon

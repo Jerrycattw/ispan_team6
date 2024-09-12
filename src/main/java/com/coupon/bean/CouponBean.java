@@ -90,15 +90,15 @@ public class CouponBean implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon",orphanRemoval=true)
 	private List<TagBean> tags=new ArrayList<TagBean>();
 	
-//	@Expose(serialize = false)//Gson
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
-//	private Set<CouponMemberBean> couponMember = new HashSet<CouponMemberBean>();
-	
 	@ManyToMany
 	@JoinTable(name = "member_coupon",
 	joinColumns = @JoinColumn(name="coupon_id"),
 	inverseJoinColumns = @JoinColumn(name="member_id"))
 	private Set<Member> members; // 关联的 MemberBean 实体集合
+	
+//	@Expose(serialize = false)//Gson
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
+//	private Set<CouponMemberBean> couponMember = new HashSet<CouponMemberBean>();
 	
 	
 	public CouponBean() {

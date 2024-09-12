@@ -26,13 +26,13 @@ public class ShoppingService {
 	}
 	
 	
-//	public ShoppingBean addShopping(ShoppingBean bean) {
-//		return sDao.addShopping(bean);
-//	}
-	
 	public ShoppingBean addOrder(ShoppingBean bean) {
 		return sDao.addOrder(bean);
 	}
+	
+	 public void addTotal(Integer shoppingItemQuantity, Integer productId, Integer shoppingId) {
+	        sDao.addTotal(shoppingItemQuantity, productId, shoppingId);
+	    }
 	
 	public boolean deleteShopping(Integer ShoppingId) {
 		return sDao.deleteShopping(ShoppingId);
@@ -41,7 +41,6 @@ public class ShoppingService {
 	public boolean deleteOrder(Integer ShoppingId) {
 		return iDao.deleteItem(ShoppingId, ShoppingId);
 	}
-	
 	
 	public ShoppingBean updateShopping(ShoppingBean shoppingbean) {
 		return sDao.updateShopping(shoppingbean);

@@ -1,0 +1,201 @@
+/* styles.css */
+
+/* Reset default margin and padding */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Basic body styling */
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+	color: #333;
+	line-height: 1.6;
+	margin: 0;
+	padding: 0;
+}
+
+/* Header styling */
+header {
+	background-color: #333;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+
+/* Navigation styling */
+nav {
+	margin-top: 10px;
+}
+
+nav button {
+	background-color: #444;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	margin: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+nav button:hover {
+	background-color: #555;
+}
+
+/* Main content styling */
+main {
+	padding: 20px;
+	margin: 20px;
+	background-color: white;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styling */
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	margin-bottom: 5px;
+}
+
+input {
+	margin-bottom: 15px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.buttonArea {
+	display: flex;
+	align-items: center;
+}
+
+/* 初始化樣式：隱藏所有區域 */
+#profileArea,
+#updatePasswordArea {
+    display: none; /* 隱藏所有區域 */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* 顯示區域的樣式 */
+#profileArea.show,
+#updatePasswordArea.show {
+    display: block; /* 顯示區域 */
+}
+
+/* 輔助樣式 */
+#profileArea {
+    background-color: #f9f9f9;
+}
+
+#updatePasswordArea {
+    background-color: #eaf7e2;
+}
+
+/* 更新密碼區域的樣式 */
+#updatePasswordArea {
+    background-color: #f9f9f9; /* 背景顏色 */
+    border: 1px solid #ddd; /* 邊框 */
+    border-radius: 8px; /* 邊框圓角 */
+    padding: 20px; /* 內邊距 */
+    width: 300px; /* 表單寬度 */
+    margin: 20px auto; /* 外邊距，居中顯示 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 投影效果 */
+}
+
+/* 表單標籤樣式 */
+#updatePasswordArea label {
+    display: block; /* 顯示為區塊 */
+    margin-bottom: 5px; /* 下邊距 */
+    font-weight: bold; /* 粗體字 */
+}
+
+/* 輸入框樣式 */
+#updatePasswordArea input[type="password"] {
+    width: calc(100% - 20px); /* 設置輸入框寬度，考慮內邊距 */
+    padding: 10px; /* 內邊距 */
+    border: 1px solid #ccc; /* 邊框 */
+    border-radius: 4px; /* 圓角 */
+    margin-bottom: 10px; /* 下邊距 */
+    box-sizing: border-box; /* 包括邊框和內邊距在內的寬度計算 */
+}
+
+/* 按鈕樣式 */
+#updatePasswordArea button {
+    background-color: #007bff; /* 按鈕背景顏色 */
+    color: #fff; /* 按鈕文字顏色 */
+    border: none; /* 去掉邊框 */
+    padding: 10px 15px; /* 內邊距 */
+    border-radius: 4px; /* 圓角 */
+    cursor: pointer; /* 鼠標懸停樣式 */
+    font-size: 16px; /* 文字大小 */
+}
+
+#updatePasswordArea button:hover {
+    background-color: #0056b3; /* 懸停時的背景顏色 */
+}
+
+button {
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+#queryProfileButton,
+#updatePasswordButton {
+    margin-right: 10px; /* 調整按鈕之間的距離 */
+}
+
+/* Login button styling */
+.login-button {
+	background-color: #4CAF50; /* 绿色背景 */
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-top: 10px;
+}
+
+.login-button:hover {
+	background-color: #45a049; /* 深绿色背景 */
+}
+
+.logout-button {
+	background-color: #af4c4c;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-top: 10px;
+}
+
+.logout-button:hover {
+	background-color: #a04545; /* 深綠色背景 */
+}
+
+/* Responsive design */
+@media ( max-width : 768px) {
+	nav button {
+		display: block;
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	main {
+		margin: 10px;
+		padding: 15px;
+	}
+}

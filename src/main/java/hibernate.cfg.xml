@@ -17,8 +17,8 @@
 		<!-- current session: 一個執行續只能產生一個session一個transaction (不需自行建立和關閉) -->
 		<property name="hibernate.current_session_context_class">thread</property>
 		
-		<property name="hibernate.show_sql">true</property>
-		<property name="hibernate.format_sql">true</property>
+<!-- 		<property name="hibernate.show_sql">true</property> -->
+<!-- 		<property name="hibernate.format_sql">true</property> -->
 		
 		<mapping class="com.reserve.bean.Restaurant" />
 		<mapping class="com.reserve.bean.Reserve" />

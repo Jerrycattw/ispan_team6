@@ -2,13 +2,21 @@ package com.coupon.bean;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.GeneratedValue;
+
 import java.io.Serializable;
 import java.util.Objects;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Embeddable
 public class TagId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@GenericGenerator(name = "generator", strategy = "foreign", 
+			parameters = @Parameter(name="property",value="coupon"))
+	@GeneratedValue(generator = "generator")
 	@Column(name = "coupon_id")
 	private Integer couponId;
 	

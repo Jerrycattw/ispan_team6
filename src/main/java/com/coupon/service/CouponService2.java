@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import org.hibernate.Session;
 
 import com.coupon.bean.CouponBean;
+import com.coupon.bean.TagBean;
+import com.coupon.bean.TagId;
 import com.coupon.dao.CouponDao2;
 import com.coupon.dto.CouponDTO;
 import com.coupon.dto.TagDTO;
@@ -41,7 +43,7 @@ public class CouponService2 {
 				couponBean.getMinOrderDiscount(),
 				couponBean.getMaxDiscount(),
 				tagDTOs,
-				couponBean.getMembers().size()
+				couponBean.getMembers().size()//receivedAmount
 		);
 	}
 	
@@ -85,17 +87,10 @@ public class CouponService2 {
 	}
 	
 	//insert Coupon
-	public void insertCoupon(String couponCode,String couponDescription,String couponStartDate,String couponEndDate,String maxCoupon,String perMaxCoupon,
-			String couponStatus,String rulesDescription,String discountType,String discount,String minOrderDiscount,String  maxDiscount, String[] productTags,String[] togoTags) {
-		LocalDate localDateCouponStartDate=LocalDate.parse(couponStartDate);
-		LocalDate localDateCouponEndDate=LocalDate.parse(couponEndDate);
-		int intMaxCoupon=Integer.parseInt(maxCoupon);
-		int intPerMaxCoupon=Integer.parseInt(perMaxCoupon);
-		int intDiscount=Integer.parseInt(discount);
-		int intMinOrderDiscount=Integer.parseInt(minOrderDiscount);
-		int intMaxDiscount=Integer.parseInt(maxDiscount);
-		
-		couponDao2.insertCoupon(couponCode, couponDescription, localDateCouponStartDate, localDateCouponEndDate, intMaxCoupon, intPerMaxCoupon, couponStatus, rulesDescription, discountType, intDiscount, intMinOrderDiscount, intMaxDiscount, productTags, togoTags);
+	public void insertCoupon(CouponBean couponBean,String[] productTags, String[] togoTags) {
+		addTags(couponBean,productTags,"product");
+		addTags(couponBean,togoTags,"togo");	
+		couponDao2.insertCoupon(couponBean);
 	}
 	
 	//delete
@@ -104,19 +99,30 @@ public class CouponService2 {
 		couponDao2.deleteCoupon(intCouponId);
 	}
 	
-	//update
-	public void updateCoupon(String couponId,String  couponCode,String  couponDescription,String  couponStartDate,String couponEndDate,String maxCoupon,
-			String perMaxCoupon,String couponStatus,String rulesDescription,String discountType,String discount,String minOrderDiscount,String maxDiscount, String[] productTags,String[] togoTags) {
-		int intCouponId=Integer.parseInt(couponId);
-		LocalDate localDateCouponStartDate=LocalDate.parse(couponStartDate);
-		LocalDate localDateCouponEndDate=LocalDate.parse(couponEndDate);
-		int intMaxCoupon=Integer.parseInt(maxCoupon);
-		int intPerMaxCoupon=Integer.parseInt(perMaxCoupon);
-		int intDiscount=Integer.parseInt(discount);
-		int intMinOrderDiscount=Integer.parseInt(minOrderDiscount);
-		int intMaxDiscount=Integer.parseInt(maxDiscount);
-		
-		couponDao2.updateCoupon(intCouponId, couponCode, couponDescription, localDateCouponStartDate, localDateCouponEndDate, intMaxCoupon, intPerMaxCoupon, couponStatus, rulesDescription, discountType, intDiscount, intMinOrderDiscount, intMaxDiscount, productTags, togoTags);
-	}
 	
+	//update
+		public void updateCoupon(CouponBean couponBean, String[] productTags, String[] togoTags) {	
+			addTags(couponBean,productTags,"product");
+			addTags(couponBean,togoTags,"togo");
+			couponDao2.updateCoupon(couponBean);
+		}
+		
+	//coupon add tags (before CRUD)	
+	private void addTags(CouponBean coupon, String[] tags, String tagType) {
+	    if (tags != null) {
+	        for (String tag : tags) {
+	            TagBean tagBean = new TagBean();
+	            tagBean.setTagType(tagType);
+	            
+	            if (coupon.getCouponId() > 0) {
+	            	tagBean.setTagId(new TagId(coupon.getCouponId(),tag));//修改透過coupon的ID
+	            }else {
+	            	tagBean.setTagId(new TagId(tag));//新增的COUPON沒有ID，透過關聯coupon identity新增
+	            }
+	            
+	            tagBean.setCoupon(coupon);
+	            coupon.getTags().add(tagBean);
+	        }
+	    }
+	}
 }

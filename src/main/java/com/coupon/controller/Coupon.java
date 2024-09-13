@@ -90,10 +90,10 @@ public class Coupon extends HttpServlet {
  				System.out.println("switch delete touch");
  				deleteCoupon(request, response);
  				break;
- 			case "search":
- 				System.out.println("switch search touch");
- 				searchCoupon(request, response);
- 				break;
+// 			case "search":
+// 				System.out.println("switch search touch");
+// 				searchCoupon(request, response);
+// 				break;
 // 			case "distribute":
 // 				System.out.println("switch distribute touch");
 // 				distributeCoupon(request, response);
@@ -114,22 +114,6 @@ public class Coupon extends HttpServlet {
  	
  	//查詢所有
  	private void getAllCouponWithTagsAndReceived(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		List<CouponBean> coupons = couponService.getAllCouponWithTagsAndReceived();
-// 		List<CouponDTO> couponsDTO = couponService.convertCouponsToDTOs(coupons);
-//
-// 		
-// 		// 使用自定义的Gson实例
-// 	    Gson gson = new GsonBuilder()
-// 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-// 	        .create();
-// 	    
-// 	    String jsonCoupons = gson.toJson(couponsDTO);
-//		request.setAttribute("jsonCoupons", jsonCoupons);
-//		response.setContentType("application/json");
-//	    response.setCharacterEncoding("UTF-8");
-//	    response.getWriter().write(jsonCoupons);
- 		
-// 		------------------------------------------------------------
  		List<CouponDTO> couponDTOs = couponService2.getAllCoupon();
  		
  		//使用自定义的Gson实例
@@ -147,29 +131,6 @@ public class Coupon extends HttpServlet {
  	
  	//查詢單筆
  	private void getOneCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		BufferedReader reader = request.getReader();
-//        String couponId = reader.readLine();
-//        CouponBean coupon=couponService.getCouponWithTags(couponId);
-//        CouponDTO couponDTO = couponService.convertCouponToDTO(coupon);
-//        System.out.println(couponDTO);
-//        Map<String, List<String>> tagOptions = couponService.getTagOptions();
-//        
-//     // 使用自定义的Gson实例
-// 	    Gson gson = new GsonBuilder()
-// 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-// 	        .create();
-// 	    
-// 	   JsonElement jsonCoupon = gson.toJsonTree(couponDTO);
-//       JsonElement jsonTagOptions = gson.toJsonTree(tagOptions);
-//       
-//       JsonObject jsonResponse = new JsonObject();
-//       jsonResponse.add("coupon", jsonCoupon);
-//       jsonResponse.add("tagOptions", jsonTagOptions);
-//       
-// 	   response.setContentType("application/json");
-// 	   response.setCharacterEncoding("UTF-8");
-// 	   response.getWriter().write(jsonResponse.toString());
-// 		--------------------------------------------------------------------------------
 		BufferedReader reader = request.getReader();
         String couponId = reader.readLine();
         CouponDTO couponDTO = couponService2.getCouponById(couponId);
@@ -196,71 +157,33 @@ public class Coupon extends HttpServlet {
  	
  	//修改單筆
  	private void updateCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		String couponId = request.getParameter("hiddenCouponId");
-// 		String couponCode = request.getParameter("couponCode");
-// 		String couponDescription = request.getParameter("couponDescription");
-// 		String couponStartDate = request.getParameter("couponStartDate");
-// 		String couponEndDate = request.getParameter("couponEndDate");
-// 		String maxCoupon = request.getParameter("maxCoupon");
-// 		String perMaxCoupon = request.getParameter("perMaxCoupon");
-// 		String couponStatus = request.getParameter("couponStatus");
-// 		String rulesDescription = request.getParameter("rulesDescription");
-// 		String discountType = request.getParameter("discountType");
-// 		String discount = request.getParameter("discount");
-// 		String minOrderDiscount = request.getParameter("minOrderDiscount");
-// 		String maxDiscount = request.getParameter("maxDiscount");
-// 		String[] productTags = request.getParameterValues("product");
-// 		String[] togoTags = request.getParameterValues("togo");
-// 		couponService.updateCoupon(couponId,couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount);
-// 		couponService.deleteCouponTag(couponId,productTags,togoTags);
-// 		couponService.insertCouponTag(Integer.parseInt(couponId),productTags,togoTags);
-// 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
-// 		--------------------------------------------------------------------------------------------
- 		String couponId = request.getParameter("hiddenCouponId");
- 		String couponCode = request.getParameter("couponCode");
- 		String couponDescription = request.getParameter("couponDescription");
- 		String couponStartDate = request.getParameter("couponStartDate");
- 		String couponEndDate = request.getParameter("couponEndDate");
- 		String maxCoupon = request.getParameter("maxCoupon");
- 		String perMaxCoupon = request.getParameter("perMaxCoupon");
- 		String couponStatus = request.getParameter("couponStatus");
- 		String rulesDescription = request.getParameter("rulesDescription");
- 		String discountType = request.getParameter("discountType");
- 		String discount = request.getParameter("discount");
- 		String minOrderDiscount = request.getParameter("minOrderDiscount");
- 		String maxDiscount = request.getParameter("maxDiscount");
+		int couponId = Integer.parseInt(request.getParameter("hiddenCouponId"));
+		String couponCode = request.getParameter("couponCode");
+		String couponDescription = request.getParameter("couponDescription");
+		LocalDate couponStartDate = LocalDate.parse(request.getParameter("couponStartDate"));
+		LocalDate couponEndDate = LocalDate.parse(request.getParameter("couponEndDate"));
+		int maxCoupon = Integer.parseInt(request.getParameter("maxCoupon"));
+		int perMaxCoupon=Integer.parseInt(request.getParameter("perMaxCoupon"));
+		String couponStatus = request.getParameter("couponStatus");
+		String rulesDescription = request.getParameter("rulesDescription");
+		String discountType = request.getParameter("discountType");
+		int discount = Integer.parseInt(request.getParameter("discount"));
+		int minOrderDiscount = Integer.parseInt(request.getParameter("minOrderDiscount"));
+		int maxDiscount = Integer.parseInt(request.getParameter("maxDiscount"));
  		String[] productTags = request.getParameterValues("product");
  		String[] togoTags = request.getParameterValues("togo");
- 		couponService2.updateCoupon(couponId,couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount, productTags, togoTags);
- 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
  		
+ 		CouponBean couponBean = new CouponBean(couponId,couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount);
+ 		couponService2.updateCoupon(couponBean,productTags,togoTags);
+ 		
+ 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
  		
  		
 	}
  	
  	//查詢預設
  	private void getDefaultCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		CouponBean coupon=new CouponBean();
-// 		Map<String, List<String>> tagOptions = couponService.getTagOptions();
-// 		
-// 	// 使用自定义的Gson实例
-// 	    Gson gson = new GsonBuilder()
-// 	    	.excludeFieldsWithoutExposeAnnotation()
-// 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())//null 序列化為""
-// 	        .registerTypeAdapter(String.class, new StringAdapter())//null 序列化為""
-// 	        .registerTypeAdapter(Integer.class, new IntegerAdapter())//0 序列化為""
-// 	        .create();
-// 	    
-// 	   JsonElement jsonCoupon = gson.toJsonTree(coupon);
-//       JsonElement jsonTagOptions = gson.toJsonTree(tagOptions);
-//       
-//       JsonObject jsonResponse = new JsonObject();
-//       jsonResponse.add("coupon", jsonCoupon);
-//       jsonResponse.add("tagOptions", jsonTagOptions);
-// 	   response.setContentType("application/json");
-// 	   response.setCharacterEncoding("UTF-8");
-// 	   response.getWriter().write(jsonResponse.toString());
-// 	   ---------------------------------------------------------------------------------
+ 		
 		CouponDTO couponDTO=new CouponDTO();
 		Map<String, List<String>> tagOptions = couponService2.getTagOptions();
 		
@@ -285,65 +208,56 @@ public class Coupon extends HttpServlet {
  	
  	//新增
  	private void insertCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+ 		
  		request.setCharacterEncoding("UTF-8");
- 		String couponCode = request.getParameter("couponCode");
- 		String couponDescription = request.getParameter("couponDescription");
- 		String couponStartDate = request.getParameter("couponStartDate");
- 		String couponEndDate = request.getParameter("couponEndDate");
- 		String maxCoupon = request.getParameter("maxCoupon");
- 		String perMaxCoupon = request.getParameter("perMaxCoupon");
- 		String couponStatus = request.getParameter("couponStatus");
- 		String rulesDescription = request.getParameter("rulesDescription");
- 		String discountType = request.getParameter("discountType");
- 		String discount = request.getParameter("discount");
- 		String minOrderDiscount = request.getParameter("minOrderDiscount");
- 		String maxDiscount = request.getParameter("maxDiscount");
+		String couponCode = request.getParameter("couponCode");
+		String couponDescription = request.getParameter("couponDescription");
+		LocalDate couponStartDate = LocalDate.parse(request.getParameter("couponStartDate"));
+		LocalDate couponEndDate = LocalDate.parse(request.getParameter("couponEndDate"));
+		int maxCoupon = Integer.parseInt(request.getParameter("maxCoupon"));
+		int perMaxCoupon=Integer.parseInt(request.getParameter("perMaxCoupon"));
+		String couponStatus = request.getParameter("couponStatus");
+		String rulesDescription = request.getParameter("rulesDescription");
+		String discountType = request.getParameter("discountType");
+		int discount = Integer.parseInt(request.getParameter("discount"));
+		int minOrderDiscount = Integer.parseInt(request.getParameter("minOrderDiscount"));
+		int maxDiscount = Integer.parseInt(request.getParameter("maxDiscount"));
  		String[] productTags = request.getParameterValues("product");
  		String[] togoTags = request.getParameterValues("togo");
-
+ 		CouponBean couponBean = new CouponBean(couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount);
  		
-// 		//執行insert，並回傳自動生成的ID
-// 		int newCouponId=couponService.insertCoupon(couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount);
-// 		//依照自動生成的ID insert
-// 		couponService.insertCouponTag(newCouponId,productTags,togoTags);
-// 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
-// 		----------------------------------------------------------------------------------------------------------
+ 		couponService2.insertCoupon(couponBean,productTags,togoTags);
  		
- 		couponService2.insertCoupon(couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount, productTags, togoTags);
  		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
  	}
  	
  	//刪除
- 	private void deleteCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+ 	private void deleteCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{	
  		
-// 		String couponCode = request.getParameter("couponId");
-// 		couponService.deleteCouponWithTags(couponCode);
-// 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
-// 		----------------------------------------------------------------------------------------------
  		String couponId = request.getParameter("couponId");
  		couponService2.deleteCouponById(couponId);
  		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
  	}
  	
  	//search
- 	private void searchCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
- 		
- 		String keyWord = request.getParameter("search");
- 		System.out.println(keyWord);
- 		List<CouponBean> coupons = couponService.getAllCouponWithTagsAndReceived(keyWord);
- 		
- 		// 使用自定义的Gson实例
- 	    Gson gson = new GsonBuilder()
- 	    	.excludeFieldsWithoutExposeAnnotation()
- 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
- 	        .create();
- 	    
- 	    String jsonCoupons = gson.toJson(coupons);
-//		request.setAttribute("jsonCoupons", jsonCoupons);
-		response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write(jsonCoupons);
- 	}
+// 	private void searchCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+// 		
+// 		String keyWord = request.getParameter("search");
+// 		System.out.println(keyWord);
+// 		List<CouponBean> coupons = couponService.getAllCouponWithTagsAndReceived(keyWord);
+// 		
+// 		// 使用自定义的Gson实例
+// 	    Gson gson = new GsonBuilder()
+// 	    	.excludeFieldsWithoutExposeAnnotation()
+// 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+// 	        .create();
+// 	    
+// 	    String jsonCoupons = gson.toJson(coupons);
+////		request.setAttribute("jsonCoupons", jsonCoupons);
+//		response.setContentType("application/json");
+//	    response.setCharacterEncoding("UTF-8");
+//	    response.getWriter().write(jsonCoupons);
+// 	}
  	
 // 	//distribute
 // 	private void distributeCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

@@ -19,14 +19,6 @@ public class ItemDao {
 		this.session = session;
 	}
 
-	// 新增訂單
-//	public ItemBean addOrder(ItemBean bean) {
-//		if (bean != null) {
-//			session.persist(bean);
-//			return bean;
-//		}
-//		return null;
-//	}
 
 	// 新增訂單明細
 	public ItemBean addItem(ItemBean itembean) {

@@ -86,19 +86,20 @@ public class CouponBean implements Serializable{
 	@Transient
 	private int receivedAmount;
 	
+	
 	@Expose(serialize = false)//Gson
 	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon",orphanRemoval=true)
 	private List<TagBean> tags=new ArrayList<TagBean>();
-	
-//	@Expose(serialize = false)//Gson
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
-//	private Set<CouponMemberBean> couponMember = new HashSet<CouponMemberBean>();
 	
 	@ManyToMany
 	@JoinTable(name = "member_coupon",
 	joinColumns = @JoinColumn(name="coupon_id"),
 	inverseJoinColumns = @JoinColumn(name="member_id"))
 	private Set<Member> members; // 关联的 MemberBean 实体集合
+	
+//	@Expose(serialize = false)//Gson
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
+//	private Set<CouponMemberBean> couponMember = new HashSet<CouponMemberBean>();
 	
 	
 	public CouponBean() {
@@ -121,6 +122,25 @@ public class CouponBean implements Serializable{
 		this.minOrderDiscount = minOrderDiscount;
 		this.maxDiscount = maxDiscount;
 	}
+	
+	public CouponBean(int couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
+			LocalDate couponEndDate, int maxCoupon, int perMaxCoupon, String couponStatus, String rulesDescription,
+			String discountType, int discount, int minOrderDiscount, int maxDiscount) {
+		this.couponId=couponId;
+		this.couponCode = couponCode;
+		this.couponDescription = couponDescription;
+		this.couponStartDate = couponStartDate;
+		this.couponEndDate = couponEndDate;
+		this.maxCoupon = maxCoupon;
+		this.perMaxCoupon = perMaxCoupon;
+		this.couponStatus = couponStatus;
+		this.rulesDescription = rulesDescription;
+		this.discountType = discountType;
+		this.discount = discount;
+		this.minOrderDiscount = minOrderDiscount;
+		this.maxDiscount = maxDiscount;
+	}
+	
 
 
 	public int getCouponId() {
@@ -237,30 +257,4 @@ public class CouponBean implements Serializable{
 		this.members = members;
 	}
 
-
-//	public Set<CouponMemberBean> getCouponMember() {
-//		return couponMember;
-//	}
-//
-//
-//	public void setCouponMember(Set<CouponMemberBean> couponMember) {
-//		this.couponMember = couponMember;
-//	}
-	
-	// 添加一个辅助方法来管理双向关系
-    public void addTag(TagBean tag) {
-    	if (tags == null) {
-            tags = new ArrayList<>();
-        }
-        tags.add(tag);
-        tag.setCoupon(this);
-    }
-
-    public void removeTag(TagBean tag) {
-    	if (tags != null) {
-            tags.remove(tag);
-            tag.setCoupon(null);
-        }
-    }
-	
 }

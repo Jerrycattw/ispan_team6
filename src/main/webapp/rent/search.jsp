@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,17 +10,10 @@
 <link rel="stylesheet" href="../template/table1.css">
 <link rel="stylesheet" href="../template/rent.css">
 <script src="../template/template.js"></script>
+
 </head>
 <body>
-	<div class="top-menu">
-		<a href="#" onclick="showSidebar('member')">會員管理</a> <a href="#"
-			onclick="showSidebar('store')">商城管理</a> <a href="#"
-			onclick="showSidebar('order')">訂餐管理</a> <a href="#"
-			onclick="showSidebar('rental')">租借用具管理</a> <a href="#"
-			onclick="showSidebar('reservation')">餐廳訂位管理</a> <a href="#"
-			onclick="showSidebar('points')">會員積分優惠券管理</a>
-	</div>
-	<div class="sidebar" id="sidebar"></div>
+	<jsp:include page="../HomePage.html"></jsp:include>
 	<div class="content" id="content">
 		<h2>輸 入 租 借 訂 單 資 料</h2>
 		<form method="get" class="btn"
@@ -27,13 +23,12 @@
 		<form method="get" id="form" action="/EEIT187-6/rentController/search">
 			<table>
 				<tr>
-					<td>訂單編號:<select id="rent_id" name="rent_id">
-						<option value="" selected disabled>請選擇訂單編號</option>
-						<option value="30000">30000</option>
-						<option value="30001">30001</option>
-						<option value="30002">30002</option>
-						<option value="30003">30003</option>
-						<option value="30004">30004</option>
+					<td>訂單編號:
+					<select id="rentId" name="rentId">
+							<option value="" selected disabled>請選擇訂單編號</option>
+							<c:forEach items="${rentIds}" var="rentId">
+								<option value="${rentId}">${rentId}</option>
+							</c:forEach>
 					</select>
 					</td>
 				</tr>
@@ -54,18 +49,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td>租借餐廳:<select id="restaurant_id" name="restaurant_id" >
-					<option value="" selected disabled>請選擇餐廳編號</option>
-						<option value="1">1</option>
-                		<option value="2">2</option>
-                		<option value="3">3</option>
-		                <option value="4">4</option>
-		                <option value="5">5</option>
-		                <option value="6">6</option>
-		                <option value="7">7</option>
-		                <option value="8">8</option>
-		                <option value="9">9</option>
-		                <option value="10">10</option>
+					<td>租借餐廳: 
+					<select name="restaurantName" id="restaurantName">
+							<option value="" selected disabled>請選擇餐廳編號</option>
+							<c:if test="${not empty param.restaurantName}">
+								<!-- 顯示 URL 中的餐廳名稱 -->
+								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+							</c:if>
+							<c:forEach items="${restaurantNames}" var="restaurantName">
+								<option value="${restaurantName}">${restaurantName}</option>
+							</c:forEach>
 					</select>
 					</td>
 				</tr>
@@ -92,4 +85,5 @@
 		});
 	</script>
 </body>
+</html>
 </html>

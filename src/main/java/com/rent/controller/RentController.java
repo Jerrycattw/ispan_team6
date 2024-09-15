@@ -11,8 +11,11 @@ import java.util.List;
 import org.hibernate.Session;
 import com.rent.bean.Rent;
 import com.rent.bean.RentItem;
+import com.rent.bean.Tableware;
 import com.rent.service.RentItemService;
 import com.rent.service.RentService;
+import com.rent.service.TablewareService;
+import com.reserve.service.RestaurantService;
 import com.util.HibernateUtil;
 
 import jakarta.servlet.ServletException;
@@ -54,14 +57,32 @@ public class RentController extends HttpServlet {
 			break;
 		case "delete":
 			delete(request, response);
+		case "getOption":
+			getOption(request,response);
+		case "searchOption":
+			searchOption(request,response);
 		}
 	}
+	
+	protected void getOption(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		TablewareService tablewareService = new TablewareService(session);
+		RestaurantService restaurantService = new RestaurantService(session);
+		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+		request.setAttribute("restaurantNames", restaurantNames);
+		List<Integer> tablewareIds = tablewareService.getTablewareIds();
+		request.setAttribute("tablewareIds", tablewareIds);
+		request.getRequestDispatcher("/rent/insert.jsp").forward(request, response);
+	}
+
 
 	protected void insert(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
 		RentItemService rentItemService = new RentItemService(session);
+		RestaurantService restaurantService = new RestaurantService(session);
 		
 		java.util.Date rentDate = new java.util.Date();
 		Calendar calendar = Calendar.getInstance();
@@ -70,7 +91,7 @@ public class RentController extends HttpServlet {
 		java.util.Date dueDate = calendar.getTime();
 		
 		int rentDeposit = Integer.parseInt(request.getParameter("rent_deposit"));
-		int restaurantId = Integer.parseInt(request.getParameter("restaurant_id"));
+		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
 		int memberId = Integer.parseInt(request.getParameter("member_id"));
 		
 		Rent rent = rentService.insert(rentDeposit, rentDate, restaurantId, memberId, dueDate);
@@ -115,6 +136,9 @@ public class RentController extends HttpServlet {
 		RentService rentService = new RentService(session);
 		int rentId = Integer.parseInt(request.getParameter("rent_id"));
 		Rent rent = rentService.getById(rentId);
+		RestaurantService restaurantService = new RestaurantService(session);
+		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+		request.setAttribute("restaurantNames", restaurantNames);
 		request.setAttribute("rent", rent);
 		String action = request.getParameter("action");
 		if ("update".equals(action)) {
@@ -128,17 +152,18 @@ public class RentController extends HttpServlet {
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
+		RestaurantService restaurantService = new RestaurantService(session);
 		try {
 			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
 			Integer rentDeposit = Integer.parseInt(request.getParameter("rent_deposit"));
 			Date rentDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("rent_date"));
-			Integer restaurantId = Integer.parseInt(request.getParameter("restaurant_id"));
+			String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
 			Integer memberId = Integer.parseInt(request.getParameter("member_id"));
 			Date dueDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("due_date"));
 			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("return_date"));
 			Integer rentStatus = Integer.parseInt(request.getParameter("rent_status"));
 			String rentMemo = request.getParameter("rent_memo");
-			Integer returnRestaurantId = Integer.parseInt(request.getParameter("return_restaurant_id"));
+			String returnRestaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
 
 			Rent rent = rentService.update(rentId, rentDeposit, rentDate, restaurantId, memberId, dueDate, returnDate,
 					rentStatus, rentMemo, returnRestaurantId);
@@ -169,7 +194,7 @@ public class RentController extends HttpServlet {
 		try {
 			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
 			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("return_date"));
-			Integer returnRestaurantId = Integer.parseInt(request.getParameter("return_restaurant_id"));
+			String returnRestaurantId = request.getParameter("return_restaurant_id");
 			Rent rent = rentService.restore(rentId, returnDate, returnRestaurantId);
 			request.getRequestDispatcher("/rentController/getAll").forward(request, response);
 		} catch (Exception e) {
@@ -185,18 +210,31 @@ public class RentController extends HttpServlet {
 		request.setAttribute("rent", rents);
 		request.getRequestDispatcher("/rent/getAll.jsp").forward(request, response);
 	}
+	
+	protected void searchOption(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		RentService rentService = new RentService(session);
+		RestaurantService restaurantService = new RestaurantService(session);
+		List<Integer> rentIds = rentService.getRentId();
+		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+		request.setAttribute("rentIds", rentIds);
+		request.setAttribute("restaurantNames", restaurantNames);
+		request.getRequestDispatcher("/rent/search.jsp").forward(request, response);
+	}
 
 	protected void search(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
+		RestaurantService restaurantService = new RestaurantService(session);
 		try {
-			Integer rentId = request.getParameter("rent_id") != null && !request.getParameter("rent_id").isEmpty() 
-	                ? Integer.parseInt(request.getParameter("rent_id")) : null;
+			Integer rentId = request.getParameter("rentId") != null && !request.getParameter("rentId").isEmpty() 
+	                ? Integer.parseInt(request.getParameter("rentId")) : null;
 	        Integer memberId = request.getParameter("member_id") != null && !request.getParameter("member_id").isEmpty() 
 	                ? Integer.parseInt(request.getParameter("member_id")) : null;
-	        Integer restaurantId = request.getParameter("restaurant_id") != null && !request.getParameter("restaurant_id").isEmpty() 
-	                ? Integer.parseInt(request.getParameter("restaurant_id")) : null;
+	        String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName")) != null && !restaurantService.getRestaurantId(request.getParameter("restaurantName")).isEmpty() 
+	                ?restaurantService.getRestaurantId(request.getParameter("restaurantName")) : null;
 	        Integer rentStatus = request.getParameter("rent_status") != null && !request.getParameter("rent_status").isEmpty() 
 	                ? Integer.parseInt(request.getParameter("rent_status")) : null;
 	        Date rentDateStart = request.getParameter("rent_date_start") != null && !request.getParameter("rent_date_start").isEmpty() 

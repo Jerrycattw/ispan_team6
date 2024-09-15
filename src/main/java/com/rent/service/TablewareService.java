@@ -24,7 +24,7 @@ public class TablewareService {
 	public Tableware getById(Integer tablewareId) {
 		return tablewareDao.getById(tablewareId);
 	}
-	
+
 	public List<Tableware> getAll() {
 		return tablewareDao.getAll();
 	}
@@ -56,5 +56,9 @@ public class TablewareService {
 			tablewareDao.update(tableware);
 		}
 		return tableware;
+	}
+
+	public List<Integer> getTablewareIds() {
+		return tablewareDao.getTablewareId();
 	}
 }

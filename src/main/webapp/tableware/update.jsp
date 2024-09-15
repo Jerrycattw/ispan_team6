@@ -24,10 +24,8 @@
 				class="com.rent.bean.Tableware" />
 			<table>
 				<tr>
-					<td>用具編號<input type="text" name="tableware_id" disabled
-						value="<%=tableware.getTablewareId()%>"> <input
-						type="hidden" name="tableware_id"
-						value="<%=tableware.getTablewareId()%>">
+					<td>用具編號<input type="text" name="tableware_id" disabled value="<%=tableware.getTablewareId()%>"> 
+					<input type="hidden" name="tableware_id" value="<%=tableware.getTablewareId()%>">
 				<tr>
 					<td>用具名稱<input type="text" name="tableware_name" id="tableware_name"
 						value="<%=tableware.getTablewareName()%>">
@@ -35,10 +33,9 @@
 					<td>用具押金<input type="text" name="tableware_deposit" id="tableware_deposit"
 						value="<%=tableware.getTablewareDeposit()%>">
 				<tr>
-					<td>用具圖片<input type="text" name="tableware_image" disabled
-						value="<%=tableware.getTablewareImage()%>"> <input
-						type="file" name="tableware_image"
-						value="<%=tableware.getTablewareImage()%>">
+					<td>用具圖片<input type="text" name="tableware_image_path" disabled value="<%=tableware.getTablewareImage()%>">
+					<input type="hidden" name="original_tableware_image" value="<%=tableware.getTablewareImage()%>">
+					<input type="file" name="tableware_image" value="<%=tableware.getTablewareImage()%>">
 				<tr>
 					<td>用具描述<input type="text" name="tableware_description" id="tableware_description"
 						value="<%=tableware.getTablewareDescription()%>">

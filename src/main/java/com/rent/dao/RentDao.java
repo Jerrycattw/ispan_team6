@@ -34,7 +34,7 @@ public class RentDao {
 				.list();
 	}
 
-	public List<Rent> search(Integer rentId, Integer memberId, Integer restaurantId, Integer rentStatus,
+	public List<Rent> search(Integer rentId, Integer memberId, String restaurantId, Integer rentStatus,
 			Date rentDateStart, Date rentDateEnd) {
 		StringBuilder hql = new StringBuilder("from Rent where 1=1");
 		if (rentId != null)
@@ -80,63 +80,13 @@ public class RentDao {
 		}
 		return false;
 	}
+	
+	public List<Integer> getRentId(){
+		String hql = "SELECT rentId FROM Rent";
+		Query<Integer> query = session.createQuery(hql, Integer.class);
+		List<Integer> rentIds = query.getResultList();
+		return rentIds;
+	}
+	
 }
 
-//	private static final String updateAll="UPDATE rent SET rent_deposit=?,rent_date=?,restaurant_id=?,member_id=?,due_date=?,return_date=?,rent_status=?,rent_memo=?,return_restaurant_id=? WHERE rent_id=?";
-//	public Rent updateRent(int rentId,int rentDeposit,Date rentDateUtil,int restaurantId,int memberId,Date dueDateUtil,Date returnDateUtil,int rentStatus,String rentMemo,int returnRestaurantId) throws SQLException {
-//		Rent rent = new Rent();
-//		try (Connection connection = DButil.getConnection();
-//				PreparedStatement preparedStatement = connection.prepareStatement(updateAll)) {
-//			
-//			java.sql.Date rentDate = new java.sql.Date(rentDateUtil.getTime());
-// 			java.sql.Date dueDate = new java.sql.Date(dueDateUtil.getTime());
-// 			java.sql.Date returnDate = new java.sql.Date(returnDateUtil.getTime());
-//			
-//			preparedStatement.setInt(10, rentId);
-//			preparedStatement.setInt(1, rentDeposit);
-//			preparedStatement.setDate(2, rentDate);
-//			preparedStatement.setInt(3, restaurantId);
-//			preparedStatement.setInt(4, memberId);
-//			preparedStatement.setDate(5, dueDate);
-//			preparedStatement.setDate(6, returnDate);
-//			preparedStatement.setInt(7, rentStatus);
-//			preparedStatement.setString(8, rentMemo);
-//			preparedStatement.setInt(9, returnRestaurantId);
-// 			preparedStatement.executeUpdate();
-// 			
-// 			rent.setRentId(rentId);
-//			rent.setRentDeposit(rentDeposit);
-//			rent.setRentDate(rentDate);
-//			rent.setRestaurantId(restaurantId);
-//			rent.setMemberId(memberId);
-//			rent.setDueDate(dueDate);
-//			rent.setReturnDate(returnDate);
-//			rent.setRentStatus(rentStatus);
-//			rent.setRentMemo(rentMemo);
-//			rent.setReturnRestaurantId(returnRestaurantId);
-//		}
-//		return rent;
-//	}
-//	
-//	private static final String updatePart="UPDATE rent SET return_date=?,rent_status=2,rent_memo='歸還',return_restaurant_id=? WHERE rent_id=?";
-//	public Rent updatePart(int rentId,Date returnDateUtil,int returnRestaurantId) throws SQLException {
-//		Rent rent = new Rent();
-//		try (Connection connection = DButil.getConnection();
-//				PreparedStatement preparedStatement = connection.prepareStatement(updatePart)) {
-//			
-//			java.sql.Date returnDate = new java.sql.Date(returnDateUtil.getTime());
-//			
-//			preparedStatement.setInt(3, rentId);
-//			preparedStatement.setDate(1, returnDate);
-//			preparedStatement.setInt(2, returnRestaurantId);
-//			preparedStatement.executeUpdate();
-//			
-//			rent.setRentId(rentId);
-//			rent.setReturnDate(returnDate);
-//			rent.setRentStatus(2);
-//			rent.setRentMemo("歸還");
-//			rent.setReturnRestaurantId(returnRestaurantId);
-//		}
-//		return rent;
-//	}
-//	

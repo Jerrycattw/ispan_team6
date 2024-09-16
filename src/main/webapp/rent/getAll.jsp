@@ -20,10 +20,10 @@
 	<div class="content" id="content">
 		<h2>租 借 訂 單 資 料</h2>
 		<form method="GET" class="btn"
-			action="/EEIT187-6/rent/insert.html">
+			action="/EEIT187-6/rentController/getOption">
 			<input type="submit" value="新增訂單">
 		</form>
-		<form method="get" class="btn" action="/EEIT187-6/rent/search.html">
+		<form method="get" class="btn" action="/EEIT187-6/rentController/searchOption">
 			<input type="submit" value="訂單搜尋">
 		</form>
 		<form method="get" class="btn"

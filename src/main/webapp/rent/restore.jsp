@@ -51,32 +51,26 @@
 					<td>訂單備註<input type="text" name="rent_memo" disabled
 						value="<%=rent.getRentMemo()%>">
 				<tr>
-					<td>歸還餐廳<select id="return_restaurant_id" name="return_restaurant_id" required>
-					<option value="<%=rent.getReturnRestaurantId()%>" selected disabled><%=rent.getReturnRestaurantId()%></option>
-						<option value="1" <%= "1".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>1</option>
-                    	<option value="2" <%= "2".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>2</option>
-                    	<option value="3" <%= "3".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>3</option>
-                    	<option value="4" <%= "4".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>4</option>
-                    	<option value="5" <%= "5".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>5</option>
-                    	<option value="6" <%= "6".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>6</option>
-                    	<option value="7" <%= "7".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>7</option>
-                    	<option value="8" <%= "8".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>8</option>
-                    	<option value="9" <%= "9".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>9</option>
-                    	<option value="10" <%= "10".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>10</option>
+					<td>歸還餐廳 
+					<select name="restaurantName" id="restaurantName" required>
+							<c:if test="${not empty param.restaurantName}">
+								<!-- 顯示 URL 中的餐廳名稱 -->
+								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+							</c:if>
+							<c:forEach items="${restaurantNames}" var="restaurantName">
+								<option value="${restaurantName}">${restaurantName}</option>
+							</c:forEach>
 					</select>
-					<p id="disabledMsg" style="color:red; display:none;">訂單已完全歸還，無法再更改。</p>
-			</table>
-			<input type="submit" id="submitBtn" value="確定更改"> <input type="hidden"
-				name="rent_id" value="<%=rent.getRentId()%>"> <input
-				type="hidden" name="rent_deposit" value="<%=rent.getRentDeposit()%>">
+						<p id="disabledMsg" style="color: red; display: none;">訂單已完全歸還，無法再更改。</p></table>
+			<input type="submit" id="submitBtn" value="確定更改"> 
+			<input type="hidden" name="rent_id" value="<%=rent.getRentId()%>"> 
+			<input type="hidden" name="rent_deposit" value="<%=rent.getRentDeposit()%>">
 			<input type="hidden" name="rent_date" value="<%=rent.getRentDate()%>">
-			<input type="hidden" name="restaurant_id"
-				value="<%=rent.getRestaurantId()%>"> <input type="hidden"
-				name="member_id" value="<%=rent.getMemberId()%>"> <input
-				type="hidden" name="due_date" value="<%=rent.getDueDate()%>">
-			<input type="hidden" name="rent_status"
-				value="<%=rent.getRentStatus()%>"> <input type="hidden"
-				name="rent_memo" value="<%=rent.getRentMemo()%>">
+			<input type="hidden" name="restaurant_id" value="<%=rent.getRestaurantId()%>">
+			<input type="hidden" name="member_id" value="<%=rent.getMemberId()%>"> 
+			<input type="hidden" name="due_date" value="<%=rent.getDueDate()%>">
+			<input type="hidden" name="rent_status" value="<%=rent.getRentStatus()%>"> 
+			<input type="hidden" name="rent_memo" value="<%=rent.getRentMemo()%>">
 		</form>
 	</div>
 		<script>

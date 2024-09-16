@@ -130,28 +130,36 @@ public class TablewareController extends HttpServlet {
 		TablewareService tablewareService = new TablewareService(session);
 
 		int tablewareId = Integer.parseInt(request.getParameter("tableware_id"));
-		String TablewareName = request.getParameter("tableware_name");
+		String tablewareName = request.getParameter("tableware_name");
 		int tablewareDeposit = Integer.parseInt(request.getParameter("tableware_deposit"));
 		String tablewareDescription = request.getParameter("tableware_description");
 		int tablewareStatus = Integer.parseInt(request.getParameter("tableware_status"));
 
 		Part filePart = request.getPart("tableware_image");
-		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // 处理文件名
-		String tablewareImage = "/EEIT187-6/tableware/tablewareImage/" + fileName;
-		try {
-			String uploadPath = getServletContext().getRealPath("/tableware/tablewareImage");
-			File uploadDir = new File(uploadPath);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdir(); // 如果目录不存在，则创建
-			}
-			filePart.write(uploadPath + File.separator + fileName);
-
-			Tableware tableware = tablewareService.update(tablewareId, TablewareName, tablewareDeposit, tablewareImage,
-					tablewareDescription, tablewareStatus);
-			request.getRequestDispatcher("/tablewareController/getAll").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    String tablewareImage;
+	    if (filePart != null && filePart.getSize() > 0) {
+	        // 用户上传了新图片
+	        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+	        tablewareImage = "/EEIT187-6/tableware/tablewareImage/" + fileName;
+	        try {
+	            // 获取上传路径
+	            String uploadPath = getServletContext().getRealPath("/tableware/tablewareImage");
+	            File uploadDir = new File(uploadPath);
+	            if (!uploadDir.exists()) {
+	                uploadDir.mkdir(); // 如果目录不存在，则创建
+	            }
+	            // 将文件写入服务器
+	            filePart.write(uploadPath + File.separator + fileName);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    } else {
+	        // 没有上传新图片，使用原始图片路径
+	        tablewareImage = request.getParameter("original_tableware_image");
+	    }
+	    Tableware tableware = tablewareService.update(tablewareId, tablewareName, tablewareDeposit, tablewareImage,
+	    		tablewareDescription, tablewareStatus);
+	    response.sendRedirect(request.getContextPath() + "/tablewareController/getAll");
 	}
 
 	protected void updateStatus(HttpServletRequest request, HttpServletResponse response)

@@ -33,18 +33,15 @@
 					<td>租借日期<input type="date" name="rent_date"
 						value="<%=rent.getRentDate()%>">
 				<tr>
-					<td>餐廳編號<select type="text" name="restaurant_id"
-						value="<%=rent.getRestaurantId()%>">
-						<option value="1" <%= "1".equals(rent.getRestaurantId()) ? "selected" : "" %>>1</option>
-                    	<option value="2" <%= "2".equals(rent.getRestaurantId()) ? "selected" : "" %>>2</option>
-                    	<option value="3" <%= "3".equals(rent.getRestaurantId()) ? "selected" : "" %>>3</option>
-                    	<option value="4" <%= "4".equals(rent.getRestaurantId()) ? "selected" : "" %>>4</option>
-                    	<option value="5" <%= "5".equals(rent.getRestaurantId()) ? "selected" : "" %>>5</option>
-                    	<option value="6" <%= "6".equals(rent.getRestaurantId()) ? "selected" : "" %>>6</option>
-                    	<option value="7" <%= "7".equals(rent.getRestaurantId()) ? "selected" : "" %>>7</option>
-                    	<option value="8" <%= "8".equals(rent.getRestaurantId()) ? "selected" : "" %>>8</option>
-                    	<option value="9" <%= "9".equals(rent.getRestaurantId()) ? "selected" : "" %>>9</option>
-                    	<option value="10" <%= "10".equals(rent.getRestaurantId()) ? "selected" : "" %>>10</option>
+					<td>餐廳編號
+					<select name="restaurantName" id="restaurantName">
+							<c:if test="${not empty param.restaurantName}">
+								<!-- 顯示 URL 中的餐廳名稱 -->
+								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+							</c:if>
+							<c:forEach items="${restaurantNames}" var="restaurantName">
+								<option value="${restaurantName}">${restaurantName}</option>
+							</c:forEach>
 					</select>
 				<tr>
 					<td>會員編號<select type="text" name="member_id"
@@ -64,7 +61,7 @@
 					<td>預定歸還<input type="date" name="due_date"
 						value="<%=rent.getDueDate()%>">
 				<tr>
-					<td>實際歸還<input type="date" name="return_date"
+					<td>實際歸還<input type="date" name="return_date" required
 						value="<%=rent.getReturnDate()%>">
 				<tr>
 					<td>租借狀態
@@ -74,18 +71,15 @@
 					<td>訂單備註<input type="text" name="rent_memo"
 						value="<%=rent.getRentMemo()%>">
 				<tr>
-					<td>歸還餐廳<select type="text" name="return_restaurant_id"
-						value="<%=rent.getReturnRestaurantId()%>">
-						<option value="1" <%= "1".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>1</option>
-                    	<option value="2" <%= "2".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>2</option>
-                    	<option value="3" <%= "3".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>3</option>
-                    	<option value="4" <%= "4".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>4</option>
-                    	<option value="5" <%= "5".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>5</option>
-                    	<option value="6" <%= "6".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>6</option>
-                    	<option value="7" <%= "7".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>7</option>
-                    	<option value="8" <%= "8".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>8</option>
-                    	<option value="9" <%= "9".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>9</option>
-                    	<option value="10" <%= "10".equals(rent.getReturnRestaurantId()) ? "selected" : "" %>>10</option>
+					<td>歸還餐廳
+					<select name="restaurantName" id="restaurantName" required>
+							<c:if test="${not empty param.restaurantName}">
+								<!-- 顯示 URL 中的餐廳名稱 -->
+								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+							</c:if>
+							<c:forEach items="${restaurantNames}" var="restaurantName">
+								<option value="${restaurantName}">${restaurantName}</option>
+							</c:forEach>
 					</select>
 			</table>
 			<input type="submit" value="確定更改">

@@ -20,7 +20,7 @@ public class RentService {
 		this.rentItemDao = new RentItemDao(session);
 	}
 
-	public Rent insert(int rentDeposit, Date rentDate, int restaurantId, int memberId, Date dueDate) {
+	public Rent insert(int rentDeposit, Date rentDate, String restaurantId, int memberId, Date dueDate) {
 		Rent rent = new Rent(rentDeposit, rentDate, restaurantId, memberId, dueDate, null, 1, "未歸還");
 		return rentDao.insert(rent);
 	}
@@ -33,8 +33,8 @@ public class RentService {
 		return rentDao.getById(rentId);
 	}
 
-	public Rent update(Integer rentId, Integer rentDeposit, Date rentDate, Integer restaurantId, Integer memberId,
-			Date dueDate, Date returnDate, Integer rentStatus, String rentMemo, Integer returnRestaurantId) {
+	public Rent update(Integer rentId, Integer rentDeposit, Date rentDate, String restaurantId, Integer memberId,
+			Date dueDate, Date returnDate, Integer rentStatus, String rentMemo, String returnRestaurantId) {
 		Rent rent = rentDao.getById(rentId);
 		if (rent != null) {
 			rent.setRentDeposit(rentDeposit);
@@ -64,12 +64,12 @@ public class RentService {
 		return rentDao.getOver();
 	}
 
-	public List<Rent> getByMany(Integer rentId, Integer memberId, Integer restaurantId, Integer rentStatus,
+	public List<Rent> getByMany(Integer rentId, Integer memberId, String restaurantId, Integer rentStatus,
 			Date rentDateStart, Date rentDateEnd) {
 		return rentDao.search(rentId, memberId, restaurantId, rentStatus, rentDateStart, rentDateEnd);
 	}
 
-	public Rent restore(Integer rentId, Date returnDate, Integer returnRestaurantId) {
+	public Rent restore(Integer rentId, Date returnDate, String returnRestaurantId) {
 		Rent rent = rentDao.getById(rentId);
 		if (rent != null) {
 			rent.setReturnDate(returnDate);
@@ -80,4 +80,9 @@ public class RentService {
 		}
 		return rent;
 	}
+
+	public List<Integer> getRentId(){
+		return rentDao.getRentId();
+	}
+	
 }

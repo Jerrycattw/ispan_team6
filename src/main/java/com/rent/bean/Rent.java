@@ -28,7 +28,7 @@ public class Rent implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date rentDate;
 	@Column(name = "restaurant_id")
-	private int restaurantId;
+	private String restaurantId;
 	@Column(name = "member_id")
 	private int memberId;
 	@Column(name = "due_date")
@@ -42,14 +42,14 @@ public class Rent implements Serializable {
 	@Column(name = "rent_memo")
 	private String rentMemo;
 	@Column(name = "return_restaurant_id")
-	private Integer returnRestaurantId;
+	private String returnRestaurantId;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rent")
 	private List<RentItem> rentItems = new ArrayList<RentItem>();
 	
 	public Rent() {
 		super();
 	}
-	public Rent(int rentDeposit, Date rentDate, int restaurantId, int memberId, Date dueDate, Date returnDate,
+	public Rent(int rentDeposit, Date rentDate, String restaurantId, int memberId, Date dueDate, Date returnDate,
 			int rentStatus, String rentMemo) {
 		super();
 		this.rentDeposit = rentDeposit;
@@ -79,10 +79,10 @@ public class Rent implements Serializable {
 	public void setRentDate(Date rentDate) {
 		this.rentDate = rentDate;
 	}
-	public int getRestaurantId() {
+	public String getRestaurantId() {
 		return restaurantId;
 	}
-	public void setRestaurantId(int restaurantId) {
+	public void setRestaurantId(String restaurantId) {
 		this.restaurantId = restaurantId;
 	}
 	public int getMemberId() {
@@ -115,10 +115,10 @@ public class Rent implements Serializable {
 	public void setRentMemo(String rentMemo) {
 		this.rentMemo = rentMemo;
 	}
-	public Integer getReturnRestaurantId() {
+	public String getReturnRestaurantId() {
 		return returnRestaurantId;
 	}
-	public void setReturnRestaurantId(int returnRestaurantId) {
+	public void setReturnRestaurantId(String returnRestaurantId) {
 		this.returnRestaurantId = returnRestaurantId;
 	}
 	@Override

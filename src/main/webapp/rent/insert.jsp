@@ -83,26 +83,6 @@
 		</form>
 	</div>
 	<script>
-		function validateForm() {
-			// 获取表单字段的值
-			var deposit = document.getElementById("rent_deposit").value;
-			var restaurant = document.getElementById("restaurant_id").value;
-			var member = document.getElementById("member_id").value;
-
-			// 检查是否为空
-			if (deposit === "" || restaurant === "" || member === "") {
-				alert("所有字段都必須填寫");
-				return false; // 阻止表单提交
-			}
-
-			// 检查押金是否为数字
-			if (isNaN(deposit)) {
-				alert("押金必須為數字");
-				return false; // 阻止表单提交
-			}
-			return true; // 表单验证通过，允许提交
-		}
-		
 		let rentItemIndex = 1;
 
 	    function addRentItem() {
@@ -141,6 +121,26 @@
 		document.addEventListener("DOMContentLoaded", function() {
 			showSidebar('rental');
 		});
+		
+		function validateForm() {
+			// 获取表单字段的值
+			var deposit = document.getElementById("rent_deposit").value;
+			var restaurant = document.getElementById("restaurantName").value;
+			var member = document.getElementById("member_id").value;
+
+			// 检查是否为空
+			if (deposit === "" || restaurant === "" || member === "") {
+				alert("所有字段都必須填寫");
+				return false; // 阻止表单提交
+			}
+
+			// 检查押金是否为数字
+			if (isNaN(deposit)) {
+				alert("押金必須為數字");
+				return false; // 阻止表单提交
+			}
+			return true; // 表单验证通过，允许提交
+		}
 	</script>
 </body>
 </html>

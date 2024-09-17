@@ -51,7 +51,7 @@
 				<tr>
 					<td>租借餐廳: 
 					<select name="restaurantName" id="restaurantName">
-							<option value="" selected disabled>請選擇餐廳編號</option>
+							<option value="" selected disabled>請選擇歸還餐廳</option>
 							<c:if test="${not empty param.restaurantName}">
 								<!-- 顯示 URL 中的餐廳名稱 -->
 								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>

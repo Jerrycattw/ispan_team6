@@ -57,25 +57,31 @@ public class RentController extends HttpServlet {
 			break;
 		case "delete":
 			delete(request, response);
+			break;
 		case "getOption":
 			getOption(request,response);
+			break;
 		case "searchOption":
 			searchOption(request,response);
+			break;
 		}
 	}
 	
 	protected void getOption(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		TablewareService tablewareService = new TablewareService(session);
-		RestaurantService restaurantService = new RestaurantService(session);
-		List<String> restaurantNames = restaurantService.getAllRestaurantName();
-		request.setAttribute("restaurantNames", restaurantNames);
-		List<Integer> tablewareIds = tablewareService.getTablewareIds();
-		request.setAttribute("tablewareIds", tablewareIds);
-		request.getRequestDispatcher("/rent/insert.jsp").forward(request, response);
+	        throws ServletException, IOException {
+	    try {
+	        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+	        TablewareService tablewareService = new TablewareService(session);
+	        RestaurantService restaurantService = new RestaurantService(session);
+	        List<String> restaurantNames = restaurantService.getAllRestaurantName();
+	        List<Integer> tablewareIds = tablewareService.getTablewareIds();
+	        request.setAttribute("restaurantNames", restaurantNames);
+	        request.setAttribute("tablewareIds", tablewareIds);
+	        request.getRequestDispatcher("/rent/insert.jsp").forward(request, response);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
-
 
 	protected void insert(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -108,20 +114,18 @@ public class RentController extends HttpServlet {
             if (tablewareIdParam == null) {
                 break; // 如果没有更多的tablewareIdParam，退出循环
             }
+            System.out.println("Rent Item " + index + ":");
+            System.out.println("Tableware ID: " + tablewareIdParam);
+            System.out.println("Quantity: " + rentItemQuantityParam);
+            System.out.println("Deposit: " + rentItemDepositParam);
 
             Integer tablewareId = Integer.parseInt(tablewareIdParam);
             Integer rentItemQuantity = Integer.parseInt(rentItemQuantityParam);
             Integer rentItemDeposit = Integer.parseInt(rentItemDepositParam);
 
-            RentItem rentItem = new RentItem();
-            rentItem.setRentId(rentId);
-            rentItem.setTablewareId(tablewareId);
-            rentItem.setRentItemQuantity(rentItemQuantity);
-            rentItem.setRentItemDeposit(rentItemDeposit);
-            rentItem.setReturnMemo("未歸還");
-            rentItem.setReturnStatus(1);
-
+            RentItem rentItem = new RentItem(rentId,tablewareId,rentItemQuantity,rentItemDeposit,"未歸還",1);
             rentItems.add(rentItem);
+            
             index++; // 处理下一个RentItem
         }
 		for (RentItem rentItem : rentItems) {
@@ -167,7 +171,7 @@ public class RentController extends HttpServlet {
 
 			Rent rent = rentService.update(rentId, rentDeposit, rentDate, restaurantId, memberId, dueDate, returnDate,
 					rentStatus, rentMemo, returnRestaurantId);
-			request.getRequestDispatcher("/rentController/getAll").forward(request, response);
+			response.sendRedirect(request.getContextPath() +"/rentController/getAll");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -179,24 +183,26 @@ public class RentController extends HttpServlet {
 		RentService rentService = new RentService(session);
 		RentItemService rentItemService = new RentItemService(session);
 		Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
+		
 		List<RentItem> rentItems = rentItemService.getById(rentId);
 		for(RentItem rentItem: rentItems) {
 			rentItemService.delete(rentItem);
 		}
 		rentService.delete(rentId);
-		request.getRequestDispatcher("/rentController/getAll").forward(request, response);
+		response.sendRedirect(request.getContextPath() + "/rentController/getAll");
 	}
 
 	protected void restore(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
+		RestaurantService restaurantService = new RestaurantService(session);
 		try {
 			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
 			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("return_date"));
-			String returnRestaurantId = request.getParameter("return_restaurant_id");
+			String returnRestaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
 			Rent rent = rentService.restore(rentId, returnDate, returnRestaurantId);
-			request.getRequestDispatcher("/rentController/getAll").forward(request, response);
+			response.sendRedirect(request.getContextPath() +"/rentController/getAll");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

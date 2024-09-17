@@ -53,6 +53,7 @@
 				<tr>
 					<td>歸還餐廳 
 					<select name="restaurantName" id="restaurantName" required>
+					<option value="" selected disabled>請選擇歸還餐廳</option>
 							<c:if test="${not empty param.restaurantName}">
 								<!-- 顯示 URL 中的餐廳名稱 -->
 								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
@@ -61,8 +62,9 @@
 								<option value="${restaurantName}">${restaurantName}</option>
 							</c:forEach>
 					</select>
-						<p id="disabledMsg" style="color: red; display: none;">訂單已完全歸還，無法再更改。</p></table>
-			<input type="submit" id="submitBtn" value="確定更改"> 
+			<p id="disabledMsg" style="color: red; display: none;">訂單已完全歸還，無法再更改。</p></table>
+			<input type="submit" id="submitBtn" value="確定更改">
+			 
 			<input type="hidden" name="rent_id" value="<%=rent.getRentId()%>"> 
 			<input type="hidden" name="rent_deposit" value="<%=rent.getRentDeposit()%>">
 			<input type="hidden" name="rent_date" value="<%=rent.getRentDate()%>">
@@ -82,6 +84,8 @@
 	        const rentStatus = document.getElementById('rent_status').value;
 	        if (rentStatus === '2') {
 	            document.getElementById('submitBtn').disabled = true;
+	            document.getElementById('return_date').disabled = true;
+	            document.getElementById('restaurantName').disabled = true;
 	            document.getElementById('disabledMsg').style.display = 'block';
 	        }
 	    };

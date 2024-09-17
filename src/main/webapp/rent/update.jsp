@@ -24,71 +24,91 @@
 			<jsp:useBean id="rent" scope="request" class="com.rent.bean.Rent" />
 			<table>
 				<tr>
-					<td>訂單編號<input type="text" name="rent_id" readonly
-						value="<%=rent.getRentId()%>">
+					<td>訂單編號<input type="text" name="rent_id" disabled value="${rent.rentId}"></td>
+					<input type="hidden" name="rent_id"  value="${rent.rentId}">
+				</tr>
 				<tr>
-					<td>租借押金<input type="text" name="rent_deposit"
-						value="<%=rent.getRentDeposit()%>">
+					<td>租借押金<input type="text" name="rent_deposit" id="rent_deposit" value="${rent.rentDeposit}"></td>
+				</tr>
 				<tr>
-					<td>租借日期<input type="date" name="rent_date"
-						value="<%=rent.getRentDate()%>">
+					<td>租借日期<input type="date" name="rent_date" id="rent_date" value="${rent.rentDate}"></td>
+				</tr>
 				<tr>
 					<td>餐廳編號
 					<select name="restaurantName" id="restaurantName">
-							<c:if test="${not empty param.restaurantName}">
-								<!-- 顯示 URL 中的餐廳名稱 -->
-								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
-							</c:if>
-							<c:forEach items="${restaurantNames}" var="restaurantName">
-								<option value="${restaurantName}">${restaurantName}</option>
-							</c:forEach>
+						<c:if test="${not empty param.restaurantName}">
+							<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+						</c:if>
+						<c:forEach items="${restaurantNames}" var="restaurantName">
+							<option value="${restaurantName}">${restaurantName}</option>
+						</c:forEach>
 					</select>
+					</td>
+				</tr>
 				<tr>
-					<td>會員編號<select type="text" name="member_id"
-						value="<%=rent.getMemberId()%>">
-						<option value="1" <%= "1".equals(rent.getMemberId()) ? "selected" : "" %>>1</option>
-                    	<option value="2" <%= "2".equals(rent.getMemberId()) ? "selected" : "" %>>2</option>
-                    	<option value="3" <%= "3".equals(rent.getMemberId()) ? "selected" : "" %>>3</option>
-                    	<option value="4" <%= "4".equals(rent.getMemberId()) ? "selected" : "" %>>4</option>
-                    	<option value="5" <%= "5".equals(rent.getMemberId()) ? "selected" : "" %>>5</option>
-                    	<option value="6" <%= "6".equals(rent.getMemberId()) ? "selected" : "" %>>6</option>
-                    	<option value="7" <%= "7".equals(rent.getMemberId()) ? "selected" : "" %>>7</option>
-                    	<option value="8" <%= "8".equals(rent.getMemberId()) ? "selected" : "" %>>8</option>
-                    	<option value="9" <%= "9".equals(rent.getMemberId()) ? "selected" : "" %>>9</option>
-                    	<option value="10" <%= "10".equals(rent.getMemberId()) ? "selected" : "" %>>10</option>
-					</select>
+					<td>會員編號<select name="member_id" id="member_id">
+						<c:forEach var="i" begin="1" end="10">
+							<option value="${i}" ${i == rent.memberId ? 'selected' : ''}>${i}</option>
+						</c:forEach>
+					</select></td>
+				</tr>
 				<tr>
-					<td>預定歸還<input type="date" name="due_date"
-						value="<%=rent.getDueDate()%>">
+					<td>預定歸還<input type="date" name="due_date" id="due_date" value="${rent.dueDate}"></td>
+				</tr>
 				<tr>
-					<td>實際歸還<input type="date" name="return_date" required
-						value="<%=rent.getReturnDate()%>">
+					<td>實際歸還<input type="date" name="return_date" id="return_date" required value="${rent.returnDate}"></td>
+				</tr>
 				<tr>
 					<td>租借狀態
-						<input type="radio" name="rent_status" value="1" <%=rent.getRentStatus() == 1 ? "checked" : ""%>>1:未歸還
-                		<input type="radio" name="rent_status" value="2" <%=rent.getRentStatus() == 2 ? "checked" : ""%>>2:歸還
+						<input type="radio" name="rent_status" id="rent_status" value="1" ${rent.rentStatus == 1 ? 'checked' : ''}>1:未歸還
+                		<input type="radio" name="rent_status" id="rent_status" value="2" ${rent.rentStatus == 2 ? 'checked' : ''}>2:歸還
+					</td>
+				</tr>
 				<tr>
-					<td>訂單備註<input type="text" name="rent_memo"
-						value="<%=rent.getRentMemo()%>">
+					<td>訂單備註<input type="text" name="rent_memo" id="rent_memo" value="${rent.rentMemo}"></td>
+				</tr>
 				<tr>
 					<td>歸還餐廳
-					<select name="restaurantName" id="restaurantName" required>
-							<c:if test="${not empty param.restaurantName}">
-								<!-- 顯示 URL 中的餐廳名稱 -->
-								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
-							</c:if>
-							<c:forEach items="${restaurantNames}" var="restaurantName">
-								<option value="${restaurantName}">${restaurantName}</option>
-							</c:forEach>
+					<select name="returnRestaurantName" id="returnRestaurantName" required>
+						<option value="" selected disabled>請選擇歸還餐廳</option>
+						<c:if test="${not empty param.restaurantName}">
+							<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+						</c:if>
+						<c:forEach items="${restaurantNames}" var="restaurantName">
+							<option value="${restaurantName}">${restaurantName}</option>
+						</c:forEach>
 					</select>
+			<p id="disabledMsg" style="color: red; display: none;">訂單已完全歸還，無法再更改。</p>
+					</td>
+				</tr>
 			</table>
-			<input type="submit" value="確定更改">
+			<input type="submit" id="submitBtn" value="確定更改">
 		</form>
 	</div>
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			showSidebar('rental');
 		});
+		
+		window.onload = function() {
+		    const rentStatusElement = document.querySelector('input[name="rent_status"]:checked');
+		    if (rentStatusElement) {
+		        const rentStatus = rentStatusElement.value;
+		        if (rentStatus === '2') {
+		            document.getElementById('submitBtn').disabled = true;
+		            document.getElementById('return_date').disabled = true;
+		            document.getElementById('returnRestaurantName').disabled = true;
+		            document.getElementById('restaurantName').disabled = true;
+		            document.getElementById('rent_deposit').disabled = true;
+		            document.getElementById('member_id').disabled = true;
+		            document.getElementById('rent_date').disabled = true;
+		            document.getElementById('due_date').disabled = true;
+		            document.getElementById('rent_memo').disabled = true;
+		            document.getElementById('rent_status').disabled = true;
+		            document.getElementById('disabledMsg').style.display = 'block';
+		        }
+		    }
+		};
 	</script>
 </body>
 </html>

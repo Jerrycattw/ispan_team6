@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.annotations.Expose;
 import com.members.bean.Member;
 
@@ -17,6 +19,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+
+
+@Component
 @Entity @Table(name = "reserve")
 public class Reserve {
 	@Id @Column(name = "reserve_id") @GeneratedValue(strategy = GenerationType.IDENTITY)

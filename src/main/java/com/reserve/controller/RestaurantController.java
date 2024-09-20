@@ -8,6 +8,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
@@ -34,27 +40,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-@WebServlet("/Restaurant/*")
-@MultipartConfig
-public class RestaurantController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+//@WebServlet("/Restaurant/*")
+@Controller
+//@MultipartConfig
+@RequestMapping("/Restaurant/*")
+//@Transactional
+public class RestaurantController{
+//	private static final long serialVersionUID = 1L;
 
-	Session session = null;
-	TableTypeService tableTypeService = null;
-	RestaurantService restaurantService = null;
-	ReserveService reserveService = null;
-	RestaurantTableService restaurantTableService = null;
+//	Session session = null;
+	@Autowired
+	private TableTypeService tableTypeService;
+	@Autowired
+	private RestaurantService restaurantService;
+	@Autowired
+	private ReserveService reserveService;
+	@Autowired
+	private RestaurantTableService restaurantTableService;
 	
-	
+	/*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		
-		session = (Session) request.getAttribute("hibernateSession");
-		tableTypeService = new TableTypeService(session);
-		restaurantService = new RestaurantService(session);
-		reserveService = new ReserveService(session);
-		restaurantTableService = new RestaurantTableService(session);
+//		session = (Session) request.getAttribute("hibernateSession");
+//		tableTypeService = new TableTypeService(session);
+//		restaurantService = new RestaurantService(session);
+//		reserveService = new ReserveService(session);
+//		restaurantTableService = new RestaurantTableService(session);
 
 		
 		// 獲取URL中的操作名稱
@@ -88,7 +101,10 @@ public class RestaurantController extends HttpServlet {
 		}
 
 	}
-
+	*/
+	
+	
+	@PostMapping("add")
 	private void addRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -106,11 +122,11 @@ public class RestaurantController extends HttpServlet {
 		restaurant.setEattime(Integer.parseInt(request.getParameter("reattime")));
 		restaurant.setRestaurantStatus(defaultStatus);
 		
-		String uploadPath = getServletContext().getRealPath("/") + "reserve" + File.separator + "restaurantIMG";
-	    File fileSaveDir = new File(uploadPath);
-	    if (!fileSaveDir.exists()) {
-	        fileSaveDir.mkdirs();
-	    }
+//		String uploadPath = getServletContext().getRealPath("/") + "reserve" + File.separator + "restaurantIMG";
+//	    File fileSaveDir = new File(uploadPath);
+//	    if (!fileSaveDir.exists()) {
+//	        fileSaveDir.mkdirs();
+//	    }
 
 	    Part part = request.getPart("rimg");
 	    if (part != null && part.getSize() > 0) {
@@ -119,8 +135,8 @@ public class RestaurantController extends HttpServlet {
 	        String newFileName = request.getParameter("rname") + "_" + System.currentTimeMillis() + extension;
 	        
 	        // 將檔案寫入指定路徑
-	        System.out.println(uploadPath + File.separator + newFileName);
-	        part.write(uploadPath + File.separator + newFileName);
+//	        System.out.println(uploadPath + File.separator + newFileName);
+//	        part.write(uploadPath + File.separator + newFileName);
 	        String restaurantImg = "/EEIT187-6/reserve/restaurantIMG/" + newFileName;
 	        System.out.println(restaurantImg);
 	        restaurant.setRestaurantImg(restaurantImg);
@@ -131,7 +147,9 @@ public class RestaurantController extends HttpServlet {
 		request.getRequestDispatcher("/Restaurant/getAll").forward(request, response);
 
 	}
-
+	
+	
+	@GetMapping("del")
 	private void delRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -139,7 +157,9 @@ public class RestaurantController extends HttpServlet {
 		request.getRequestDispatcher("/Restaurant/getAll").forward(request, response);
 
 	}
-
+	
+	
+	@GetMapping("get")
 	private void getRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -148,9 +168,13 @@ public class RestaurantController extends HttpServlet {
 		request.getRequestDispatcher("/reserve/GetRestaurant.jsp").forward(request, response);
 
 	}
-
+	
+	
+	
+	@GetMapping("getAll")
 	private void getAllRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		
 		List<Restaurant> restaurants = restaurantService.selectAll();
 		request.setAttribute("restaurants", restaurants);
@@ -158,6 +182,9 @@ public class RestaurantController extends HttpServlet {
 
 	}
 	
+	
+	
+	@GetMapping("list")
 	private void getRestaurantList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -185,7 +212,10 @@ public class RestaurantController extends HttpServlet {
         response.getWriter().write(json);
 		
 	}
-
+	
+	
+	
+	@GetMapping("set")
 	private void setRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -195,7 +225,10 @@ public class RestaurantController extends HttpServlet {
 		request.getRequestDispatcher("/reserve/SetRestaurant.jsp").forward(request, response);
 
 	}
-
+	
+	
+	
+	@PostMapping("set2")
 	private void setRestaurant2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -214,11 +247,11 @@ public class RestaurantController extends HttpServlet {
 		restaurant.setRestaurantStatus(Integer.parseInt(request.getParameter("restaurantStatus")));
 		
 	    
-	    String uploadPath = getServletContext().getRealPath("/") + "reserve" + File.separator + "restaurantIMG";
-	    File fileSaveDir = new File(uploadPath);
-	    if (!fileSaveDir.exists()) {
-	        fileSaveDir.mkdirs();
-	    }
+//	    String uploadPath = getServletContext().getRealPath("/") + "reserve" + File.separator + "restaurantIMG";
+//	    File fileSaveDir = new File(uploadPath);
+//	    if (!fileSaveDir.exists()) {
+//	        fileSaveDir.mkdirs();
+//	    }
 
 	    Part part = request.getPart("rimg");
 	    if (part != null && part.getSize() > 0) {
@@ -227,8 +260,8 @@ public class RestaurantController extends HttpServlet {
 	        String newFileName = request.getParameter("rname") + "_" + System.currentTimeMillis() + extension;
 	        
 	        // 將檔案寫入指定路徑
-	        System.out.println(uploadPath + File.separator + newFileName);
-	        part.write(uploadPath + File.separator + newFileName);
+//	        System.out.println(uploadPath + File.separator + newFileName);
+//	        part.write(uploadPath + File.separator + newFileName);
 	        String restaurantImg = "/EEIT187-6/reserve/restaurantIMG/" + newFileName;
 	        System.out.println(restaurantImg);
 	        restaurant.setRestaurantImg(restaurantImg);
@@ -245,13 +278,6 @@ public class RestaurantController extends HttpServlet {
 
 	}
 	
-	
-	
-	
-	
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
 }
+
+

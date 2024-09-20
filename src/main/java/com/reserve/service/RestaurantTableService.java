@@ -3,18 +3,26 @@ package com.reserve.service;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.reserve.bean.RestaurantTable;
 import com.reserve.bean.RestaurantTableId;
 import com.reserve.dao.RestaurantTableDao;
 
-public class RestaurantTableService {
 
+@Service
+@Transactional
+public class RestaurantTableService {
+	
+	
+	@Autowired
 	private RestaurantTableDao restaurantTableDao;
 	
-	public RestaurantTableService(Session session) {
-		restaurantTableDao = new RestaurantTableDao(session);
-	}
+//	public RestaurantTableService(Session session) {
+//		restaurantTableDao = new RestaurantTableDao(session);
+//	}
 	
 	//新增單筆餐廳桌位種類
 	public RestaurantTable insert(RestaurantTable restaurantTable) {

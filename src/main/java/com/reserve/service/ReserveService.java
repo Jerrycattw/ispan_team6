@@ -5,18 +5,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.reserve.bean.Reserve;
 import com.reserve.bean.ReserveCheckBean;
 import com.reserve.dao.ReserveDao;
 
-public class ReserveService {
 
+@Service
+@Transactional
+public class ReserveService {
+	
+	@Autowired
 	private ReserveDao reserveDao;
 	
-	public ReserveService(Session session) {
-		reserveDao = new ReserveDao(session);
-	}
+//	public ReserveService(Session session) {
+//		reserveDao = new ReserveDao(session);
+//	}
 	
 	//新增單筆訂位
 	public Reserve insert(Reserve reserve) {

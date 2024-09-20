@@ -6,6 +6,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.reserve.bean.RestaurantTable;
 import com.reserve.bean.RestaurantTableId;
@@ -29,24 +35,33 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/Table/*")
-public class RestaurantTableController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	Session session = null;
-	TableTypeService tableTypeService = null;
-	RestaurantService restaurantService = null;
-	ReserveService reserveService = null;
-	RestaurantTableService restaurantTableService = null;
+@Controller
+//@WebServlet("/Table/*")
+@RequestMapping("/Table/*")
+@Transactional
+public class RestaurantTableController {
+//	private static final long serialVersionUID = 1L;
+
+//	Session session = null;
+	@Autowired
+	TableTypeService tableTypeService;
+	@Autowired
+	RestaurantService restaurantService;
+	@Autowired
+	ReserveService reserveService;
+	@Autowired
+	RestaurantTableService restaurantTableService;
 	
+	/*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		session = (Session) request.getAttribute("hibernateSession");
-		tableTypeService = new TableTypeService(session);
-		restaurantService = new RestaurantService(session);
-		reserveService = new ReserveService(session);
-		restaurantTableService = new RestaurantTableService(session);
+//		session = (Session) request.getAttribute("hibernateSession");
+//		tableTypeService = new TableTypeService(session);
+//		restaurantService = new RestaurantService(session);
+//		reserveService = new ReserveService(session);
+//		restaurantTableService = new RestaurantTableService(session);
 
 		
 		// 獲取URL中的操作名稱
@@ -78,8 +93,9 @@ public class RestaurantTableController extends HttpServlet {
 		}
 
 	}
-
-
+	*/
+	
+	@GetMapping("add1")
 	private void addTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -90,7 +106,8 @@ public class RestaurantTableController extends HttpServlet {
 		request.getRequestDispatcher("/reserve/AddTable.jsp").forward(request, response);
 
 	}
-
+	
+	@PostMapping("add2")
 	private void addTable2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -111,7 +128,9 @@ public class RestaurantTableController extends HttpServlet {
 		request.getRequestDispatcher("/Table/getAll").forward(request, response);
 
 	}
-
+	
+	
+	@GetMapping("del")
 	private void delTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -124,7 +143,9 @@ public class RestaurantTableController extends HttpServlet {
 		request.getRequestDispatcher("/Table/getAll").forward(request, response);
 
 	}
-
+	
+	
+	@GetMapping("getAll")
 	private void getAllTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -152,7 +173,7 @@ public class RestaurantTableController extends HttpServlet {
 	}
 
 
-
+	@GetMapping("set1")
 	private void setTable1(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -165,7 +186,9 @@ public class RestaurantTableController extends HttpServlet {
 		request.getRequestDispatcher("/reserve/SetTableType.jsp").forward(request, response);
 
 	}
-
+	
+	
+	@PostMapping("set2")
 	private void setTable2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -181,8 +204,4 @@ public class RestaurantTableController extends HttpServlet {
 		request.getRequestDispatcher("/Table/getAll").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
 }

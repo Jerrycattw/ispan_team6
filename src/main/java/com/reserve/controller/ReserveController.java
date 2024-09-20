@@ -9,6 +9,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
@@ -45,24 +51,33 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/Reserve/*")
-public class ReserveController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	Session session = null;
-	TableTypeService tableTypeService = null;
-	RestaurantService restaurantService = null;
-	ReserveService reserveService = null;
-	RestaurantTableService restaurantTableService = null;
+@Controller
+@RequestMapping("/Reserve/*")
+@Transactional
+public class ReserveController{
+//	private static final long serialVersionUID = 1L;
+
+//	Session session = null;
+	@Autowired
+	TableTypeService tableTypeService;
+	@Autowired
+	RestaurantService restaurantService;
+	@Autowired
+	ReserveService reserveService;
+	@Autowired
+	RestaurantTableService restaurantTableService;
 	
+	
+	/*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		session = (Session) request.getAttribute("hibernateSession");
-		tableTypeService = new TableTypeService(session);
-		restaurantService = new RestaurantService(session);
-		reserveService = new ReserveService(session);
-		restaurantTableService = new RestaurantTableService(session);
+//		session = (Session) request.getAttribute("hibernateSession");
+//		tableTypeService = new TableTypeService(session);
+//		restaurantService = new RestaurantService(session);
+//		reserveService = new ReserveService(session);
+//		restaurantTableService = new RestaurantTableService(session);
 		
 		// 獲取URL中的操作名稱
 		String action = request.getPathInfo().substring(1);
@@ -105,7 +120,9 @@ public class ReserveController extends HttpServlet {
 		}
 
 	}
-
+	*/
+	
+	@GetMapping("getAllRestaurantName")
 	private void getAllRestaurantName(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -115,6 +132,7 @@ public class ReserveController extends HttpServlet {
 
 	}
 	
+	@GetMapping("listName")
 	private void getAllRestaurantNameForList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -126,7 +144,7 @@ public class ReserveController extends HttpServlet {
 		
 	}
 	
-	
+	@GetMapping("list")
 	private void getReserveList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -183,6 +201,7 @@ public class ReserveController extends HttpServlet {
 	}
 	
 	
+	@GetMapping("checkTable")
 	private void checkReserveTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -214,7 +233,7 @@ public class ReserveController extends HttpServlet {
 		
 	}
 	
-	
+	@PostMapping("addNew")
 	private void addReserveNew(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -242,7 +261,8 @@ public class ReserveController extends HttpServlet {
 		request.getRequestDispatcher("/Reserve/listName").forward(request, response);
 		
 	}
-
+	
+	@GetMapping("del")
 	private void delReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -250,7 +270,9 @@ public class ReserveController extends HttpServlet {
 		request.getRequestDispatcher("/Reserve/listName").forward(request, response);
 
 	}
-
+	
+	
+	@GetMapping("get")
 	private void getReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -260,6 +282,8 @@ public class ReserveController extends HttpServlet {
 
 	}
 
+	
+	@GetMapping("getAll")
 	private void getAllReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -268,7 +292,9 @@ public class ReserveController extends HttpServlet {
 		request.getRequestDispatcher("/reserve/GetAllReserve.jsp").forward(request, response);
 
 	}
-
+	
+	
+	@GetMapping("set")
 	private void setReserve(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -277,7 +303,9 @@ public class ReserveController extends HttpServlet {
 		request.getRequestDispatcher("/reserve/SetReserveNew.jsp").forward(request, response);
 
 	}
-
+	
+	
+	@PostMapping("set2")
 	private void setReserve2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -315,8 +343,4 @@ public class ReserveController extends HttpServlet {
 	
 	
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
 }

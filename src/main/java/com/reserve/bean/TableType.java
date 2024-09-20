@@ -4,6 +4,8 @@ package com.reserve.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.annotations.Expose;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+@Component
 @Entity @Table(name = "table_type")
 public class TableType {
 	@Id @Column(name = "table_type_id")

@@ -3,11 +3,17 @@ package com.reserve.bean;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.reserve.service.ReserveService;
 import com.reserve.service.RestaurantService;
+import com.reserve.service.RestaurantTableService;
 import com.reserve.service.TableTypeService;
 import com.util.HibernateUtil;
 
+
+@Component
 public class TableDTO {
 	
 	private String tableTypeId;
@@ -16,6 +22,11 @@ public class TableDTO {
 	private Integer tableTypeNumber;
 	private String restaurantName;
 	
+	
+	@Autowired
+	private TableTypeService tableTypeService;
+	@Autowired
+	private RestaurantService restaurantService;
 	
 	
 	public TableDTO() {
@@ -27,8 +38,8 @@ public class TableDTO {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		
 		try (Session session = sessionFactory.openSession()) {
-			TableTypeService tableTypeService = new TableTypeService(session);
-			RestaurantService restaurantService = new RestaurantService(session);
+//			TableTypeService tableTypeService = new TableTypeService(session);
+//			RestaurantService restaurantService = new RestaurantService(session);
 			
 			this.tableTypeId = restaurantTable.getId().getTableTypeId();
 			this.restaurantId = restaurantTable.getId().getRestaurantId().toString();

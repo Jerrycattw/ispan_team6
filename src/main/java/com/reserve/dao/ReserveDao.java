@@ -9,36 +9,51 @@ import java.util.List;
 
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.protobuf.TextFormatParseInfoTree;
 import com.reserve.bean.Reserve;
 import com.reserve.bean.ReserveCheckBean;
 import com.util.HibernateUtil;
 
+
+@Repository
+@Transactional
 public class ReserveDao {
 
-	private Session session;
-
-	public ReserveDao(Session session) {
-		super();
-		this.session = session;
-	}
+	@Autowired
+	private SessionFactory sessionFactory;
+//	private Session session;
+//
+//	public ReserveDao(Session session) {
+//		super();
+//		this.session = session;
+//	}
 
 	// 依ID查詢單筆訂位訂單
 	public Reserve selectById(String reserveId) {
+		
+		Session session = sessionFactory.getCurrentSession();
 		return session.get(Reserve.class, reserveId);
 	}
 
 	// 查詢所有訂位訂單
 	public List<Reserve> selectAll() {
+		Session session = sessionFactory.openSession();
+
 		Query<Reserve> query = session.createQuery("from Reserve", Reserve.class);
 		return query.list();
 	}
 
 	// 新增單筆訂位訂單
 	public Reserve insert(Reserve reserve) {
+		Session session = sessionFactory.getCurrentSession();
+
 		if (reserve != null) {
 			session.persist(reserve);
 			return reserve;
@@ -48,6 +63,8 @@ public class ReserveDao {
 
 	// 更新訂位資料
 	public Reserve update(Reserve reserve) {
+		Session session = sessionFactory.getCurrentSession();
+
 		Reserve isExist = session.get(Reserve.class, reserve.getReserveId());
 		if (isExist != null) {
 			session.merge(reserve);
@@ -58,6 +75,8 @@ public class ReserveDao {
 
 	// 刪除訂位訂單ById
 	public boolean deleteById(String reserveId) {
+		Session session = sessionFactory.getCurrentSession();
+
 		Reserve reserve = session.get(Reserve.class, reserveId);
 		if (reserve != null) {
 			session.remove(reserve);
@@ -70,6 +89,8 @@ public class ReserveDao {
 	
 	
 	public List<ReserveCheckBean> getReserveCheck(String restaurantId, String tableTypeId, LocalDate checkDate) {
+		Session session = sessionFactory.getCurrentSession();
+
 	    // 原生 SQL 查詢
 	    String sql = "WITH TimeSlots AS ("
 	            + "    SELECT restaurant_opentime AS slot_start, "
@@ -127,6 +148,9 @@ public class ReserveDao {
 	public List<Reserve> getReserveByCriteria(String memberName, String phone, String memberId, String restaurantId,
 			String tableTypeId, String restaurantAddress, LocalDateTime reserveTimeStart,
 			LocalDateTime reserveTimeEnd) {
+		
+		Session session = sessionFactory.getCurrentSession();
+
 		
 	    StringBuilder hql = new StringBuilder(
 	            "SELECT r FROM Reserve r JOIN r.restaurant rt JOIN r.member m WHERE 1=1");

@@ -4,9 +4,12 @@ package com.reserve.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+@Component
 @Embeddable
 public class RestaurantTableId implements Serializable{
 	

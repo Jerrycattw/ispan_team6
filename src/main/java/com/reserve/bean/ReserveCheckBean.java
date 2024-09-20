@@ -2,6 +2,11 @@ package com.reserve.bean;
 
 import java.time.LocalTime;
 
+import org.springframework.stereotype.Component;
+
+
+
+@Component
 public class ReserveCheckBean {
 	
 	private LocalTime startTime;

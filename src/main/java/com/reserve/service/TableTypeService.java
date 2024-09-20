@@ -3,18 +3,25 @@ package com.reserve.service;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.reserve.bean.TableType;
 import com.reserve.dao.TableTypeDao;
 
-public class TableTypeService {
 
+@Service
+@Transactional
+public class TableTypeService {
+	
+	@Autowired
 	private TableTypeDao tableTypeDao;
 	
-	public TableTypeService(Session session) {
-		tableTypeDao = new TableTypeDao(session);
-	}
-	
+//	public TableTypeService(Session session) {
+//		tableTypeDao = new TableTypeDao(session);
+//	}
+//	
 	//新增單筆桌位種類
 	public TableType insert(TableType tableType) {
 		return tableTypeDao.insert(tableType);

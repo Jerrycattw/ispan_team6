@@ -5,6 +5,12 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.reserve.bean.TableType;
 import com.reserve.service.ReserveService;
@@ -24,26 +30,34 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/TableType/*")
-public class TableTypeController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	Session session = null;
-	TableTypeService tableTypeService = null;
-	RestaurantService restaurantService = null;
-	ReserveService reserveService = null;
-	RestaurantTableService restaurantTableService = null;
+//@WebServlet("/TableType/*")
+@Controller
+@RequestMapping("/TableType/*")
+@Transactional
+public class TableTypeController {
+//	private static final long serialVersionUID = 1L;
+
+//	Session session = null;
+	@Autowired
+	TableTypeService tableTypeService;
+	@Autowired
+	RestaurantService restaurantService;
+	@Autowired
+	ReserveService reserveService;
+	@Autowired
+	RestaurantTableService restaurantTableService;
 	
-	
+	/*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		
-		session = (Session) request.getAttribute("hibernateSession");
-		tableTypeService = new TableTypeService(session);
-		restaurantService = new RestaurantService(session);
-		reserveService = new ReserveService(session);
-		restaurantTableService = new RestaurantTableService(session);
+//		session = (Session) request.getAttribute("hibernateSession");
+//		tableTypeService = new TableTypeService(session);
+//		restaurantService = new RestaurantService(session);
+//		reserveService = new ReserveService(session);
+//		restaurantTableService = new RestaurantTableService(session);
 
 		
 		// 獲取URL中的操作名稱
@@ -66,7 +80,9 @@ public class TableTypeController extends HttpServlet {
 		}
 
 	}
-
+	*/
+	
+	@PostMapping("add")
 	private void addTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -78,7 +94,7 @@ public class TableTypeController extends HttpServlet {
 
 	}
 
-
+	@GetMapping("del")
 	private void delTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -88,7 +104,8 @@ public class TableTypeController extends HttpServlet {
 
 	}
 
-
+	
+	@GetMapping("getAll")
 	private void getAllTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -98,9 +115,14 @@ public class TableTypeController extends HttpServlet {
 
 	}
 
-
+	/*
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
+	
+	*/
+	
+	
+	
 }

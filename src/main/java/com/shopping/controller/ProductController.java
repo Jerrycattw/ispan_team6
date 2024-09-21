@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import com.shopping.bean.ProductBean;
+import com.shopping.bean.ProductDTO;
 import com.shopping.bean.ProductType;
 import com.shopping.service.ItemService;
 import com.shopping.service.ProductService;
@@ -20,16 +21,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.shopping.service.ShoppingService;
 
-@Controller
+//@MultipartConfig
+//@MultipartConfig(location="C:/Users/user/Program/EEIT187-6/src/main/webapp/Product/ProductImg")
 //@WebServlet("/ProductController/*")
 @RequestMapping("/ProductController/*")
-@Transactional
-@MultipartConfig
-//@MultipartConfig(location="C:/Users/user/Program/EEIT187-6/src/main/webapp/Product/ProductImg")
+//@Transactional
+@Controller
 public class ProductController{
 //	private static final long serialVersionUID = 1L;
 
@@ -89,28 +95,54 @@ public class ProductController{
 //			break;
 //		}
 //	}
-			
-	  @GetMapping("/home")
-	    public String homePage() {
-	        return "home"; // 返回首頁的視圖名稱
+//			
+//	  @GetMapping("/home")
+//	    public String homePage() {
+//	        return "home"; // 返回首頁的視圖名稱
+//	    }
+//
+//	
+//	
+//	protected void HomePage(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		
+//		String action = request.getParameter("action");
+//
+//		if("AddProduct".equals(action)) {
+//			response.sendRedirect("/Product/AddProduct.html");
+//		}else if ("SearchAllProduct".equals(action)) {
+//			response.sendRedirect("/ProductController/SearchAllProduct");
+//		}else if ("SearchByCategory".equals(action)) {
+//			response.sendRedirect("/Product/SearchByCategory.html");
+//		}
+//		
+//	}
+	
+	 @PostMapping("/addProduct")
+	    public String addProduct(@RequestParam String productName,
+	                             @RequestParam int productTypeId,
+	                             @RequestParam int productPrice,
+	                             @RequestParam int productStock,
+	                             @RequestParam int productStatus,
+	                             @RequestParam String productDescription,
+	                             @RequestParam("productPicture") MultipartFile file) throws IOException {
+
+	        String filename = file.getOriginalFilename();
+	        String uploadDir = "C:/upload/ProductImg"; 
+	        File uploadDirFile = new File(uploadDir);
+	        if (!uploadDirFile.exists()) {
+	            uploadDirFile.mkdirs();
+	        }
+	        file.transferTo(new File(uploadDir, filename));
+
+	        String productPicture = "/EEIT187-6/Product/ProductImg/" + filename;
+	        ProductType productType = productService.searchByProductType(productTypeId);
+	        ProductBean productBean = new ProductBean(productName, productPrice, productPicture, productStock, productStatus, productDescription);
+	        productBean.setProductType(productType);
+	        productService.addProduct(productBean);
+	        
+	        return "redirect:/ProductController/searchAllProduct"; // 重定向到搜索所有產品
 	    }
-
-	
-	
-	protected void HomePage(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		String action = request.getParameter("action");
-
-		if("AddProduct".equals(action)) {
-			response.sendRedirect("/Product/AddProduct.html");
-		}else if ("SearchAllProduct".equals(action)) {
-			response.sendRedirect("/ProductController/SearchAllProduct");
-		}else if ("SearchByCategory".equals(action)) {
-			response.sendRedirect("/Product/SearchByCategory.html");
-		}
-		
-	}
 	
 	
 //	private void AddProduct(HttpServletRequest request, HttpServletResponse response)
@@ -145,48 +177,92 @@ public class ProductController{
 //		productService.addProduct(productBean);
 //		request.getRequestDispatcher("/ProductController/SearchAllProduct").forward(request, response);
 //	}
+//	
+//	private String getFileName(Part part) {
+//		String header = part.getHeader("Content-Disposition");
+//		int slashIdx = header.lastIndexOf("\\");
+//		String filename;
+//		if (slashIdx != -1)
+//			filename = header.substring(slashIdx + 1, header.length()-1);			
+//		else {
+//			int idx = header.indexOf("filename");
+//			filename = header.substring(idx + 10, header.length()-1);
+//		}
+//		return filename;
+//	}
 	
-	private String getFileName(Part part) {
-		String header = part.getHeader("Content-Disposition");
-		int slashIdx = header.lastIndexOf("\\");
-		String filename;
-		if (slashIdx != -1)
-			filename = header.substring(slashIdx + 1, header.length()-1);			
-		else {
-			int idx = header.indexOf("filename");
-			filename = header.substring(idx + 10, header.length()-1);
-		}
-		return filename;
-	}
 	
-	
-	
-	protected void DelProduct(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		int productId = Integer.parseInt(request.getParameter("productId"));
-
+	@PostMapping("delProduct")
+	public String delProduct(@RequestParam int productId, Model m) {
 		productService.deleteProduct(productId);
+		return "redirect:/ProductController/searchAllProduct";
 		
-		request.getRequestDispatcher("/ProductController/SearchAllProduct").forward(request, response);
 	}
 	
 	
-	protected void UpdateProduct(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		int productId = Integer.parseInt(request.getParameter("productId"));
-		
-		ProductBean product = productService.searchByProductId(productId);
-		
-		request.setAttribute("product",product );
-		request.getRequestDispatcher("/Product/UpdateProduct.jsp").forward(request, response);
-		
-
+	@PostMapping("/updateProduct")
+	public String updateProduct(HttpServletRequest request, @RequestParam("productId") int productId) throws ServletException, IOException {
+	    ProductBean product = productService.searchByProductId(productId);
+	    request.setAttribute("product", product);
+	    return "Product/UpdateProduct"; 
 	}
 
-
+	@PostMapping("/updateDataProduct")
+	public String updateDataProduct(HttpServletRequest request,
+	                                @RequestParam String productName,
+	                                @RequestParam int productTypeId,
+	                                @RequestParam int productPrice,
+	                                @RequestParam int productStock,
+	                                @RequestParam int productStatus,
+	                                @RequestParam String productDescription,
+	                                @RequestParam("productId") int productId,
+	                                @RequestParam("productPicture") MultipartFile file) throws IOException {
+	    
+	    ProductBean product = productService.searchByProductId(productId);
+	    ProductType productType = productService.searchByProductType(productTypeId);
+	    
+	    String productPicture;
+	    String filename = file.getOriginalFilename();
+	    
+	    if (filename == null || filename.isEmpty()) {
+	        productPicture = product.getProductPicture(); 
+	    } else {
+	        String uploadDir = "C:/upload/ProductImg";
+	        File uploadDirFile = new File(uploadDir);
+	        if (!uploadDirFile.exists()) {
+	            uploadDirFile.mkdirs();
+	        }
+	        file.transferTo(new File(uploadDir, filename));
+	        productPicture = "/EEIT187-6/Product/ProductImg/" + filename; 
+	    }
+	    
+	    product.setProductName(productName);
+	    product.setProductPicture(productPicture);
+	    product.setProductPrice(productPrice);
+	    product.setProductStatus(productStatus);
+	    product.setProductStock(productStock);
+	    product.setProductType(productType);
+	    product.setProductDescription(productDescription);
+	    
+	    productService.updateProduct(product);
+	    return "redirect:/ProductController/searchAllProduct";
+	}
 	
+	
+//	protected void UpdateProduct(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//
+//		int productId = Integer.parseInt(request.getParameter("productId"));
+//		
+//		ProductBean product = productService.searchByProductId(productId);
+//		
+//		request.setAttribute("product",product );
+//		request.getRequestDispatcher("/Product/UpdateProduct.jsp").forward(request, response);
+//		
+//
+//	}
+//
+//	
 //	protected void UpdateDataProduct(HttpServletRequest request, HttpServletResponse response)
 //	        throws ServletException, IOException {
 //		
@@ -234,26 +310,24 @@ public class ProductController{
 	
 	
 	
-//	protected void SearchAllProduct(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		
-//		List<ProductBean> products = productService.searchAllProduct();
-//		for (ProductBean product : products) {
-//			System.out.println(product);
-//		}
-//		request.setAttribute("products", products);
-//		 System.out.println("Sea");
-//		request.getRequestDispatcher("/Product/SearchAllProduct.jsp").forward(request, response);
-//	}
+	
+	@GetMapping("searchAllProduct")
+	public String searchAllProduct(Model m){
+		
+		System.out.println("searchAllProduct.Con");
+		
+		
+		List<ProductDTO> products = productService.searchAllProduct();
+		
+		
+		for (ProductDTO product : products) {
+			System.out.println(product);
+		}
+		m.addAttribute("products", products);
+		 return "Product/SearchAllProduct";
+	}
 
-	
-	   @GetMapping("/searchAllProduct")
-	    public String searchAllProduct(Model model) {
-	        List<ProductBean> products = productService.searchAllProduct();
-	        model.addAttribute("products", products);
-	        return "./Product/SearchAllProduct"; // 返回產品列表的視圖
-	    }
-	
+//	
 //	protected void SearchByProductId(HttpServletRequest request, HttpServletResponse response)
 //			throws ServletException, IOException {
 //

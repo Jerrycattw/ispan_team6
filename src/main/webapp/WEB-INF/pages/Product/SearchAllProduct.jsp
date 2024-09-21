@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-    import="java.util.*" %>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -16,7 +15,7 @@
     <!-- 引入 DataTables 的 JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="../template/template.js"></script>
-    <jsp:include page="../HomePage.jsp"></jsp:include>
+    <jsp:include page="../../../HomePage.jsp"></jsp:include>
     <meta charset="UTF-8">
     <style>
         .custom-button {
@@ -65,10 +64,10 @@
                         <td>${p.productStock}</td>
                         <td>${p.productStatus}</td>
                         <td>${p.productDescription}</td>
-                        <td>${p.productType.productId}</td>
-                        <td>${p.productType.productName}</td>
+                        <td>${p.productTypeId}</td>
+                        <td>${p.productTypeName}</td>
                         <td>
-                            <form method="post" action="/EEIT187-6/ProductController/UpdateProduct">
+                            <form method="post" action="/EEIT187-6/ProductController/updateProduct">
                                 <input type="hidden" name="productId" value="${p.productId}">
                                 <button type="submit" class="custom-button">
                                     <i class="fa-regular fa-pen-to-square fa-xl"></i>
@@ -76,7 +75,7 @@
                             </form>
                         </td>
                         <td>
-                            <form method="post" action="/EEIT187-6/ProductController/DelProduct">
+                            <form method="post" action="/EEIT187-6/ProductController/delProduct">
                                 <input type="hidden" name="productId" value="${p.productId}">
                                 <button type="submit" class="custom-button custom-button-delete">
                                     <i class="fa-solid fa-trash-arrow-up fa-xl"></i>

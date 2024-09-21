@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shopping.bean.ProductBean;
+import com.shopping.bean.ProductDTO;
+import com.shopping.bean.ProductType;
 
 @Repository
 @Transactional
@@ -33,6 +35,17 @@ public class ProductDao {
 		}
 		return null;
 	}
+	
+	// 新增
+	public ProductDTO addProduct(ProductDTO DTO) {
+		Session session = sessionFactory.getCurrentSession();
+		if (DTO != null) {
+			session.persist(DTO);
+			return DTO;
+		}
+		return null;
+	}
+
 
 	// 刪除
 	public boolean deleteProduct(Integer productId) {
@@ -55,13 +68,26 @@ public class ProductDao {
 		}
 		return null;
 	}
-
+	
+	
+	 // 依ID查詢單筆訂位訂單
+//	 public Reserve selectById(String reserveId) {
+//	  Session session = sessionFactory.getCurrentSession();
+//	     String hql = "SELECT r FROM Reserve r JOIN FETCH r.member JOIN FETCH r.restaurant WHERE r.id = :reserveId";
+//	     Query<Reserve> query = session.createQuery(hql, Reserve.class);
+//	     query.setParameter("reserveId", reserveId);
+//	     return query.uniqueResult();
+//	 }
+	
+	
 	// 查詢全部
 	public List<ProductBean> searchAllProduct() {
 		Session session = sessionFactory.getCurrentSession();
-		Query<ProductBean> query = session.createQuery("from ProductBean", ProductBean.class);
+		
+		Query<ProductBean> query = session.createQuery("from ProductBean pb JOIN FETCH pb.productType", ProductBean.class);
 		return query.list();
 	}
+	
 
 	// 依ID查詢
 	public ProductBean searchByProductId(Integer productId) {
@@ -91,11 +117,19 @@ public class ProductDao {
     }
 
     // 根據產品類型查詢
-    public List<ProductBean> searchByProductType(Integer productType) {
-    	Session session = sessionFactory.getCurrentSession();
-        Query<ProductBean> query = session.createQuery("from ProductBean where productType = :productType", ProductBean.class);
-        query.setParameter("productType", productType);
-        return query.list();
+//    public List<ProductBean> searchByProductType(Integer productType) {
+//    	Session session = sessionFactory.getCurrentSession();
+//        Query<ProductBean> query = session.createQuery("from ProductBean where productType = :productType", ProductBean.class);
+//        query.setParameter("productType", productType);
+//        return query.list();
+//    }
+    
+ // 根據產品類型查詢單一產品
+    public ProductType searchByProductType(Integer productTypeId) { 
+        Session session = sessionFactory.getCurrentSession();
+        Query<ProductType> query = session.createQuery("from ProductType where productTypeId = :productTypeId", ProductType.class);
+        query.setParameter("productTypeId", productTypeId);
+        return query.uniqueResult(); 
     }
     
     // 查詢產品價格

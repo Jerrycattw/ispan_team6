@@ -32,47 +32,128 @@ public class ProductType {
 		
 		@OneToMany(fetch= FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="productType")
 		private Set<ProductBean> products;
-		
-		
+
+
 		public ProductType() {
-			super();
 		}
 
-		public ProductType(Integer productId, String productName) {
-			this.productTypeId = productId;
-			this.productTypeName = productName;
+
+		public ProductType(Integer productTypeId, String productTypeName) {
+			this.productTypeId = productTypeId;
+			this.productTypeName = productTypeName;
 		}
 
-		public Integer getProductId() {
+
+		public Integer getProductTypeId() {
 			return productTypeId;
 		}
 
-		public void setProductId(Integer productId) {
-			this.productTypeId = productId;
+
+		public void setProductTypeId(Integer productTypeId) {
+			this.productTypeId = productTypeId;
 		}
 
-		public String getProductName() {
+
+		public String getProductTypeName() {
 			return productTypeName;
 		}
 
-		public void setProductName(String productName) {
-			this.productTypeName = productName;
+
+		public void setProductTypeName(String productTypeName) {
+			this.productTypeName = productTypeName;
 		}
-		
-		
+
 
 		public Set<ProductBean> getProducts() {
 			return products;
 		}
 
+
 		public void setProducts(Set<ProductBean> products) {
 			this.products = products;
 		}
 
+
 		@Override
 		public String toString() {
-			return "ProductBean [productId=" + productTypeId + ", productName=" + productTypeName + "]";
+			return "ProductType [productTypeId=" + productTypeId + ", productTypeName=" + productTypeName
+					+ ", products=" + products + "]";
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		public Integer getProductTypeId() {
+//			return productTypeId;
+//		}
+//
+//		public void setProductTypeId(Integer productTypeId) {
+//			this.productTypeId = productTypeId;
+//		}
+//
+//		public String getProductTypeName() {
+//			return productTypeName;
+//		}
+//
+//		public void setProductTypeName(String productTypeName) {
+//			this.productTypeName = productTypeName;
+//		}
+//
+//		public ProductType() {
+//			super();
+//		}
+//
+//		public ProductType(Integer productId, String productName) {
+//			this.productTypeId = productId;
+//			this.productTypeName = productName;
+//		}
+//
+//		public Integer getProductId() {
+//			return productTypeId;
+//		}
+//
+//		public void setProductId(Integer productId) {
+//			this.productTypeId = productId;
+//		}
+//
+//		public String getProductName() {
+//			return productTypeName;
+//		}
+//
+//		public void setProductName(String productName) {
+//			this.productTypeName = productName;
+//		}
+//		
+//		
+//
+//		public Set<ProductBean> getProducts() {
+//			return products;
+//		}
+//
+//		public void setProducts(Set<ProductBean> products) {
+//			this.products = products;
+//		}
+//
+//		@Override
+//		public String toString() {
+//			return "ProductBean [productId=" + productTypeId + ", productName=" + productTypeName + "]";
+//		}
 		
 	
 }

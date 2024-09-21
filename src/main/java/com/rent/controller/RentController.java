@@ -1,4 +1,4 @@
-package com.rent.controller;
+/*package com.rent.controller;
 
 import java.io.IOException;
 
@@ -272,3 +272,4 @@ public class RentController extends HttpServlet {
 		doGet(request, response);
 	}
 }
+*/

@@ -38,8 +38,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 	}
 	
-	
-	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.members.bean.Member;
 
 import jakarta.persistence.Column;
@@ -18,6 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+@Component
 @Entity @Table(name="shopping_order")
 public class ShoppingBean  {
 	

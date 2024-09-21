@@ -16,7 +16,7 @@
     <!-- 引入 DataTables 的 JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="../template/template.js"></script>
-    <jsp:include page="../HomePage.html"></jsp:include>
+    <jsp:include page="../HomePage.jsp"></jsp:include>
     <meta charset="UTF-8">
     <style>
         .custom-button {

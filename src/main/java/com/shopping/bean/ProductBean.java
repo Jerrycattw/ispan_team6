@@ -2,6 +2,8 @@ package com.shopping.bean;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.members.bean.Member;
 
 import jakarta.persistence.CascadeType;
@@ -18,6 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+@Component
 @Entity @Table(name="product")
 public class ProductBean {
 

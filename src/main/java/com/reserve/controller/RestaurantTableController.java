@@ -37,13 +37,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
-//@WebServlet("/Table/*")
 @RequestMapping("/Table/*")
-@Transactional
 public class RestaurantTableController {
-//	private static final long serialVersionUID = 1L;
-
-//	Session session = null;
+	
 	@Autowired
 	TableTypeService tableTypeService;
 	@Autowired
@@ -53,62 +49,26 @@ public class RestaurantTableController {
 	@Autowired
 	RestaurantTableService restaurantTableService;
 	
-	/*
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-//		session = (Session) request.getAttribute("hibernateSession");
-//		tableTypeService = new TableTypeService(session);
-//		restaurantService = new RestaurantService(session);
-//		reserveService = new ReserveService(session);
-//		restaurantTableService = new RestaurantTableService(session);
 
-		
-		// 獲取URL中的操作名稱
-		String action = request.getPathInfo().substring(1);
-
-		System.out.println(action);
-
-		switch (action) {
-		case "add1":
-			addTable(request, response);
-			break;
-		case "add2":
-			addTable2(request, response);
-			break;
-		case "del":
-			delTable(request, response);
-			break;
-		case "getAll":
-			getAllTable(request, response);
-			break;
-		case "set1":
-			setTable1(request, response);
-			break;
-		case "set2":
-			setTable2(request, response);
-			break;
-		default:
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-
-	}
-	*/
+	
 	
 	@GetMapping("add1")
-	private void addTable(HttpServletRequest request, HttpServletResponse response)
+	public String addTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String restaurantName = request.getParameter("restaurantName");
 		request.setAttribute("restaurantName", restaurantName);
 		List<TableType> tableTypes = tableTypeService.selectAll();
 		request.setAttribute("allTypes", tableTypes);
-		request.getRequestDispatcher("/reserve/AddTable.jsp").forward(request, response);
+		
+		return "reserve/AddTable";
 
 	}
 	
+	
+	
 	@PostMapping("add2")
-	private void addTable2(HttpServletRequest request, HttpServletResponse response)
+	public String addTable2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
@@ -125,13 +85,17 @@ public class RestaurantTableController {
 		RestaurantTable restaurantTable = new RestaurantTable(restaurantTableId,tableTypeNumber);
 		
 		restaurantTableService.insert(restaurantTable);
-		request.getRequestDispatcher("/Table/getAll").forward(request, response);
+		
+		
+//		request.getRequestDispatcher("/Table/getAll").forward(request, response);
+		return "redirect:/Reserve/listName";
+
 
 	}
 	
 	
 	@GetMapping("del")
-	private void delTable(HttpServletRequest request, HttpServletResponse response)
+	public String delTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String restaurantId = request.getParameter("restaurantId");
@@ -140,13 +104,17 @@ public class RestaurantTableController {
 		restaurantTableService.delete(restaurantTableId);
 		
 		request.setAttribute("restaurantId", restaurantId);
-		request.getRequestDispatcher("/Table/getAll").forward(request, response);
+		
+		
+//		request.getRequestDispatcher("/Table/getAll").forward(request, response);
+		return "redirect:/Table/getAll";
+
 
 	}
 	
 	
 	@GetMapping("getAll")
-	private void getAllTable(HttpServletRequest request, HttpServletResponse response)
+	public String getAllTable(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String restaurantId = request.getParameter("restaurantId");
@@ -168,13 +136,17 @@ public class RestaurantTableController {
 		
 		request.setAttribute("name", restaurantName);
 		request.setAttribute("tableTypes", tableDTOs);
-		request.getRequestDispatcher("/reserve/GetAllTables.jsp").forward(request, response);
+		
+		
+//		request.getRequestDispatcher("/reserve/GetAllTables.jsp").forward(request, response);
+		return "reserve/GetAllTables";
+
 
 	}
 
 
 	@GetMapping("set1")
-	private void setTable1(HttpServletRequest request, HttpServletResponse response)
+	public String setTable1(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String restaurantId = request.getParameter("restaurantId");
@@ -183,13 +155,17 @@ public class RestaurantTableController {
 		RestaurantTableId restaurantTableId = new RestaurantTableId(Integer.parseInt(restaurantId), tableTypeId);
 		RestaurantTable restaurantTable = restaurantTableService.selectById(restaurantTableId);
 		request.setAttribute("table", restaurantTable);
-		request.getRequestDispatcher("/reserve/SetTableType.jsp").forward(request, response);
+		
+		
+//		request.getRequestDispatcher("/reserve/SetTableType.jsp").forward(request, response);
+		return "reserve/SetTableType";
+
 
 	}
 	
 	
 	@PostMapping("set2")
-	private void setTable2(HttpServletRequest request, HttpServletResponse response)
+	private String setTable2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String restaurantId = request.getParameter("restaurantId");
@@ -201,7 +177,10 @@ public class RestaurantTableController {
 		restaurantTable.setTableTypeNumber(tableTypeNumber);
 		restaurantTableService.update(restaurantTable);
 		
-		request.getRequestDispatcher("/Table/getAll").forward(request, response);
+		
+//		request.getRequestDispatcher("/Table/getAll").forward(request, response);
+		return "redirect:/Table/getAll";
+
 	}
 
 }

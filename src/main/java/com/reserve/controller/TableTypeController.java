@@ -31,14 +31,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-//@WebServlet("/TableType/*")
 @Controller
 @RequestMapping("/TableType/*")
-@Transactional
 public class TableTypeController {
-//	private static final long serialVersionUID = 1L;
-
-//	Session session = null;
+	
 	@Autowired
 	TableTypeService tableTypeService;
 	@Autowired
@@ -48,81 +44,47 @@ public class TableTypeController {
 	@Autowired
 	RestaurantTableService restaurantTableService;
 	
-	/*
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		
-//		session = (Session) request.getAttribute("hibernateSession");
-//		tableTypeService = new TableTypeService(session);
-//		restaurantService = new RestaurantService(session);
-//		reserveService = new ReserveService(session);
-//		restaurantTableService = new RestaurantTableService(session);
-
-		
-		// 獲取URL中的操作名稱
-		String action = request.getPathInfo().substring(1);
-
-		System.out.println(action);
-
-		switch (action) {
-		case "add":
-			addTableType(request, response);
-			break;
-		case "del":
-			delTableType(request, response);
-			break;
-		case "getAllType":
-			getAllTableType(request, response);
-			break;
-		default:
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-
-	}
-	*/
 	
 	@PostMapping("add")
-	private void addTableType(HttpServletRequest request, HttpServletResponse response)
+	public String addTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String tableTypeId = request.getParameter("tableTypeId");
 		String tableTypeName = request.getParameter("tableTypeName");
 		TableType tableType = new TableType(tableTypeId, tableTypeName);
 		tableTypeService.insert(tableType);
-		request.getRequestDispatcher("/TableType/getAllType").forward(request, response);
+		
+		
+		return "redirect:/TableType/getAllType";
+
 
 	}
 
 	@GetMapping("del")
-	private void delTableType(HttpServletRequest request, HttpServletResponse response)
+	public String delTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String tableTypeId = request.getParameter("tableTypeId");
 		tableTypeService.delete(tableTypeId);
-		request.getRequestDispatcher("/TableType/getAllType").forward(request, response);
+		
+		return "redirect:/TableType/getAllType";
+
 
 	}
 
 	
-	@GetMapping("getAll")
-	private void getAllTableType(HttpServletRequest request, HttpServletResponse response)
+	@GetMapping("getAllType")
+	public String getAllTableType(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		List<TableType> tableTypes = tableTypeService.selectAll();
 		request.setAttribute("tableTypes", tableTypes);
-		request.getRequestDispatcher("/reserve/GetAllTableTypes.jsp").forward(request, response);
+		
+		return "reserve/GetAllTableTypes";
+
 
 	}
 
-	/*
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
-	
-	*/
-	
 	
 	
 }

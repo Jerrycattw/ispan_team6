@@ -37,8 +37,8 @@ function showSidebar(menu) {
                     break;
                 case 'reservation':
                     menuItems = `
-                         <a href="/EEIT187-6/reserve/AddRestaurant.jsp">新增餐廳</a>
-                         <a href="/EEIT187-6/reserve/GetListRestaurants.jsp">查詢餐廳</a>
+                         <a href="/EEIT187-6/reserve/AddRestaurant">新增餐廳</a>
+                         <a href="/EEIT187-6/reserve/GetListRestaurants">查詢餐廳</a>
                          <a href="/EEIT187-6/Restaurant/getAll">查詢所有餐廳</a>
                          <a href="/EEIT187-6/TableType/getAllType">桌位種類管理</a>
                          <a href="/EEIT187-6/Reserve/getAllRestaurantName">新增訂位</a>

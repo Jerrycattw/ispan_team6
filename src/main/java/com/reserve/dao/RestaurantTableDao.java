@@ -36,13 +36,29 @@ public class RestaurantTableDao {
 	}
 	
 	//查詢所有餐廳桌位種類by餐廳ID
+//	public List<RestaurantTable> selectAll(String restaurantId) {
+//		Session session = sessionFactory.getCurrentSession();
+//
+//		Query<RestaurantTable> query = session.createQuery("from RestaurantTable rt WHERE rt.id.restaurantId =:restaurantId ", RestaurantTable.class);
+//		query.setParameter("restaurantId", restaurantId);
+//		return query.list();
+//	}
+	
+	
+	//查詢所有餐廳桌位種類by餐廳ID，並使用 JOIN FETCH 加載關聯屬性
 	public List<RestaurantTable> selectAll(String restaurantId) {
-		Session session = sessionFactory.getCurrentSession();
+	    Session session = sessionFactory.getCurrentSession();
 
-		Query<RestaurantTable> query = session.createQuery("from RestaurantTable rt WHERE rt.id.restaurantId =:restaurantId", RestaurantTable.class);
-		query.setParameter("restaurantId", restaurantId);
-		return query.list();
+	    String hql = "SELECT rt FROM RestaurantTable rt " +
+	                 "JOIN FETCH rt.tableType " +
+	                 "JOIN FETCH rt.restaurant " +
+	                 "WHERE rt.id.restaurantId = :restaurantId";
+	    Query<RestaurantTable> query = session.createQuery(hql, RestaurantTable.class);
+	    query.setParameter("restaurantId", restaurantId);
+	    return query.list();
 	}
+	
+	
 	
 	//新增單筆餐廳桌位種類
 	public RestaurantTable insert(RestaurantTable restaurantTable) {

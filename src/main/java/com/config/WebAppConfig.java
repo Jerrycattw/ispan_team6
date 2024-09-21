@@ -39,15 +39,16 @@ public class WebAppConfig implements WebMvcConfigurer {
 	}
 	
 	
+	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
-//		InternalResourceViewResolver irv = new InternalResourceViewResolver();
 //		irv.setPrefix("/WEB-INF/pages/");
 		//irv.setSuffix(".jsp");
 		irv.setOrder(1);
 		return irv;
 	}
+	
 	
 	
 	@Bean
@@ -97,9 +98,12 @@ public class WebAppConfig implements WebMvcConfigurer {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		
-//		registry.addRedirectViewController("/", "home.html");
-		registry.addRedirectViewController("/", "NewFile.jsp");
-		registry.addViewController("/wonderland").setViewName("loginSystem");
+		registry.addRedirectViewController("/", "HomePage.jsp");
+		
+		
+//		registry.addViewController("/wonderland").setViewName("loginSystem");
+		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
+		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
 		
 	}
 	

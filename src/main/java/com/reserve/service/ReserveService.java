@@ -21,9 +21,6 @@ public class ReserveService {
 	@Autowired
 	private ReserveDao reserveDao;
 	
-//	public ReserveService(Session session) {
-//		reserveDao = new ReserveDao(session);
-//	}
 	
 	//新增單筆訂位
 	public Reserve insert(Reserve reserve) {

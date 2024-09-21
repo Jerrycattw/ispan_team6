@@ -8,9 +8,11 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.reserve.bean.TableType;
 import com.reserve.service.ReserveService;
@@ -44,46 +46,28 @@ public class TableTypeController {
 	@Autowired
 	RestaurantTableService restaurantTableService;
 	
-	
-	@PostMapping("add")
-	public String addTableType(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		String tableTypeId = request.getParameter("tableTypeId");
-		String tableTypeName = request.getParameter("tableTypeName");
-		TableType tableType = new TableType(tableTypeId, tableTypeName);
-		tableTypeService.insert(tableType);
-		
-		
-		return "redirect:/TableType/getAllType";
+    @PostMapping("/add")
+    public String addTableType(@RequestParam("tableTypeId") String tableTypeId,
+                               @RequestParam("tableTypeName") String tableTypeName) {
+        TableType tableType = new TableType(tableTypeId, tableTypeName);
+        tableTypeService.insert(tableType);
+        return "redirect:/TableType/getAllType";
+    }
 
+    @GetMapping("/del")
+    public String delTableType(@RequestParam("tableTypeId") String tableTypeId) {
+        tableTypeService.delete(tableTypeId);
+        return "redirect:/TableType/getAllType";
+    }
 
-	}
-
-	@GetMapping("del")
-	public String delTableType(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String tableTypeId = request.getParameter("tableTypeId");
-		tableTypeService.delete(tableTypeId);
-		
-		return "redirect:/TableType/getAllType";
-
-
-	}
-
-	
-	@GetMapping("getAllType")
-	public String getAllTableType(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		List<TableType> tableTypes = tableTypeService.selectAll();
-		request.setAttribute("tableTypes", tableTypes);
-		
-		return "reserve/GetAllTableTypes";
-
-
-	}
+    @GetMapping("/getAllType")
+    public String getAllTableType(Model model) {
+        List<TableType> tableTypes = tableTypeService.selectAll();
+        model.addAttribute("tableTypes", tableTypes);
+        return "reserve/GetAllTableTypes";
+    }
+    
+    
 
 	
 	

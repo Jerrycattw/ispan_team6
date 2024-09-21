@@ -29,10 +29,10 @@ function showSidebar(menu) {
                     break;
                 case 'rental':
                     menuItems = `
-						<a href="/EEIT187-6/tablewareController/getAll">環保用具管理</a>
-						<a href="/EEIT187-6/tablewareStockController/getAll">環保用具庫存管理</a>
-						<a href="/EEIT187-6/rentController/getAll">租借訂單管理</a>
-						<a href="/EEIT187-6/rentItemController/getAll">租借訂單項目管理</a>
+						<a href="/EEIT187-6/Tableware/getAll">環保用具管理</a>
+						<a href="/EEIT187-6/TablewareStock/getAll">環保用具庫存管理</a>
+						<a href="/EEIT187-6/Rent/getAll">租借訂單管理</a>
+						<a href="/EEIT187-6/RentItem/getAll">租借訂單項目管理</a>
                     `;
                     break;
                 case 'reservation':

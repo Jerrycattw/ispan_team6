@@ -16,19 +16,19 @@
 
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>租 借 訂 單 項 目 資 料</h2>
 		<form method="GET" class="btn"
-			action="/EEIT187-6/rent_item/insert.html">
+			action="/EEIT187-6/tableware/InsertRentItem.html">
 			<input type="submit" value="新增訂單">
 		</form>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rent_item/search.html">
+			action="/EEIT187-6/tableware/SearchRentItem.html">
 			<input type="submit" value="搜尋用具">
 		</form>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rentItemController/getAll">
+			action="/EEIT187-6/RentItem/getAll">
 			<input type="submit" value="返回全資料">
 		</form>
 		<table class="table">
@@ -51,13 +51,13 @@
 				<td><%=rentItem.getReturnMemo()%>
 				<td><%=rentItem.getReturnStatus()%>
 				<td>
-					<form class="btn" method="get" action="/EEIT187-6/rentItemController/get">
+					<form class="btn" method="get" action="/EEIT187-6/RentItem/get">
     					<input type="submit" value="更新資料" />
 					    <input type="hidden" name="rent_id" value="<%=rentItem.getRentId()%>">
 					    <input type="hidden" name="tableware_id" value="<%=rentItem.getTablewareId()%>">
 					    <input type="hidden" name="action" value="update">
 					</form>
-					<form class="btn" method="get" id="submitBtn" action="/EEIT187-6/rentItemController/get">
+					<form class="btn" method="get" id="submitBtn" action="/EEIT187-6/RentItem/get">
 					    <input type="submit" value="歸還" />
 					    <input type="hidden" name="rent_id" value="<%=rentItem.getRentId()%>">
 					    <input type="hidden" name="tableware_id" value="<%=rentItem.getTablewareId()%>">

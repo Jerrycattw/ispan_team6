@@ -4,21 +4,26 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.rent.bean.Rent;
 import com.rent.bean.RentItem;
 import com.rent.dao.RentDao;
 import com.rent.dao.RentItemDao;
-
+@Service
+@Transactional
 public class RentService {
-	private final RentDao rentDao;
-	private RentItemDao rentItemDao;
-	private final Session session;
+	@Autowired
+	private  RentDao rentDao;
+//	private  Session session;
 
-	public RentService(Session session) {
-		this.session = session;
-		this.rentDao = new RentDao(session);
-		this.rentItemDao = new RentItemDao(session);
-	}
+//	public RentService(Session session) {
+//		this.session = session;
+//		this.rentDao = new RentDao(session);
+//		this.rentItemDao = new RentItemDao(session);
+//	}
 
 	public Rent insert(int rentDeposit, Date rentDate, String restaurantId, int memberId, Date dueDate) {
 		Rent rent = new Rent(rentDeposit, rentDate, restaurantId, memberId, dueDate, null, 1, "未歸還");

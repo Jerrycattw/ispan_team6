@@ -1,132 +1,77 @@
 package com.rent.controller;
 
 import java.io.IOException;
+
+
 import java.util.List;
 
-import javax.xml.transform.Source;
-
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rent.bean.TablewareStock;
 import com.rent.service.TablewareStockService;
-import com.util.HibernateUtil;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/tablewareStockController/*")
-@SuppressWarnings("unchecked")
+@Controller
+@RequestMapping("/TablewareStock/*")
 public class TablewareStockController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	TablewareStockService tablewareStockService;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String action = request.getPathInfo().substring(1);
-		System.out.println(action);
-		switch (action) {
-		case "insert":
-			insert(request, response);
-			break;
-		case "getAll":
-			getAll(request, response);
-			break;
-		case "search":
-			search(request, response);
-			break;
-		case "get":
-			getById(request, response);
-			break;
-		case "update":
-			update(request, response);
-			break;
-		}
+	@GetMapping("insert")
+	protected String insert(
+			@RequestParam("tableware_id") Integer tablewareId,
+			@RequestParam("restaurant_id") Integer restaurantId,
+			@RequestParam("stock") Integer stock,
+			Model model) {
+		TablewareStock tablewareStock = tablewareStockService.insert(tablewareId, restaurantId, stock);
+		model.addAttribute("tableware_stock", tablewareStock);
+		return "redirect:/TablewareStock/getAll";
 	}
 
-	protected void insert(HttpServletRequest request, HttpServletResponse response)
+	@GetMapping("getAll")
+	protected String getAll(Model model)
 			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		TablewareStockService tablewareStockService = new TablewareStockService(session);
-
-		int tablewareId = Integer.parseInt(request.getParameter("tableware_id"));
-		int restaurantId = Integer.parseInt(request.getParameter("restaurant_id"));
-		int stock = Integer.parseInt(request.getParameter("stock"));
-		try {
-			TablewareStock tablewareStock = tablewareStockService.insert(tablewareId, restaurantId, stock);
-			request.setAttribute("tableware_stock", tablewareStock);
-			request.getRequestDispatcher("/tablewareStockController/getAll").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		List<TablewareStock> tablewareStocks = tablewareStockService.getAll();
+		model.addAttribute("stock", tablewareStocks);
+		return "tableware/GetAllStock";
 	}
 
-	protected void getAll(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		TablewareStockService tablewareStockService = new TablewareStockService(session);
-		try {
-			List<TablewareStock> tablewareStocks = tablewareStockService.getAll();
-			request.setAttribute("stock", tablewareStocks);
-			request.getRequestDispatcher("/tableware_stock/getAll.jsp").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@GetMapping("update")
+	protected String update(
+			@RequestParam("tableware_id") Integer tablewareId,
+			@RequestParam("restaurant_id") Integer restaurantId,
+			@RequestParam("stock") Integer stock,
+			Model model) {
+		TablewareStock tablewareStock = tablewareStockService.update(tablewareId, restaurantId, stock);
+		model.addAttribute("stock", tablewareStock);
+		return "redirect:/TablewareStock/getAll";
 	}
 
-	protected void update(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		TablewareStockService tablewareStockService = new TablewareStockService(session);
-
-		int tablewareId = Integer.parseInt(request.getParameter("tableware_id"));
-		int restaurantId = Integer.parseInt(request.getParameter("restaurant_id"));
-		Integer stock = Integer.parseInt(request.getParameter("stock"));
-		
-		try {
-			TablewareStock tablewareStock = tablewareStockService.update(tablewareId,restaurantId,stock);
-			request.setAttribute("stock", tablewareStock);
-			request.getRequestDispatcher("/tablewareStockController/getAll").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected void search(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		TablewareStockService tablewareStockService = new TablewareStockService(session);
-
-		Integer restaurantId = request.getParameter("restaurant_id") != null
-				? Integer.parseInt(request.getParameter("restaurant_id"))
-				: null;
-		Integer tablewareId = request.getParameter("tableware_id") != null
-				? Integer.parseInt(request.getParameter("tableware_id"))
-				: null;
-
+	@GetMapping("search")
+	protected String search(
+			@RequestParam("tableware_id") Integer tablewareId,
+			@RequestParam("restaurant_id") Integer restaurantId,
+			Model model) {
 		List<TablewareStock> tablewareStocks = tablewareStockService.search(restaurantId, tablewareId);
-		request.setAttribute("stock", tablewareStocks);
-		request.getRequestDispatcher("/tableware_stock/getAll.jsp").forward(request, response);
+		model.addAttribute("stock", tablewareStocks);
+		return "tableware/GetAllStock";
 	}
 	
-	protected void getById(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		TablewareStockService tablewareStockService = new TablewareStockService(session);
-		try {
-			int tablewareId = Integer.parseInt(request.getParameter("tableware_id"));
-			int restaurantId = Integer.parseInt(request.getParameter("restaurant_id"));
-			TablewareStock tablewareStock = tablewareStockService.getById(tablewareId, restaurantId);
-			request.setAttribute("stock", tablewareStock);
-			request.getRequestDispatcher("/tableware_stock/update.jsp").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
+	@GetMapping("getById")
+	protected String getById(
+			@RequestParam("tableware_id") Integer tablewareId,
+			@RequestParam("restaurant_id") Integer restaurantId,
+			Model model) {
+		TablewareStock tablewareStock = tablewareStockService.getById(tablewareId, restaurantId);
+		model.addAttribute("stock", tablewareStock);
+		return "tableware/UpdateStock";
 	}
 }

@@ -26,17 +26,11 @@ public class CouponMemberBean {
 	@Column(name = "member_id")
 	private int memberId;
 	
-	@Column(name = "status")
-	private int status;
+	@Column(name = "total_amount")
+	private int totalAmount;
 	
-	@Transient
-	private int receivedAmount;
-	
-	@Transient
-	private String distributeStatus;//for發放
-	
-	@Transient
-	private String distributeFailReason;//for發放
+	@Column(name = "usage_amount")
+	private int usageAmount;
 	
 	@Expose(serialize = false)
 	@ManyToOne
@@ -60,38 +54,6 @@ public class CouponMemberBean {
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
 	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	public int getReceivedAmount() {
-		return receivedAmount;
-	}
-	public void setReceivedAmount(int receivedAmount) {
-		this.receivedAmount = receivedAmount;
-	}
-
-
-	public String getDistributeStatus() {
-		return distributeStatus;
-	}
-
-
-	public void setDistributeStatus(String distributeStatus) {
-		this.distributeStatus = distributeStatus;
-	}
-
-
-	public String getDistributeFailReason() {
-		return distributeFailReason;
-	}
-
-
-	public void setDistributeFailReason(String distributeFailReason) {
-		this.distributeFailReason = distributeFailReason;
-	}
 
 	
 	public CouponBean getCoupon() {
@@ -103,13 +65,33 @@ public class CouponMemberBean {
 		this.coupon = coupon;
 	}
 
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+
+	public int getUsageAmount() {
+		return usageAmount;
+	}
+
+
+	public void setUsageAmount(int usageAmount) {
+		this.usageAmount = usageAmount;
+	}
+
 
 	@Override
 	public String toString() {
-		return "CouponMemberBean [couponId=" + couponId + ", memberId=" + memberId + ", status=" + status
-				+ ", receivedAmount=" + receivedAmount + ", distributeStatus=" + distributeStatus
-				+ ", distributeFailReason=" + distributeFailReason + "]";
+		return "CouponMemberBean [id=" + id + ", couponId=" + couponId + ", memberId=" + memberId + ", totalAmount="
+				+ totalAmount + ", usageAmount=" + usageAmount + ", coupon=" + coupon + "]";
 	}
+
+
 	
 	
 }

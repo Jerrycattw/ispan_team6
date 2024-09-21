@@ -1,12 +1,14 @@
 package com.coupon.dao;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import com.coupon.bean.CouponBean;
+import com.util.DateUtils;
 
 
 public class CouponDao2 {
@@ -64,4 +66,30 @@ public class CouponDao2 {
 		}	
 	}
 	
+	//search模糊查詢
+	public List<CouponBean> searchCoupons(String keyWord){
+		String hql = "SELECT c from CouponBean c WHERE c.couponId = :couponId "
+				+ "OR c.couponCode LIKE :couponCode OR c.couponDescription LIKE :couponDescription "
+				+ "OR c.couponStatus LIKE :couponStatus OR c.rulesDescription LIKE :rulesDescription "
+				+ "OR c.discountType LIKE :discountType OR c.couponStartDate = :couponStartDate OR c.couponEndDate = :couponEndDate ";
+		Query<CouponBean> query = session.createQuery(hql,CouponBean.class);
+		Integer intKeyWord;
+		try {
+			intKeyWord=Integer.parseInt(keyWord);			
+		} catch (Exception e) {
+			intKeyWord=null;
+		}
+		query.setParameter("couponId",intKeyWord);
+		query.setParameter("couponCode","%"+keyWord+"%");
+		query.setParameter("couponDescription","%"+keyWord+"%");
+		query.setParameter("couponStatus","%"+keyWord+"%");
+		query.setParameter("rulesDescription","%"+keyWord+"%");
+		query.setParameter("discountType","%"+keyWord+"%");
+		LocalDate LocalDateKeyword = DateUtils.convertLocalDate(keyWord);
+		query.setParameter("couponStartDate",LocalDateKeyword);
+		query.setParameter("couponEndDate",LocalDateKeyword);
+		
+		return query.list();
+		
+	}
 }

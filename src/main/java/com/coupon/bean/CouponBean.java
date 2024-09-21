@@ -95,7 +95,7 @@ public class CouponBean implements Serializable{
 	@JoinTable(name = "member_coupon",
 	joinColumns = @JoinColumn(name="coupon_id"),
 	inverseJoinColumns = @JoinColumn(name="member_id"))
-	private Set<Member> members; // 关联的 MemberBean 实体集合
+	private List<Member> members; // 关联的 MemberBean 实体集合
 	
 //	@Expose(serialize = false)//Gson
 //	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
@@ -248,12 +248,12 @@ public class CouponBean implements Serializable{
 	}
 
 
-	public Set<Member> getMembers() {
+	public List<Member> getMembers() {
 		return members;
 	}
 
 
-	public void setMembers(Set<Member> members) {
+	public void Members(List<Member> members) {
 		this.members = members;
 	}
 

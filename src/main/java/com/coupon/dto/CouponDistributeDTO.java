@@ -1,5 +1,7 @@
 package com.coupon.dto;
 
+import jakarta.persistence.Transient;
+
 public class CouponDistributeDTO {
 	private int couponId;
 	private String selectOption;
@@ -7,9 +9,20 @@ public class CouponDistributeDTO {
 	private String excuteStatus;
 	private int maxCoupon;
 	private int receivedAmount;
+	private String distributeStatus;//for發放
+	private String distributeFailReason;//for發放
 	
 	public CouponDistributeDTO() {
 	}
+
+	public CouponDistributeDTO(int couponId, String selectOption, int maxCoupon, int receivedAmount) {
+		super();
+		this.couponId = couponId;
+		this.selectOption = selectOption;
+		this.maxCoupon = maxCoupon;
+		this.receivedAmount = receivedAmount;
+	}
+
 
 	public int getCouponId() {
 		return couponId;
@@ -58,6 +71,22 @@ public class CouponDistributeDTO {
 
 	public void setMaxCoupon(int maxCoupon) {
 		this.maxCoupon = maxCoupon;
+	}
+
+	public String getDistributeStatus() {
+		return distributeStatus;
+	}
+
+	public void setDistributeStatus(String distributeStatus) {
+		this.distributeStatus = distributeStatus;
+	}
+
+	public String getDistributeFailReason() {
+		return distributeFailReason;
+	}
+
+	public void setDistributeFailReason(String distributeFailReason) {
+		this.distributeFailReason = distributeFailReason;
 	}
 	
 	

@@ -27,6 +27,7 @@ import com.coupon.bean.CouponMemberBean;
 import com.coupon.dao.CouponDao;
 import com.coupon.dao.CouponDao2;
 import com.coupon.dto.CouponDTO;
+import com.coupon.dto.CouponDistributeDTO;
 import com.coupon.service.CouponService;
 import com.coupon.service.CouponService2;
 import com.google.gson.Gson;
@@ -90,18 +91,18 @@ public class Coupon extends HttpServlet {
  				System.out.println("switch delete touch");
  				deleteCoupon(request, response);
  				break;
-// 			case "search":
-// 				System.out.println("switch search touch");
-// 				searchCoupon(request, response);
-// 				break;
-// 			case "distribute":
-// 				System.out.println("switch distribute touch");
-// 				distributeCoupon(request, response);
-// 				break;
-// 			case "getOneCoupon":
-// 				System.out.println("switch getOneCoupon touch");
-// 				getOneCoupon(request, response);
-// 				break;
+ 			case "search":
+ 				System.out.println("switch search touch");
+ 				searchCoupon(request, response);
+ 				break;
+ 			case "distribute":
+ 				System.out.println("switch distribute touch");
+ 				distributeCoupon(request, response);
+ 				break;
+ 			case "getOneCoupon":
+ 				System.out.println("switch getOneCoupon touch");
+ 				getOneCoupon(request, response);
+ 				break;
 // 			case "distributeExcute":
 // 				System.out.println("switch distributeExcute touch");
 // 				distributeExcute(request, response);
@@ -240,53 +241,51 @@ public class Coupon extends HttpServlet {
  	}
  	
  	//search
-// 	private void searchCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		
-// 		String keyWord = request.getParameter("search");
-// 		System.out.println(keyWord);
-// 		List<CouponBean> coupons = couponService.getAllCouponWithTagsAndReceived(keyWord);
-// 		
-// 		// 使用自定义的Gson实例
-// 	    Gson gson = new GsonBuilder()
-// 	    	.excludeFieldsWithoutExposeAnnotation()
-// 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-// 	        .create();
-// 	    
-// 	    String jsonCoupons = gson.toJson(coupons);
-////		request.setAttribute("jsonCoupons", jsonCoupons);
-//		response.setContentType("application/json");
-//	    response.setCharacterEncoding("UTF-8");
-//	    response.getWriter().write(jsonCoupons);
-// 	}
+ 	private void searchCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+ 		
+ 		String keyWord = request.getParameter("search");
+ 		List<CouponDTO> coupons = couponService2.searchCoupons(keyWord);
+ 		
+ 		// 使用自定义的Gson实例
+ 	    Gson gson = new GsonBuilder()
+ 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+ 	        .create();
+ 	    
+ 	    String jsonCoupons = gson.toJson(coupons);
+//		request.setAttribute("jsonCoupons", jsonCoupons);
+		response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write(jsonCoupons);
+ 	}
  	
-// 	//distribute
-// 	private void distributeCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		BufferedReader reader = request.getReader();
-//        String memberIds = reader.readLine();
-// 		List<CouponDistributeBean> couponDistributes = couponService.getDistributeOption(memberIds);
-// 		Gson gson = new GsonBuilder().create();
-// 		String json = gson.toJson(couponDistributes);
-// 		response.setContentType("application/json");
-//	    response.setCharacterEncoding("UTF-8");
-//	    response.getWriter().write(json);
-// 	}
-// 	
-// 	//查詢 coupon
-// 	private void getOneCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-// 		BufferedReader reader = request.getReader();
-//        String memberIds = reader.readLine();
-//        List<CouponBean> OneCoupon = couponService.getOneCoupon(memberIds);
-//     // 使用自定义的Gson实例
-// 	    Gson gson = new GsonBuilder()
-// 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-// 	        .create();
-// 	    
-// 		String json = gson.toJson(OneCoupon);
-// 		response.setContentType("application/json");
-//	    response.setCharacterEncoding("UTF-8");
-//	    response.getWriter().write(json);
-// 	}
-// 	
+ 	//distribute
+ 	private void distributeCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+ 		BufferedReader reader = request.getReader();
+        String memberIds = reader.readLine();
+ 		List<CouponDistributeDTO> couponDistributes = couponService2.getDistributeOption(memberIds);
+ 		Gson gson = new GsonBuilder().create();
+ 		String json = gson.toJson(couponDistributes);
+ 		response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write(json);
+ 	}
+ 	
+ 	//查詢 coupon
+ 	private void getOneCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+ 		BufferedReader reader = request.getReader();
+        String memberIds = reader.readLine();
+        CouponDTO couponDTO = couponService2.getCouponById(memberIds);
+     // 使用自定义的Gson实例
+ 	    Gson gson = new GsonBuilder()
+ 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+ 	        .create();
+ 	    
+ 		String json = gson.toJson(couponDTO);
+ 		response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write(json);
+ 	}
+ 	
 // 	//
 // 	private void distributeExcute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 // 		 // 读取请求体中的 JSON 数据

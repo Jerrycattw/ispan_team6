@@ -1,9 +1,11 @@
 package com.coupon.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.hibernate.Session;
@@ -13,6 +15,7 @@ import com.coupon.bean.TagBean;
 import com.coupon.bean.TagId;
 import com.coupon.dao.CouponDao2;
 import com.coupon.dto.CouponDTO;
+import com.coupon.dto.CouponDistributeDTO;
 import com.coupon.dto.TagDTO;
 
 public class CouponService2 {
@@ -21,8 +24,27 @@ public class CouponService2 {
 	public CouponService2(Session session) {
 		couponDao2 = new CouponDao2(session);
 	}
-
-	//convert DTO
+	
+	//convert distributeDTO
+	public CouponDistributeDTO convertCouponDistributeDTO(CouponBean couponBean) {
+		return new CouponDistributeDTO(
+				couponBean.getCouponId(),
+				couponBean.getCouponCode()+couponBean.getCouponDescription(),//selectOption
+				couponBean.getReceivedAmount(),
+				couponBean.getMaxCoupon()
+		);
+	}
+	
+	//convert distributeDTOs
+	public List<CouponDistributeDTO> conCouponDistributeDTO(List<CouponBean> couponBeans){
+		return couponBeans.stream()
+				.map(couponBean -> convertCouponDistributeDTO(couponBean))
+				.collect(Collectors.toList());
+	}
+	
+	
+	
+	//convert couponDTO
 	public CouponDTO convertCouponDTO(CouponBean couponBean) {
 		List<TagDTO> tagDTOs = couponBean.getTags().stream()
 				.map(tagBean -> new TagDTO(tagBean.getTagId().getTagName(), tagBean.getTagType()))
@@ -47,7 +69,7 @@ public class CouponService2 {
 		);
 	}
 	
-	//convert DTOs
+	//convert couponDTOs
 	public List<CouponDTO> convertCouponDTO(List<CouponBean> couponBeans) {
 	    return couponBeans.stream()
 	            .map(couponBean -> convertCouponDTO(couponBean))
@@ -105,6 +127,35 @@ public class CouponService2 {
 			addTags(couponBean,productTags,"product");
 			addTags(couponBean,togoTags,"togo");
 			couponDao2.updateCoupon(couponBean);
+		}
+	
+	//search coupon
+		public List<CouponDTO> searchCoupons(String keyWord){
+			List<CouponBean> searchBeans = couponDao2.searchCoupons(keyWord);
+			return convertCouponDTO(searchBeans);
+		}
+	
+	//distrubute option
+		public List<CouponDistributeDTO> getDistributeOption(String memberIds){
+			String[] arrayMemberIds=memberIds.split(",");
+			int distributeAmount=arrayMemberIds.length;
+			
+			List<CouponBean> allCoupon = couponDao2.getAllCoupon();
+			List<CouponBean> couponOption = new ArrayList<CouponBean>();
+			for (CouponBean couponBean : couponOption) {
+				int maxAmount = couponBean.getMaxCoupon();
+				int receivedAmount = couponBean.getMembers().size();
+				int usageAmount = maxAmount-receivedAmount;
+				
+				//0表示無發放限制
+				if(maxAmount==0) {    
+					couponOption.add(couponBean);
+				}else if(usageAmount>= distributeAmount){
+					couponOption.add(couponBean);
+				}
+			}
+			return conCouponDistributeDTO(couponOption);
+			
 		}
 		
 	//coupon add tags (before CRUD)	

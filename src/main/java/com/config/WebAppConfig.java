@@ -38,8 +38,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 	}
 	
-	
-	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
@@ -92,11 +90,15 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
 		
 		
+
 		
         registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
 		
 		
 		
+
+		registry.addResourceHandler("/ProductImg/**").addResourceLocations("file:///C:/upload/ProductImg");
+
 	}
 
 
@@ -108,8 +110,13 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 //		registry.addViewController("/wonderland").setViewName("loginSystem");
 		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
+<<<<<<< HEAD
 		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
 		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
+=======
+		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
+		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
+>>>>>>> shopping0920
 		
 	}
 	

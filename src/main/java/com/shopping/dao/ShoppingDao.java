@@ -3,23 +3,33 @@ package com.shopping.dao;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.members.bean.Member;
 import com.shopping.bean.ShoppingBean;
 import com.shopping.bean.ShoppingBean;
 
+@Repository
+@Transactional
 public class ShoppingDao {
 
-	private Session session;
+//	private Session session;
 
-	public ShoppingDao(Session session) {
-		this.session = session;
-	}
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+//	public ShoppingDao(Session session) {
+//		this.session = session;
+//	}
 
 
 	// 新增
 	public ShoppingBean addOrder(ShoppingBean bean) {
+		Session session = sessionFactory.getCurrentSession();
 		if (bean != null) {
 			session.persist(bean);
 			return bean;
@@ -29,6 +39,7 @@ public class ShoppingDao {
 
 	// 新增總金額
 	public void addTotal(Integer shoppingItemQuantity, Integer productId, Integer shoppingId) {
+		Session session = sessionFactory.getCurrentSession();
 
 		String selectPriceHql = "SELECT p.productPrice FROM ProductBean p WHERE p.productId = :productId";
 		Query<Integer> selectPriceQuery = session.createQuery(selectPriceHql, Integer.class);
@@ -54,6 +65,7 @@ public class ShoppingDao {
 
 	// 刪除
 	public boolean deleteShopping(Integer shoppingId) {
+		Session session = sessionFactory.getCurrentSession();
 		ShoppingBean resultBean = session.get(ShoppingBean.class, shoppingId);
 		if (resultBean != null) {
 			session.remove(resultBean);
@@ -65,6 +77,7 @@ public class ShoppingDao {
 	// 删除訂單項目並更新訂單總金額
 	public void deleteItemTotal(Integer shoppingItemQuantity, Integer productId, Integer shoppingId) {
 
+		Session session = sessionFactory.getCurrentSession();
 		String selectPriceHql = "SELECT p.productPrice FROM ProductBean p WHERE p.productId = :productId";
 		Query<Integer> selectPriceQuery = session.createQuery(selectPriceHql, Integer.class);
 		selectPriceQuery.setParameter("productId", productId);
@@ -86,6 +99,7 @@ public class ShoppingDao {
 
 	// 更新
 	public ShoppingBean updateShopping(ShoppingBean shoppingBean) {
+		Session session = sessionFactory.getCurrentSession();
 		ShoppingBean isExist = session.get(ShoppingBean.class, shoppingBean.getShoppingId());
 		if (isExist != null) {
 			session.merge(shoppingBean);
@@ -97,6 +111,7 @@ public class ShoppingDao {
 	// 更新訂單項目並更新訂單總金額
 	public void updateTotal(Integer shoppingItemQuantity, Integer productId, Integer shoppingId) {
 
+		Session session = sessionFactory.getCurrentSession();
 		String selectPriceHql = "SELECT p.productPrice FROM ProductBean p WHERE p.productId = :productId";
 		Query<Integer> selectPriceQuery = session.createQuery(selectPriceHql, Integer.class);
 		selectPriceQuery.setParameter("productId", productId);
@@ -119,6 +134,7 @@ public class ShoppingDao {
 	}
 
 	public ShoppingBean updateDataShopping(ShoppingBean shoppingBean) {
+		Session session = sessionFactory.getCurrentSession();
 		ShoppingBean isExist = session.get(ShoppingBean.class, shoppingBean.getShoppingId());
 		if (isExist != null) {
 			session.merge(shoppingBean);
@@ -129,6 +145,7 @@ public class ShoppingDao {
 
 	// 查詢全部
 	public List<ShoppingBean> searchAllShopping() {
+		Session session = sessionFactory.getCurrentSession();
 		Query<ShoppingBean> query = session.createQuery("SELECT s FROM ShoppingBean s JOIN FETCH s.member",
 				ShoppingBean.class);
 		return query.list();
@@ -136,16 +153,19 @@ public class ShoppingDao {
 
 	// 依ID查詢
 	public ShoppingBean searchByShoppingId(Integer ShoppingId) {
+		Session session = sessionFactory.getCurrentSession();
 		return session.get(ShoppingBean.class, ShoppingId);
 	}
 
 	// 依會員ID查詢
 	public Member searchMemberById(Integer memberId) {
+		Session session = sessionFactory.getCurrentSession();
 		return session.get(Member.class, memberId);
 	}
 
 	// 查詢所有會員
 	public List<Member> searchAllMembers() {
+		Session session = sessionFactory.getCurrentSession();
 		return session.createQuery("from Member", Member.class).list();
 	}
 

@@ -40,15 +40,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-//@WebServlet("/Restaurant/*")
-@Controller
 //@MultipartConfig
+@Controller
 @RequestMapping("/Restaurant/*")
-//@Transactional
 public class RestaurantController{
-//	private static final long serialVersionUID = 1L;
 
-//	Session session = null;
 	@Autowired
 	private TableTypeService tableTypeService;
 	@Autowired
@@ -58,54 +54,10 @@ public class RestaurantController{
 	@Autowired
 	private RestaurantTableService restaurantTableService;
 	
-	/*
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		
-//		session = (Session) request.getAttribute("hibernateSession");
-//		tableTypeService = new TableTypeService(session);
-//		restaurantService = new RestaurantService(session);
-//		reserveService = new ReserveService(session);
-//		restaurantTableService = new RestaurantTableService(session);
-
-		
-		// 獲取URL中的操作名稱
-		String action = request.getPathInfo().substring(1);
-		System.out.println(action);
-
-		switch (action) {
-		case "add":
-			addRestaurant(request, response);
-			break;
-		case "del":
-            delRestaurant(request, response);
-			break;
-		case "get":
-			getRestaurant(request, response);
-			break;
-		case "getAll":
-			getAllRestaurant(request, response);
-			break;
-		case "set":
-			setRestaurant(request, response);
-			break;
-		case "set2":
-			setRestaurant2(request, response);
-			break;
-		case "list":
-			getRestaurantList(request, response);
-			break;
-		default:
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-
-	}
-	*/
 	
 	
 	@PostMapping("add")
-	private void addRestaurant(HttpServletRequest request, HttpServletResponse response)
+	public String addRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		Integer defaultStatus = 3;
@@ -144,48 +96,53 @@ public class RestaurantController{
 		
 		
 		restaurantService.insert(restaurant);
-		request.getRequestDispatcher("/Restaurant/getAll").forward(request, response);
+		
+		return "redirect:/Restaurant/getAll";
 
 	}
 	
 	
 	@GetMapping("del")
-	private void delRestaurant(HttpServletRequest request, HttpServletResponse response)
+	public String delRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		restaurantService.delete(request.getParameter("restaurantId"));
-		request.getRequestDispatcher("/Restaurant/getAll").forward(request, response);
 
+		return "redirect:/Restaurant/getAll";
 	}
 	
 	
 	@GetMapping("get")
-	private void getRestaurant(HttpServletRequest request, HttpServletResponse response)
+	public String getRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		Restaurant restaurant = restaurantService.selectById(request.getParameter("restaurantId"));
 		request.setAttribute("restaurant", restaurant);
-		request.getRequestDispatcher("/reserve/GetRestaurant.jsp").forward(request, response);
+		
+		return "reserve/GetRestaurant";
 
 	}
 	
 	
 	
 	@GetMapping("getAll")
-	private void getAllRestaurant(HttpServletRequest request, HttpServletResponse response)
+	public String getAllRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		System.out.println("test");
 		
 		List<Restaurant> restaurants = restaurantService.selectAll();
 		request.setAttribute("restaurants", restaurants);
-		request.getRequestDispatcher("/reserve/GetAllRestaurants.jsp").forward(request, response);
+		
+		
+		return "reserve/GetAllRestaurants";
 
 	}
 	
 	
 	
 	@GetMapping("list")
-	private void getRestaurantList(HttpServletRequest request, HttpServletResponse response)
+	public void getRestaurantList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 	    String restaurantName = request.getParameter("restaurantName");
@@ -202,7 +159,6 @@ public class RestaurantController{
 	    
 	    
 		GsonBuilder gsonBuilder = new GsonBuilder();
-//		gsonBuilder.excludeFieldsWithoutExposeAnnotation();
 	    Converters.registerLocalTime(gsonBuilder);
 	    Gson gson = gsonBuilder.create();
         String json = gson.toJson(restaurantDTOs);
@@ -216,20 +172,22 @@ public class RestaurantController{
 	
 	
 	@GetMapping("set")
-	private void setRestaurant(HttpServletRequest request, HttpServletResponse response)
+	public String setRestaurant(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		String restaurantId = request.getParameter("restaurantId");
 		Restaurant restaurant = restaurantService.selectById(restaurantId);
 		request.setAttribute("restaurant", restaurant);
-		request.getRequestDispatcher("/reserve/SetRestaurant.jsp").forward(request, response);
+		
+		
+		return "reserve/SetRestaurant";
 
 	}
 	
 	
 	
 	@PostMapping("set2")
-	private void setRestaurant2(HttpServletRequest request, HttpServletResponse response)
+	public String setRestaurant2(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		Restaurant restaurant = new Restaurant();
@@ -274,7 +232,10 @@ public class RestaurantController{
 	    }
 		
 		restaurantService.update(restaurant);
-		request.getRequestDispatcher("/Restaurant/getAll").forward(request, response);
+		
+		
+		
+		return "redirect:/Restaurant/getAll";
 
 	}
 	

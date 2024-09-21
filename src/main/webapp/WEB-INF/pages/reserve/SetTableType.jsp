@@ -11,7 +11,7 @@
 <script src="../template/template.js"></script>
 </head>
 <body>
-<jsp:include page="../HomePage.jsp"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
 	<div class="content" id="content">
 <h2>修 改 餐 廳 桌 位 數 量</h2>

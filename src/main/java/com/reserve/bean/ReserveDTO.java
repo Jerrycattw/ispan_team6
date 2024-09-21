@@ -18,10 +18,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.transaction.Transactional;
 
 
 @Component
 public class ReserveDTO {
+	
 	private String reserveId;
 	private String memberId;
 	private String restaurantId;

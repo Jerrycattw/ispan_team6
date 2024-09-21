@@ -119,8 +119,10 @@
         <h2>餐 廳 資 料</h2>
 
         <div class="restaurant-info">
-        	
-            <a class="view-seats-button2" href="/EEIT187-6/reserve/AddReserveNew.jsp?restaurantId=${restaurant.restaurantId}&restaurantName=${restaurant.restaurantName}">餐廳訂位</a>
+        	<!--  
+            <a class="view-seats-button2" href="/EEIT187-6/reserve/AddReserveNew?restaurantId=${restaurant.restaurantId}&restaurantName=${restaurant.restaurantName}">餐廳訂位</a>
+            -->
+            <a class="view-seats-button2" href="/EEIT187-6/Reserve/getAllRestaurantName">餐廳訂位</a>
             <a class="view-seats-button" href="/EEIT187-6/Table/getAll?restaurantId=${restaurant.restaurantId}&restaurantName=${restaurant.restaurantName}">查看餐廳桌位</a>
 
             <div class="restaurant-img">

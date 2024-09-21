@@ -92,6 +92,11 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
 		
 		
+		
+        registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
+		
+		
+		
 	}
 
 
@@ -103,7 +108,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 //		registry.addViewController("/wonderland").setViewName("loginSystem");
 		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
-		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
+		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
+		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
 		
 	}
 	

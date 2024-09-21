@@ -97,7 +97,7 @@ h2 {
 </style>
 </head>
 <body>
-<jsp:include page="../HomePage.jsp"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
 	<div class="content" id="content">
 	

@@ -18,7 +18,7 @@ float: right;
 </head>
 
 <body>
-<jsp:include page="../HomePage.jsp"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
     <!-- 把JSP的內容放到這個div content裡面!!! -->
     <div class="content" id="content">

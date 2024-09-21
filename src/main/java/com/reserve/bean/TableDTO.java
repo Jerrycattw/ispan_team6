@@ -22,11 +22,13 @@ public class TableDTO {
 	private Integer tableTypeNumber;
 	private String restaurantName;
 	
-	
 	@Autowired
 	private TableTypeService tableTypeService;
 	@Autowired
 	private RestaurantService restaurantService;
+	
+//	@Autowired
+//	private SessionFactory sessionFactory;
 	
 	
 	public TableDTO() {
@@ -35,21 +37,15 @@ public class TableDTO {
 	
 	public TableDTO(RestaurantTable restaurantTable) {
 		
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		
-		try (Session session = sessionFactory.openSession()) {
-//			TableTypeService tableTypeService = new TableTypeService(session);
-//			RestaurantService restaurantService = new RestaurantService(session);
 			
 			this.tableTypeId = restaurantTable.getId().getTableTypeId();
 			this.restaurantId = restaurantTable.getId().getRestaurantId().toString();
-			this.tableTypeName = tableTypeService.getTableTypeName(tableTypeId);
+//			this.tableTypeName = tableTypeService.getTableTypeName(tableTypeId);
+			this.tableTypeName = restaurantTable.getTableType().getTableTypeName();
 			this.tableTypeNumber = restaurantTable.getTableTypeNumber();
-			this.restaurantName = restaurantService.getRestaurantName(restaurantId);
+//			this.restaurantName = restaurantService.getRestaurantName(restaurantId);
+			this.restaurantName = restaurantTable.getRestaurant().getRestaurantName();
 			
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}
 	}
 
 

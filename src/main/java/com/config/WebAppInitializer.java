@@ -43,12 +43,12 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 	
 	
-	
+	/*
 	@Override
 	protected void customizeRegistration(Dynamic registration) {
 		registration.setMultipartConfig(new MultipartConfigElement("c:/temp/upload/"));
 	}
-	
+	*/
 	
 	
 	

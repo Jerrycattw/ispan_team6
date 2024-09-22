@@ -2,6 +2,7 @@ package com.coupon.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.coupon.bean.CouponBean;
 import com.coupon.bean.TagBean;
@@ -18,12 +21,12 @@ import com.coupon.dto.CouponDTO;
 import com.coupon.dto.CouponDistributeDTO;
 import com.coupon.dto.TagDTO;
 
-public class CouponService2 {
-	private CouponDao2 couponDao2;
 
-	public CouponService2(Session session) {
-		couponDao2 = new CouponDao2(session);
-	}
+@Service
+public class CouponService2 {
+	
+	@Autowired
+	private CouponDao2 couponDao2;
 	
 	//convert distributeDTO
 	public CouponDistributeDTO convertCouponDistributeDTO(CouponBean couponBean) {
@@ -111,7 +114,7 @@ public class CouponService2 {
 	//insert Coupon
 	public void insertCoupon(CouponBean couponBean,String[] productTags, String[] togoTags) {
 		addTags(couponBean,productTags,"product");
-		addTags(couponBean,togoTags,"togo");	
+		addTags(couponBean,togoTags,"togo");
 		couponDao2.insertCoupon(couponBean);
 	}
 	
@@ -123,11 +126,14 @@ public class CouponService2 {
 	
 	
 	//update
-		public void updateCoupon(CouponBean couponBean, String[] productTags, String[] togoTags) {	
-			addTags(couponBean,productTags,"product");
-			addTags(couponBean,togoTags,"togo");
-			couponDao2.updateCoupon(couponBean);
-		}
+	public void updateCoupon(CouponBean couponBean, String[] productTags, String[] togoTags) {
+		System.out.println("touch");
+		addTags(couponBean,productTags,"product");
+		addTags(couponBean,togoTags,"togo");
+		System.out.println("addtags done");
+		couponDao2.updateCoupon(couponBean);
+		System.out.println("dao DONE");
+	}
 	
 	//search coupon
 		public List<CouponDTO> searchCoupons(String keyWord){
@@ -159,7 +165,7 @@ public class CouponService2 {
 		}
 		
 	//coupon add tags (before CRUD)	
-	private void addTags(CouponBean coupon, String[] tags, String tagType) {
+	public void addTags(CouponBean coupon, String[] tags, String tagType) {
 	    if (tags != null) {
 	        for (String tag : tags) {
 	            TagBean tagBean = new TagBean();

@@ -1,5 +1,7 @@
 package com.coupon.bean;
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.annotations.Expose;
 
 import jakarta.persistence.Column;
@@ -12,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
+@Component
 @Entity @Table(name = "member_coupon")
 public class CouponMemberBean {
 	

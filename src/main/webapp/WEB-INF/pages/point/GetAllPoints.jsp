@@ -123,7 +123,7 @@ th {
             if (data==='success') {
                 // 你可以在這裡執行刷新頁面或其他操作
                 
-                window.location.href='/EEIT187-6/Point/PreInsertBatchPoint';
+                window.location.href='/EEIT187-6/point/InsertBatchPoint';
             } else {
                 alert("新增點數失敗");
             }

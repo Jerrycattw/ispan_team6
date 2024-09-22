@@ -7,9 +7,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +24,18 @@ import javax.sql.DataSource;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.coupon.bean.CouponBean;
 import com.coupon.bean.CouponMemberBean;
@@ -47,88 +62,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/Coupon/*")
-public class Coupon extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+@Controller
+@RequestMapping("/Coupon")
+@Transactional
+public class Coupon  {
+
 	
-	CouponService couponService;
+	@Autowired
 	CouponService2 couponService2;
 	
-
- 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
- 		 Session session = (Session) request.getAttribute("hibernateSession");
- 		 SessionFactory sessionFactory = (SessionFactory) request.getAttribute("hibernateSessionFactory");
-         couponService = new CouponService(session);
-         couponService2 = new CouponService2(session);
-         
-         
- 		// 獲取URL中的操作名稱
- 			String action = request.getPathInfo().substring(1);
- 			System.out.println(action);
- 			switch (action) {
- 			case "Home"://優惠券首頁
- 				getAllCouponWithTagsAndReceived(request, response);//查詢
- 				break;
- 			case "update":
- 				System.out.println("switch update touch");
- 				getOneCouponWithTags(request, response);
- 				break;
- 			case "updateExcute":
- 				System.out.println("switch updateExcute touch");
- 				updateCouponWithTags(request, response);
- 				break;	
- 			case "insert":
- 				System.out.println("switch insert touch");
- 				getDefaultCouponWithTags(request, response);
- 				break;
- 			case "insertExcute":
- 				System.out.println("switch insertExcute touch");
- 				insertCouponWithTags(request, response);
- 				break;
- 			case "deleteCoupon":
- 				System.out.println("switch delete touch");
- 				deleteCoupon(request, response);
- 				break;
- 			case "search":
- 				System.out.println("switch search touch");
- 				searchCoupon(request, response);
- 				break;
- 			case "distribute":
- 				System.out.println("switch distribute touch");
- 				distributeCoupon(request, response);
- 				break;
- 			case "getOneCoupon":
- 				System.out.println("switch getOneCoupon touch");
- 				getOneCoupon(request, response);
- 				break;
-// 			case "distributeExcute":
-// 				System.out.println("switch distributeExcute touch");
-// 				distributeExcute(request, response);
-// 				break;	
- 			default:
- 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
- 			}
- 		
-	}
- 	
  	//查詢所有
- 	private void getAllCouponWithTagsAndReceived(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+ 	@GetMapping("/Home")
+ 	@ResponseBody
+ 	public List<CouponDTO> getAllCouponWithTagsAndReceived() {
  		List<CouponDTO> couponDTOs = couponService2.getAllCoupon();
- 		
- 		//使用自定义的Gson实例
- 	    Gson gson = new GsonBuilder()
- 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
- 	        .create();
- 	    
- 	    String jsonCoupons = gson.toJson(couponDTOs);
-		request.setAttribute("jsonCoupons", jsonCoupons);
-		response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write(jsonCoupons);
- 		
-	}
+ 		return couponDTOs;
+ 	}
  	
  	//查詢單筆
  	private void getOneCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -153,8 +102,27 @@ public class Coupon extends HttpServlet {
  	   response.setCharacterEncoding("UTF-8");
  	   response.getWriter().write(jsonResponse.toString());		
  	   
- 	   
  	}
+ 	
+ 	@PostMapping("/update")
+ 	@ResponseBody
+ 	public Map<String, Object> getOneCouponWithTagss(@RequestBody String couponId) {
+ 		CouponDTO couponDTO = couponService2.getCouponById(couponId);
+ 		Map<String, List<String>> tagOptions = couponService2.getTagOptions();
+ 		
+ 		Map<String, Object> data = new HashMap<String, Object>();
+ 		data.put("coupon", couponDTO);
+ 		data.put("tagOptions", tagOptions);
+ 		return data;
+ 	}
+ 	
+ 	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(LocalDate.class, "couponStartDate",
+				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+		binder.registerCustomEditor(LocalDate.class, "couponEndDate",
+				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
  	
  	//修改單筆
  	private void updateCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -182,6 +150,14 @@ public class Coupon extends HttpServlet {
  		
 	}
  	
+ 	@PostMapping("/updateExcute")
+ 	private String updateCouponWithTags(CouponBean couponBean,@RequestParam("hiddenCouponId") int couponId, @RequestParam("product") String[] productTags,@RequestParam("togo") String[] togoTags) {
+ 		couponBean.setCouponId(couponId);
+ 		couponService2.updateCoupon(couponBean,productTags,togoTags);
+ 		return "redirect:/coupon/Home.html";
+ 	}
+ 	
+
  	//查詢預設
  	private void getDefaultCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
  		
@@ -204,6 +180,19 @@ public class Coupon extends HttpServlet {
 	   response.setContentType("application/json");
 	   response.setCharacterEncoding("UTF-8");
 	   response.getWriter().write(jsonResponse.toString());
+ 		
+ 	}
+ 	
+ 	@GetMapping("/insert")
+ 	@ResponseBody
+ 	public Map<String, Object> getDefaultCouponWithTags(){
+ 		CouponDTO couponDTO=new CouponDTO();
+ 		Map<String, List<String>> tagOptions = couponService2.getTagOptions();
+ 		
+ 		Map<String, Object> data = new HashMap<String, Object>();
+ 		data.put("coupon", couponDTO);
+ 		data.put("tagOptions", tagOptions);
+ 		return data;
  		
  	}
  	
@@ -232,6 +221,13 @@ public class Coupon extends HttpServlet {
  		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
  	}
  	
+ 	@PostMapping("/insertExcute")
+ 	public String insertCouponWithTags(CouponBean couponBean, int couponId, @RequestParam("product") String[] productTags,@RequestParam("togo") String[] togoTags) {
+ 		System.out.println("insert touch");
+ 		couponService2.insertCoupon(couponBean,productTags,togoTags);
+ 		return "redirect:/coupon/Home.html";
+ 	}
+ 	
  	//刪除
  	private void deleteCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{	
  		
@@ -256,6 +252,16 @@ public class Coupon extends HttpServlet {
 		response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
 	    response.getWriter().write(jsonCoupons);
+ 	}
+ 	
+ 	
+ 	@GetMapping("/search")
+ 	@ResponseBody
+ 	public List<CouponDTO> searchCoupon(@RequestParam("search") String keyWord){
+ 		System.out.println("touch");
+ 		List<CouponDTO> coupons = couponService2.searchCoupons(keyWord);
+ 		System.out.println(coupons);
+ 		return coupons;
  	}
  	
  	//distribute
@@ -314,8 +320,10 @@ public class Coupon extends HttpServlet {
 //
 // 	}
 // 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+//	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		doGet(request, response);
+//	}
+ 	
+
 }

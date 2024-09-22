@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.annotations.Expose;
 import com.members.bean.Member;
 
@@ -25,69 +27,70 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
+@Component
 @Entity @Table(name = "coupon")
 public class CouponBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Expose
+
 	@Id @Column(name = "coupon_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int couponId;
 	
-	@Expose
+
 	@Column(name = "coupon_code")
 	private String couponCode;
 	
-	@Expose
+	
 	@Column(name = "coupon_description")
 	private String couponDescription;
 	
-	@Expose
+	
 	@Column(name = "coupon_start_date")
 	private LocalDate couponStartDate;
 	
-	@Expose
+	
 	@Column(name = "coupon_end_date")
 	private LocalDate couponEndDate;
 	
-	@Expose
+	
 	@Column(name = "max_coupon")
 	private int maxCoupon;
 	
-	@Expose
+	
 	@Column(name = "per_max_coupon")
 	private int perMaxCoupon;
 	
-	@Expose
+	
 	@Column(name = "coupon_status")
 	private String couponStatus;
 	
-	@Expose
+	
 	@Column(name = "rules_description")
 	private String rulesDescription;
 	
-	@Expose
+	
 	@Column(name = "discount_type")
 	private String discountType;
 	
-	@Expose
+	
 	@Column(name = "discount")
 	private int discount;
 	
-	@Expose
+	
 	@Column(name = "min_order_amount")
 	private int minOrderDiscount;
 	
-	@Expose
+	
 	@Column(name = "max_discount")
 	private int maxDiscount;
 	
-	@Expose
+	
 	@Transient
 	private int receivedAmount;
 	
 	
-	@Expose(serialize = false)//Gson
+	
 	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon",orphanRemoval=true)
 	private List<TagBean> tags=new ArrayList<TagBean>();
 	

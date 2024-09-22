@@ -116,10 +116,10 @@ public class Point {
 		return "success";
 	}
 
-	@GetMapping("/PreInsertBatchPoint")
-	public String preBatchInsertExcute() {
-		return "point/InsertBatchPoint";
-	}
+//	@GetMapping("/PreInsertBatchPoint")
+//	public String preBatchInsertExcute() {
+//		return "point/InsertBatchPoint";
+//	}
 
 	@PostMapping("/BatchInsertExcute")
 	public String batchInsertExcute(@SessionAttribute("memberIds") List<String> memberIds, PointBean pointBean) {
@@ -164,10 +164,11 @@ public class Point {
 	}
 
 	// 新增-------------------------
-	@GetMapping("/PreInsertPoint") // jsp>controller>jsp
-	public String preInsertPoint() {
-		return "point/InsertPoint";
-	}
+	
+//	@GetMapping("/PreInsertPoint") // jsp>controller>jsp
+//	public String preInsertPoint() {
+//		return "point/InsertPoint";
+//	}
 
 	@PostMapping("/InsertPoint")
 	public String insertPoint(PointBean pointBean, @SessionAttribute("pointMemberIndex") int memberID) {

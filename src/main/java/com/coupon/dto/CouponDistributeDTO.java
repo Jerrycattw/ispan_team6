@@ -1,7 +1,10 @@
 package com.coupon.dto;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Transient;
 
+@Component
 public class CouponDistributeDTO {
 	private int couponId;
 	private String selectOption;

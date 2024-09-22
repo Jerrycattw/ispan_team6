@@ -66,7 +66,7 @@ th {
 	            <p>
 	            </div>
 	            <div  style="width: 200px;">
-	                <form action="/EEIT187-6/Point/PreInsertPoint" method="get" style="margin: 0;">
+	                <form action="/EEIT187-6/point/InsertPoint" method="get" style="margin: 0;">
 	                    <input type="hidden" name="memberID" value="<%= pointMember.getMemberId() %>">
 	                    <button type="submit">贈送點數</button>
 	                </form>

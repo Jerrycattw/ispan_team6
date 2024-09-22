@@ -48,7 +48,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 	}
 	
 	
-	
+		
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
 		
@@ -89,6 +89,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
 		
+		//去tableware下找html檔
+		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
 		
 
 		
@@ -113,7 +115,14 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
 		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
 		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
-		
+
+		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
+		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
+		registry.addViewController("/Shopping/SearchAllShopping").setViewName("Shopping/SearchAllShopping");
+		registry.addViewController("/Shopping/AddOrder").setViewName("Shopping/AddOrder");
+		registry.addViewController("/Shopping/ItemDetail").setViewName("Shopping/ItemDetail");
+		registry.addViewController("/Shopping/UpdateShopping").setViewName("Shopping/UpdateShopping");
+		registry.addViewController("/Shopping/UpdateItem").setViewName("Shopping/UpdateItem");
 	}
 	
 	

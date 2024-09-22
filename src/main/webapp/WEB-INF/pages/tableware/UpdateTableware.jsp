@@ -12,14 +12,14 @@
 <script src="../template/template.js"></script>
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>環 保 用 具 資 料</h2>
 		<form method="get" class="btn"
-			action="/EEIT187-6/tablewareController/getAll">
+			action="/EEIT187-6/Tableware/getAll">
 			<input type="submit" value="返回">
 		</form>
-		<form method="post" action="/EEIT187-6/tablewareController/update" id="tablewareForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+		<form method="post" action="/EEIT187-6/Tableware/update" id="tablewareForm" enctype="multipart/form-data" onsubmit="return validateForm()">
 			<jsp:useBean id="tableware" scope="request"
 				class="com.rent.bean.Tableware" />
 			<table>

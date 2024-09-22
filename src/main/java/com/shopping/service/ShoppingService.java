@@ -21,15 +21,11 @@ public class ShoppingService {
 	
 	@Autowired
 	private ShoppingDao sDao;
+	@Autowired
 	private ItemDao iDao;
+	@Autowired
 	private ProductDao pDao;
 	
-	
-//	public ShoppingService(Session session) {
-//		sDao = new ShoppingDao(session);
-//		iDao = new ItemDao(session);
-//		pDao = new ProductDao(session);
-//	}
 	
 	
 	public ShoppingBean addOrder(ShoppingBean bean) {
@@ -69,9 +65,9 @@ public class ShoppingService {
         return sDao.searchAllMembers();  
     }
 
-    public List<ProductBean> searchAllProduct() {
-        return pDao.searchAllProduct(); 
-    }
+//    public List<ProductBean> searchAllProduct() {
+//        return pDao.searchAllProduct(); 
+//    }
 	
 	public List<ShoppingBean> searchAllShopping() {
 		return sDao.searchAllShopping();

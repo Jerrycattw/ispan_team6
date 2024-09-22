@@ -82,16 +82,6 @@ public class ProductBean {
         this.productName = productName;
     }
 
-	 
-	 
-
-//	public Integer getProductTypeId() {
-//		return productTypeId;
-//	}
-//
-//	public void setProductTypeId(Integer productTypeId) {
-//		this.productTypeId = productTypeId;
-//	}
 
 	public ProductType getProductType() {
 		return productType;
@@ -141,35 +131,6 @@ public class ProductBean {
 		this.productDescription = productDescription;
 	}
 	
-//	public Member getMember() {
-//	    return member;
-//	}
-//
-//	public void setMember(Member member) {
-//	    this.member = member;
-//	}
-	
-//	public Set<ProductType> getProductTypes() {
-//	    return productTypes;
-//	}
-//
-//	public void setProductTypes(Set<ProductType> productTypes) {
-//	    this.productTypes = productTypes;
-//	}
-	
-//	public ProductBean(Integer productId, String productName, Integer productTypeId, Integer productPrice,
-//			String productPicture, Integer productStock, Integer productStatus, String productDescription) {
-//		super();
-//		this.productId = productId;
-//		this.productName = productName;
-//		this.productTypeId = productTypeId;
-//		this.productPrice = productPrice;
-//		this.productPicture = productPicture;
-//		this.productStock = productStock;
-//		this.productStatus = productStatus;
-//		this.productDescription = productDescription;
-//	}
-	
 	
 	public ProductBean(Integer productId, String productName, Integer productPrice,
 			String productPicture, Integer productStock, Integer productStatus, String productDescription) {
@@ -183,17 +144,6 @@ public class ProductBean {
 		this.productDescription = productDescription;
 	}
 
-//	public ProductBean(String productName, Integer productTypeId, Integer productPrice, String productPicture,
-//			Integer productStock, Integer productStatus, String productDescription) {
-//		super();
-//		this.productName = productName;
-//		this.productTypeId = productTypeId;
-//		this.productPrice = productPrice;
-//		this.productPicture = productPicture;
-//		this.productStock = productStock;
-//		this.productStatus = productStatus;
-//		this.productDescription = productDescription;
-//	}
 	
 	public ProductBean(String productName,  Integer productPrice, String productPicture,
 			Integer productStock, Integer productStatus, String productDescription) {
@@ -212,13 +162,6 @@ public class ProductBean {
 		this.productId = productId;
 	}
 
-//	@Override
-//	public String toString() {
-//		return "ProductBean [productId=" + productId + ", productName=" + productName + ", productTypeId="
-//				+ productTypeId + ", productPrice=" + productPrice + ", productPicture=" + productPicture
-//				+ ", productStock=" + productStock + ", productStatus=" + productStatus + ", productDescription="
-//				+ productDescription + "]";
-//	}
 	
     @Override
     public String toString() {
@@ -229,8 +172,6 @@ public class ProductBean {
 
 	public ProductBean() {
 	}
-
-
 
 
 }

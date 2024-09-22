@@ -23,12 +23,12 @@
 <link rel="stylesheet" href="../template/template.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="../template/template.js"></script>
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 <!--<body style="background-color: #ACD6FF">  -->
 <div class="content" id="content">
     <div align="center">
         <h2>更新訂單資料</h2>
-        <form method="post" action="/EEIT187-6/ShoppingController/UpdateDataShopping">
+        <form method="post" action="/EEIT187-6/ShoppingController/updateDataShopping">
         
             <input type="hidden" name="shoppingId" value="${shoppingBean.shoppingId}" />
             
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     statusInput.addEventListener('input', function() {
-        validateStatus(statusInput, errorContainerStatus); // 進行驗證
+        validateStatus(statusInput, errorContainerStatus); 
     });
 });
 </script>

@@ -15,19 +15,19 @@
 <script src="../template/template.js"></script>
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>用 具 庫 存 資 料</h2>
 		<form method="GET" class="btn"
-			action="/EEIT187-6/tableware_stock/insert.html">
+			action="/EEIT187-6/tableware/InsertStock.html">
 			<input type="submit" value="新增用具庫存">
 		</form>
 		<form method="get" class="btn"
-			action="/EEIT187-6/tableware_stock/search.html">
+			action="/EEIT187-6/tableware/SearchStock.html">
 			<input type="submit" value="搜尋用具庫存">
 		</form>
 		<form method="get" class="btn"
-			action="/EEIT187-6/tablewareStockController/getAll">
+			action="/EEIT187-6/TablewareStock/getAll">
 			<input type="submit" value="返回全資料">
 		</form>
 		<table class="table">
@@ -45,7 +45,7 @@
 				<td><%=tablewareStock.getStock()%>
 				<td>
 					<form class="update" method="get"
-						action="/EEIT187-6/tablewareStockController/get">
+						action="/EEIT187-6/TablewareStock/getById">
 						<input type="submit" value="庫存調整" /> <input type="hidden"
 							name="restaurant_id"
 							value="<%=tablewareStock.getRestaurantId()%>"> <input

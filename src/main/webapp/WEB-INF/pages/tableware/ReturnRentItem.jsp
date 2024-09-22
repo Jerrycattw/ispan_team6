@@ -11,14 +11,14 @@
 <script src="../template/template.js"></script>
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>租 借 訂 單 項 目 資 料</h2>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rentItemController/getAll">
+			action="/EEIT187-6/RentItem/getAll">
 			<input type="submit" value="返回">
 		</form>
-		<form method="get" action="/EEIT187-6/rentItemController/restore">
+		<form method="get" action="/EEIT187-6/RentItem/restore">
 			<jsp:useBean id="rentItem" scope="request"
 				class="com.rent.bean.RentItem" />
 			<table>

@@ -3,6 +3,8 @@ package com.rent.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +13,7 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+@Component
 @Entity@Table(name = "rent_item")
 @IdClass(RentItem.RentItemId.class)
 public class RentItem implements Serializable {

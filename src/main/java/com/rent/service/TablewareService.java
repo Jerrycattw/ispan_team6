@@ -3,17 +3,24 @@ package com.rent.service;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.rent.bean.Tableware;
 import com.rent.dao.TablewareDao;
 
+@Service
+@Transactional
 public class TablewareService {
-	private final TablewareDao tablewareDao;
-	private final Session session;
+	@Autowired
+	private TablewareDao tablewareDao;
+//	private  Session session;
 
-	public TablewareService(Session session) {
-		this.session = session;
-		this.tablewareDao = new TablewareDao(session);
-	}
+//	public TablewareService(Session session) {
+//		this.session = session;
+//		this.tablewareDao = new TablewareDao(session);
+//	}
 
 	public Tableware insert(String tablewareName, int tablewareDeposit, String tablewareImage,
 			String tablewareDescription) {

@@ -3,7 +3,13 @@ package com.coupon.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+
+
+@Component
 public class CouponDTO {
+
 	private int couponId;
 	private String couponCode;
 	private String couponDescription;
@@ -21,6 +27,7 @@ public class CouponDTO {
 	private int receivedAmount;
 	
 	public CouponDTO() {
+		
 	}
 	
 	

@@ -3,12 +3,15 @@ package com.point.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.grammars.hql.HqlParser.CurrentDateFunctionContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.coupon.dao.CouponDao;
 import com.point.bean.PointBean;
@@ -19,15 +22,21 @@ import com.point.dao.PointSetDAO;
 import com.point.dto.PointMemberDTO;
 import com.util.DateUtils;
 
+@Service
 public class PointService {
+	
+	@Autowired
 	private PointDAO pointDao;
+	
+	@Autowired
 	private PointSetService pointSetService;
 
-	public PointService(Session session, PointSetService pointSetService) {
-		this.pointDao = new PointDAO(session);
-		this.pointSetService = pointSetService;
-	}
+//	public PointService(Session session, PointSetService pointSetService) {
+//		this.pointDao = new PointDAO(session);
+//		this.pointSetService = pointSetService;
+//	}
 	
+	@Autowired
 	private static PointSetBean currentPointSet;
 	
 	
@@ -57,21 +66,62 @@ public class PointService {
 			break;
 		}
 	}
+	
+	// 新增點數紀錄
+		public void insertOneRecord(PointBean pointBean) {
+
+			String createDateStr = DateUtils.getStringFromDate(pointBean.getCreateDate());
+
+			currentPointSet = pointSetService.getPointSet();// 取得點數設定
+			String Expiry = currentPointSet.getIsExpiry();// 判斷有無到期
+			switch (Expiry) {
+			case ("isExpiry"):
+				int yearInt = Integer.parseInt(createDateStr.substring(0, 4)) + 1;// 到期日為隔年
+				String year = String.valueOf(yearInt);
+				String month = currentPointSet.getExpiryMonth();// 取得點數設定月
+				String day = currentPointSet.getExpiryDay();// 取得點數設定日
+				Date expiryDate = DateUtils.GetDateFromString(year + "-" + month + "-" + day);// yyyy-mm-dd
+				pointBean.setExpiryDate(expiryDate);
+				System.out.println(pointBean);
+				pointDao.insertOneRecord(pointBean);
+				break;
+			case ("noExpiry"):
+				Date noExpiryDate = DateUtils.GetDateFromString("9999-12-31");// 無到期日時間無限大
+				pointBean.setExpiryDate(noExpiryDate);
+				System.out.println(pointBean);
+				pointDao.insertOneRecord(pointBean);
+				break;
+			}
+		}
 
 	// 批次新增點數紀錄
 	public void insertBatchRecord(List<String> memberIDs, int pointChange, String createDateString, int transactionID,
 			String transactionType) {
-		System.out.println("SERVER TOUCH");
 		for (String memberID : memberIDs) {
 			int IntMemberID = Integer.parseInt(memberID);
 			insertOneRecord(IntMemberID, pointChange, createDateString, transactionID, transactionType);
 		}
-		System.out.println("SERVER DONE");
 	}
+	
+	
+	// 批次新增點數紀錄
+		public void insertBatchRecord(List<String> memberIDs, PointBean pointBean) {
+			for (String memberID : memberIDs) {
+				int IntMemberID = Integer.parseInt(memberID);
+				PointBean insertBean = new PointBean();
+				
+				insertBean.setMemberID(IntMemberID);
+				insertBean.setPointChange(pointBean.getPointChange());
+				insertBean.setCreateDate(pointBean.getCreateDate());
+				insertBean.setTransactionID(pointBean.getTransactionID());
+				insertBean.setTransactionType(pointBean.getTransactionType());
+				insertOneRecord(insertBean);
+			}
+		}
 
 	// 搜尋點數
-	public static List<PointMemberBean> search(String keyWord) {
-
+//	public static List<PointMemberBean> search(String keyWord) {
+//
 //		String cleanKeyWord = keyWord.startsWith("-") ? keyWord.substring(1) : keyWord;
 //		Boolean isName = keyWord.matches("^[A-Za-z\u4e00-\u9fa5\\s\\p{P}]+$");
 //		Boolean isNumber = keyWord.matches("\\d+");
@@ -82,9 +132,9 @@ public class PointService {
 //		} else if (isNumber) {
 //			return PointDAO.getPointMemberByNumber(cleanKeyWord);
 //		}
-		
-		return null;
-	}
+//		
+//		return null;
+//	}
 
 	//OK// 打印訊息(批次新增)
 	public String printMessage(List<String> memberIDs) {
@@ -148,10 +198,9 @@ public class PointService {
 	}
 	
 	//修改
-	public void updatePoint(int pointChange,Date createDate,Date expiryDate,int pointUsage,int transactionID,String transactionType,int pointID) {
-		pointDao.updatePoint(pointChange, createDate, expiryDate, pointUsage, transactionID, transactionType, pointID);
+	public void updatePoint(PointBean pointBean) {
+		pointDao.updatePoint(pointBean);
 	}
-	
 	//刪除
 	public void deleteOneRecord(int pointID) {
 		pointDao.deleteOneRecord(pointID);

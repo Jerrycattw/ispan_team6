@@ -9,7 +9,9 @@ import java.util.Objects;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.stereotype.Component;
 
+@Component
 @Embeddable
 public class TagId implements Serializable {
 	private static final long serialVersionUID = 1L;

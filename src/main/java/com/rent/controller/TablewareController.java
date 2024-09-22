@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,42 +45,49 @@ public class TablewareController{
 			@RequestParam("tableware_deposit") Integer tablewareDeposit, 
 			@RequestParam("tableware_image") MultipartFile timg,
 			@RequestParam("tableware_description") String tablewareDescription,
-			@RequestParam("restaurantId") String restaurantIdParam,
-			@RequestParam("stock") String stockParam,
+			@RequestParam Map<String, String> allParams,
 			Model model) throws IOException {
-		
 		String uploadPath = servletContext.getRealPath("/tableware/tablewareImage");
-		File uploadDir = new File(uploadPath);
-		if (!uploadDir.exists()) {
-			uploadDir.mkdir();
-		}
-		String fileName = Paths.get(timg.getOriginalFilename()).getFileName().toString();
-		File filePart = new File(uploadPath + File.separator + fileName);
+	    File uploadDir = new File(uploadPath);
+	    if (!uploadDir.exists()) {
+	        uploadDir.mkdirs(); // 确保递归创建目录
+	    }
+	    String fileName = Paths.get(timg.getOriginalFilename()).getFileName().toString();
+	    File filePart = new File(uploadPath + File.separator + fileName);
 		timg.transferTo(filePart);
 		String tablewareImage = "/EEIT187-6/tableware/tablewareImage/" + fileName;
-
-		Tableware tableware = tablewareService.insert(tablewareName, tablewareDeposit, tablewareImage,tablewareDescription);
+		
+		Tableware tableware = new Tableware();
+		tableware.setTablewareName(tablewareName);
+		tableware.setTablewareDeposit(tablewareDeposit);
+		tableware.setTablewareImage(tablewareImage);
+		tableware.setTablewareDescription(tablewareDescription);
+		tableware.setTablewareStatus(1);
+		tablewareService.insert(tableware);
 		
 		int tablewareId = tableware.getTablewareId();
+		List<String> restaurantIdParams = new ArrayList<>();
+	    List<String> stockParams = new ArrayList<>();
+	    for (Map.Entry<String, String> entry : allParams.entrySet()) {
+	        if (entry.getKey().startsWith("restaurantId")) {
+	            restaurantIdParams.add(entry.getValue());
+	        } else if (entry.getKey().startsWith("stock")) {
+	            stockParams.add(entry.getValue());
+	        }
+	    }
 		
         List<TablewareStock> tablewareStocks = new ArrayList<>();
-        int index = 0;
-        while (true) {
-            restaurantIdParam += index;
-            stockParam += index;
-            if (restaurantIdParam == null) {
-                break; 
+        for (int i = 0; i < restaurantIdParams.size(); i++) {
+            String restaurantIdParam = restaurantIdParams.get(i);
+            String stockParam = stockParams.get(i);
+            if (restaurantIdParam != null && !restaurantIdParam.isEmpty() && stockParam != null && !stockParam.isEmpty()) {
+                Integer restaurantId = Integer.parseInt(restaurantIdParam);
+                Integer stock = Integer.parseInt(stockParam);
+
+                TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);
+                tablewareStocks.add(tablewareStock);
             }
-
-            Integer restaurantId = Integer.parseInt(restaurantIdParam);
-            Integer stock = Integer.parseInt(stockParam);
-
-            TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);
-            tablewareStocks.add(tablewareStock);
-
-            index++; // 处理下一个TablewareStock
         }
-
         // 批量插入库存记录
         for (TablewareStock tablewareStock : tablewareStocks) {
             tablewareStockService.insert(tablewareStock.getTablewareId(), tablewareStock.getRestaurantId(), tablewareStock.getStock());
@@ -109,12 +117,12 @@ public class TablewareController{
 			@RequestParam("tableware_image") MultipartFile timg,
 			@RequestParam("tableware_description") String tablewareDescription,
 			@RequestParam("tableware_status") Integer tablewareStatus,
-			Model model)
-			throws IOException {
-		Tableware tableware = new Tableware();
-	    String tablewareImage = null;
+			Model model) throws IOException {
+		Tableware existingTableware = tablewareService.getById(tablewareId);
+        String tablewareImage = existingTableware.getTablewareImage();
+        
+	    // 用户上传了新图片
 	    if (timg != null && timg.getSize() > 0) {
-	        // 用户上传了新图片
 	        String fileName = Paths.get(timg.getOriginalFilename()).getFileName().toString();
 	        tablewareImage = "/EEIT187-6/tableware/tablewareImage/" + fileName;
 	        try {
@@ -130,15 +138,13 @@ public class TablewareController{
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	    } else {
-	        // 没有上传新图片，使用原始图片路径
-	    	Tableware existingTableware = tablewareService.getById(tablewareId);
-	        if (existingTableware != null) {
-	        	tableware.setTablewareImage(existingTableware.getTablewareImage());
-	        }
 	    }
-	    tablewareService.update(tablewareId, tablewareName, tablewareDeposit, tablewareImage,
-	    		tablewareDescription, tablewareStatus);
+	    existingTableware.setTablewareName(tablewareName);
+	    existingTableware.setTablewareDeposit(tablewareDeposit);
+	    existingTableware.setTablewareImage(tablewareImage);
+	    existingTableware.setTablewareDescription(tablewareDescription);
+	    existingTableware.setTablewareStatus(tablewareStatus);
+	    tablewareService.update(existingTableware);
 	    return "redirect:/Tableware/getAll";
 	}
 

@@ -20,7 +20,16 @@ public class RentDao {
 //	public RentDao(Session session) {
 //		this.session = session;
 //	}
+	public Rent getById(Integer rentId) {
+		Session session = sessionFactory.getCurrentSession();
+		return session.get(Rent.class, rentId);
+	}
 
+	public List<Rent> getAll() {
+		Session session = sessionFactory.getCurrentSession();
+		return session.createQuery("from Rent", Rent.class).list();
+	}
+	
 	public Rent insert(Rent rent) {
 		Session session = sessionFactory.getCurrentSession();
 		if (rent != null) {
@@ -30,20 +39,18 @@ public class RentDao {
 		return null;
 	}
 
-	public List<Rent> getAll() {
+	public Rent update(Rent rent) {
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from Rent", Rent.class).list();
-	}
-
-	public Rent getById(Integer rentId) {
-		Session session = sessionFactory.getCurrentSession();
-		return session.get(Rent.class, rentId);
+		if (rent != null) {
+			session.merge(rent);
+			return rent;
+		}
+		return null;
 	}
 
 	public List<Rent> getOver() {
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from Rent where dueDate < current_date() and returnDate is null", Rent.class)
-				.list();
+		return session.createQuery("from Rent where dueDate < current_date() and returnDate is null", Rent.class).list();
 	}
 
 	public List<Rent> search(Integer rentId, Integer memberId, String restaurantId, Integer rentStatus,
@@ -78,19 +85,10 @@ public class RentDao {
 		return query.getResultList();
 	}
 
-	public Rent update(Rent rent) {
-		Session session = sessionFactory.getCurrentSession();
-		if (rent != null) {
-			session.update(rent);
-			return rent;
-		}
-		return null;
-	}
-
 	public boolean delete(Rent rent) {
 		Session session = sessionFactory.getCurrentSession();
 		if (rent != null) {
-			session.delete(rent);
+			session.remove(rent);
 			return true;
 		}
 		return false;

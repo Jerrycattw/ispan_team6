@@ -40,18 +40,18 @@ public class TablewareStockDao {
 	
 	public TablewareStock getById(TablewareStock.TablewareStockId id) {
 		Session session = sessionFactory.getCurrentSession();
-		return session.find(TablewareStock.class, id);
+		return session.get(TablewareStock.class, id);
 	}
 	
 	public TablewareStock update(TablewareStock tablewareStock) {
 		Session session = sessionFactory.getCurrentSession();
 		if(tablewareStock!=null) {
-			session.update(tablewareStock);
+			session.merge(tablewareStock);
 		}
 		return tablewareStock;
 	}
 	
-	public List<TablewareStock> search(Integer restaurantId,Integer tablewareId) throws SQLException {
+	public List<TablewareStock> search(Integer restaurantId, Integer tablewareId) throws SQLException {
 		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("FROM TablewareStock WHERE 1=1");
         if (restaurantId != null) {

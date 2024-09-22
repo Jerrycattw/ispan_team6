@@ -25,8 +25,7 @@ public class RentItemService {
 //		this.rentItemDao = new RentItemDao(session);
 //	}
 
-	public RentItem insert(Integer rentId, Integer tablewareId, Integer rentItemQuantity, Integer rentItemDeposit) {
-		RentItem rentItem = new RentItem(rentId, tablewareId, rentItemQuantity, rentItemDeposit, "未歸還", 1);
+	public RentItem insert(RentItem rentItem) {
 		return rentItemDao.insert(rentItem);
 	}
 
@@ -42,18 +41,8 @@ public class RentItemService {
 		return rentItemDao.getById(rentId);
 	}
 
-	public boolean update(int rentId, int tablewareId, int rentItemQuantity, int rentItemDeposit, String returnMemo,
-			int returnStatus) {
-		RentItem rentItem = rentItemDao.getByIds(rentId, tablewareId);
-		if (rentItem != null) {
-			rentItem.setRentItemQuantity(rentItemQuantity);
-			rentItem.setRentItemDeposit(rentItemDeposit);
-			rentItem.setReturnMemo(returnMemo);
-			rentItem.setReturnStatus(returnStatus);
-			rentItemDao.update(rentItem);
-			return true;
-		}
-		return false;
+	public RentItem update(RentItem rentItem) {
+		return rentItemDao.update(rentItem);
 	}
 
 	public boolean delete(RentItem rentItem) {

@@ -93,6 +93,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 		//去tableware下找html檔
 		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
+		//去tablewareImage下找圖檔
+		registry.addResourceHandler("/tablewareImage/**").addResourceLocations("/WEB-INF/pages/tableware/tablewareImage/");
 		
 		
         registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");

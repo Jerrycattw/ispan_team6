@@ -1,6 +1,6 @@
 package com.rent.controller;
 
-import java.io.IOException;
+
 
 
 import java.text.SimpleDateFormat;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,9 +24,6 @@ import com.rent.service.RentService;
 import com.rent.service.TablewareService;
 import com.reserve.service.RestaurantService;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/Rent/*")
@@ -62,41 +60,51 @@ public class RentController{
 			@RequestParam("rent_deposit") Integer rentDeposit,
 			@RequestParam("restaurantName") String restaurantName, 
 			@RequestParam("member_id") Integer memberId,
-			@RequestParam("tablewareId") String tablewareIdParam,
-			@RequestParam("rentItemQuantity") String rentItemQuantityParam,
-			@RequestParam("rentItemDeposit") String rentItemDepositParam,
+			@RequestParam Map<String, String> allParams,
 			Model model) {
 		java.util.Date rentDate = new java.util.Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(rentDate);
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
 		java.util.Date dueDate = calendar.getTime();
-		
 		String restaurantId = restaurantService.getRestaurantId(restaurantName);
-		Rent rent = rentService.insert(rentDeposit, rentDate, restaurantId, memberId, dueDate);
+		
+		Rent rent = new Rent();
+		rent.setRentDeposit(rentDeposit);
+		rent.setRentDate(rentDate);
+		rent.setRestaurantId(restaurantId);
+		rent.setMemberId(memberId);
+		rent.setDueDate(dueDate);
+		rent.setRentStatus(1);		rent.setRentMemo("未歸還");
+		rentService.insert(rent);
 
 		int rentId = rent.getRentId();
+		
+		List<String> tablewareIds = new ArrayList<>();
+	    List<String> rentItemQuantities = new ArrayList<>();
+	    List<String> rentItemDeposits = new ArrayList<>();
+
+	    for (Map.Entry<String, String> entry : allParams.entrySet()) {
+	        if (entry.getKey().startsWith("tablewareId")) {
+	            tablewareIds.add(entry.getValue());
+	        } else if (entry.getKey().startsWith("rentItemQuantity")) {
+	            rentItemQuantities.add(entry.getValue());
+	        } else if (entry.getKey().startsWith("rentItemDeposit")) {
+	            rentItemDeposits.add(entry.getValue());
+	        }
+	    }
+		
 		List<RentItem> rentItems = new ArrayList<>();
-		int index = 0;
-		while (true) {
-            tablewareIdParam += index;
-            rentItemQuantityParam += index;
-            rentItemDepositParam += index;
+		for (int i = 0; i < tablewareIds.size(); i++) {
+	        Integer tablewareId = Integer.parseInt(tablewareIds.get(i));
+	        Integer rentItemQuantity = Integer.parseInt(rentItemQuantities.get(i));
+	        Integer rentItemDeposit = Integer.parseInt(rentItemDeposits.get(i));
 
-            if (tablewareIdParam == null) {
-                break; // 如果没有更多的tablewareIdParam，退出循环
-            }
-
-            Integer tablewareId = Integer.parseInt(tablewareIdParam);
-            Integer rentItemQuantity = Integer.parseInt(rentItemQuantityParam);
-            Integer rentItemDeposit = Integer.parseInt(rentItemDepositParam);
-
-            RentItem rentItem = new RentItem(rentId,tablewareId,rentItemQuantity,rentItemDeposit,"未歸還",1);
-            rentItems.add(rentItem);
-            index++; // 处理下一个RentItem
-        }
+	        RentItem rentItem = new RentItem(rentId, tablewareId, rentItemQuantity, rentItemDeposit, "未歸還", 1);
+	        rentItems.add(rentItem);
+	    }
 		for (RentItem rentItem : rentItems) {
-	        rentItemService.insert(rentItem.getRentId(), rentItem.getTablewareId(), rentItem.getRentItemQuantity(), rentItem.getRentItemDeposit());
+	        rentItemService.insert(rentItem);
 	    }
 		return "redirect:/Rent/getAll";
 	}
@@ -137,9 +145,19 @@ public class RentController{
 			Date dueDate = new SimpleDateFormat("yyyy-MM-dd").parse(dueDateUtil);
 			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(returnDateUtil);
 			String returnRestaurantId = restaurantService.getRestaurantId(returnRestaurantName);
-
-			Rent rent = rentService.update(rentId, rentDeposit, rentDate, restaurantId, memberId, dueDate, returnDate,
-					rentStatus, rentMemo, returnRestaurantId);
+			
+			Rent rent = new Rent();
+			rent.setRentId(rentId);
+			rent.setRentDeposit(rentDeposit);
+			rent.setRentDate(rentDate);
+			rent.setRestaurantId(restaurantId);
+			rent.setMemberId(memberId);
+			rent.setDueDate(dueDate);
+			rent.setReturnDate(returnDate);
+			rent.setRentStatus(rentStatus);
+			rent.setRentMemo(rentMemo);
+			rent.setReturnRestaurantId(returnRestaurantId);
+			rentService.update(rent);
 			return "redirect:/Rent/getAll";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,23 +205,24 @@ public class RentController{
 
 	@GetMapping("search")
 	protected String search(
-			@RequestParam("rent_id") Integer rentId,
-			@RequestParam("member_id") Integer memberId,
-			@RequestParam("restaurantName") String restaurantName, 
-			@RequestParam("rent_status") Integer rentStatus,
-			@RequestParam("rent_date_start") String rentDateStart,
-			@RequestParam("rent_date_end") String rentDateEnd,
+			@RequestParam(value = "rent_id" , required = false) Integer rentId,
+			@RequestParam(value = "member_id" , required = false) Integer memberId,
+			@RequestParam(value = "restaurantName" , required = false) String restaurantName, 
+			@RequestParam(value = "rent_status", required = false) Integer rentStatus,
+			@RequestParam(value = "rent_date_start", required = false) String rentDateStartStr,
+			@RequestParam(value = "rent_date_end", required = false) String rentDateEndStr,
 			Model model) {
 		try {
-//			rentId = rentId != null && !rentId.isEmpty() ? rentId : null;
-//	        memberId = memberId != null && !memberId.isEmpty() ? memberId : null;
-//	        String restaurantId = restaurantService.getRestaurantId(restaurantName) != null && !restaurantService.getRestaurantId(restaurantName).isEmpty() ?restaurantService.getRestaurantId(restaurantName) : null;
-//	        rentStatus = rentStatus != null && !rentStatus.isEmpty() ? rentStatus : null;
-//	        Date rentDateStart = rentDateStart != null && !rentDateStart.isEmpty() ? new SimpleDateFormat("yyyy-MM-dd").parse(rentDateStart) : null;
-//	        Date rentDateEnd = rentDateEnd != null && !rentDateEnd.isEmpty() ? new SimpleDateFormat("yyyy-MM-dd").parse(rentDateEnd) : null;
-
-//			List<Rent> rents = rentService.getByMany(rentId, memberId, restaurantId, rentStatus, rentDateStart,rentDateEnd);
-//			model.addAttribute("rent", rents);
+			rentId = (rentId != null) ? rentId : null;
+			memberId = (memberId != null) ? memberId : null;
+			String restaurantId = restaurantService.getRestaurantId(restaurantName);
+	        restaurantId = (restaurantId != null && !restaurantId.isEmpty()) ? restaurantId : null;
+	        rentStatus = (rentStatus != null) ? rentStatus : null;
+	        Date rentDateStart = (rentDateStartStr != null && !rentDateStartStr.isEmpty()) ? new SimpleDateFormat("yyyy-MM-dd").parse(rentDateStartStr) : null;
+	        Date rentDateEnd = (rentDateEndStr != null && !rentDateEndStr.isEmpty()) ? new SimpleDateFormat("yyyy-MM-dd").parse(rentDateEndStr) : null;
+	        
+			List<Rent> rents = rentService.getByMany(rentId, memberId, restaurantId, rentStatus, rentDateStart,rentDateEnd);
+			model.addAttribute("rent", rents);
 			return "tableware/GetAllRent";
 		} catch (Exception e) {
 			e.printStackTrace();

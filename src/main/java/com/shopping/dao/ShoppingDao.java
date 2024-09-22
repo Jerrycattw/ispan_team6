@@ -17,16 +17,9 @@ import com.shopping.bean.ShoppingBean;
 @Transactional
 public class ShoppingDao {
 
-//	private Session session;
-
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-//	public ShoppingDao(Session session) {
-//		this.session = session;
-//	}
-
-
 	// 新增
 	public ShoppingBean addOrder(ShoppingBean bean) {
 		Session session = sessionFactory.getCurrentSession();

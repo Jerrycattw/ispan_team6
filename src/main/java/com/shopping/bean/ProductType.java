@@ -37,42 +37,34 @@ public class ProductType {
 		public ProductType() {
 		}
 
-
 		public ProductType(Integer productTypeId, String productTypeName) {
 			this.productTypeId = productTypeId;
 			this.productTypeName = productTypeName;
 		}
 
-
 		public Integer getProductTypeId() {
 			return productTypeId;
 		}
-
 
 		public void setProductTypeId(Integer productTypeId) {
 			this.productTypeId = productTypeId;
 		}
 
-
 		public String getProductTypeName() {
 			return productTypeName;
 		}
-
 
 		public void setProductTypeName(String productTypeName) {
 			this.productTypeName = productTypeName;
 		}
 
-
 		public Set<ProductBean> getProducts() {
 			return products;
 		}
 
-
 		public void setProducts(Set<ProductBean> products) {
 			this.products = products;
 		}
-
 
 		@Override
 		public String toString() {
@@ -81,79 +73,4 @@ public class ProductType {
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		public Integer getProductTypeId() {
-//			return productTypeId;
-//		}
-//
-//		public void setProductTypeId(Integer productTypeId) {
-//			this.productTypeId = productTypeId;
-//		}
-//
-//		public String getProductTypeName() {
-//			return productTypeName;
-//		}
-//
-//		public void setProductTypeName(String productTypeName) {
-//			this.productTypeName = productTypeName;
-//		}
-//
-//		public ProductType() {
-//			super();
-//		}
-//
-//		public ProductType(Integer productId, String productName) {
-//			this.productTypeId = productId;
-//			this.productTypeName = productName;
-//		}
-//
-//		public Integer getProductId() {
-//			return productTypeId;
-//		}
-//
-//		public void setProductId(Integer productId) {
-//			this.productTypeId = productId;
-//		}
-//
-//		public String getProductName() {
-//			return productTypeName;
-//		}
-//
-//		public void setProductName(String productName) {
-//			this.productTypeName = productName;
-//		}
-//		
-//		
-//
-//		public Set<ProductBean> getProducts() {
-//			return products;
-//		}
-//
-//		public void setProducts(Set<ProductBean> products) {
-//			this.products = products;
-//		}
-//
-//		@Override
-//		public String toString() {
-//			return "ProductBean [productId=" + productTypeId + ", productName=" + productTypeName + "]";
-//		}
-		
-	
 }

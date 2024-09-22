@@ -18,6 +18,7 @@ public class ItemService {
 
 	@Autowired
     private ItemDao itemDao;
+	@Autowired
     private ShoppingDao shoppingDao;
 
 //    public ItemService(Session session) {

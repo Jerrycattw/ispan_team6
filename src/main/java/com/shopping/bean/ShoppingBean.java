@@ -62,21 +62,6 @@ public class ShoppingBean  {
         super();
     }
 
-    
-    
-//    public ShoppingBean(Integer shoppingId, Integer shoppingTotal,LocalDateTime shoppingDate,  Integer memberId,
-//			String memberName,Integer shoppingStatus, String shoppingMemo, Integer shoppingItemQuantity, Integer shoppingItemPrice) {
-//		super();
-//		this.shoppingId = shoppingId;
-//		this.shoppingTotal = shoppingTotal;
-//		this.shoppingDate = shoppingDate;
-//		this.memberId = memberId;
-//		this.memberName = memberName;
-//		this.shoppingStatus = shoppingStatus;
-//		this.shoppingMemo = shoppingMemo;
-//		this.shoppingItemQuantity = shoppingItemQuantity;
-//		this.shoppingItemPrice = shoppingItemPrice;
-//	}
 
     public ShoppingBean(Integer memberId, Integer shoppingStatus) {
 		super();
@@ -184,14 +169,6 @@ public class ShoppingBean  {
         this.member = member;
     }
     
-//	@Override
-//    public String toString() {
-//    	return "ShoppingBean [shoppgetFormattedShoppingDate()ing_Id=" + shoppingId +  ", shopping_Total="
-//    			+ shoppingTotal + ", shopping_Date=" + shoppingDate +", member_Id=" + memberId + ", shopping_Status=" + shoppingStatus
-//    			+ ", shopping_Memo=" + shoppingMemo + ", shoppingItem_Quantity=" + shoppingItemQuantity
-//    			+ ", shoppingItem_Price=" + shoppingItemPrice + ", member_Name=" + memberName + "]";
-//    }
-//	
 	@Override
     public String toString() {
     	return "ShoppingBean [shoppgetFormattedShoppingDate()ing_Id=" + shoppingId +  ", shopping_Total="

@@ -19,15 +19,12 @@ import com.shopping.bean.ItemBean;
 @Transactional
 public class ItemDao {
 
-//	private Session session;
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private ProductDao productDao;
 	
-//	public ItemDao(Session session) {
-//		this.session = session;
-//	}
-
 
 	// 新增訂單明細
 	public ItemBean addItem(ItemBean itembean) {
@@ -84,10 +81,12 @@ public class ItemDao {
 	// 更新產品項目
 	public ItemBean updateItem(Integer shoppingItemQuantity, Integer productId, Integer shoppingId) {
 		Session session = sessionFactory.getCurrentSession();
+		
 		ItemBean item = session
 				.createQuery("FROM ItemBean WHERE shoppingId = :shoppingId AND productId = :productId", ItemBean.class)
 				.setParameter("shoppingId", shoppingId).setParameter("productId", productId).uniqueResult();
-		ProductDao productDao = new ProductDao();
+		
+//		ProductDao productDao = new ProductDao();。
 		Integer productPrice = productDao.searchProductPriceById(productId);
 		Integer itemPrice = shoppingItemQuantity * productPrice;
 		item.setShoppingItemQuantity(shoppingItemQuantity);
@@ -118,6 +117,7 @@ public class ItemDao {
 	public ItemBean searchItem(Integer shoppingId, Integer productId) {
 		Session session = sessionFactory.getCurrentSession();
 		ItemId itemId = new ItemId(shoppingId, productId);
+		
 		ItemBean resultBean = session.get(ItemBean.class, itemId);
 		if (resultBean != null) {
 			return resultBean;

@@ -15,7 +15,6 @@ private Integer productId;
 	private String productDescription;
 	private Integer productTypeId;
 	private String productTypeName;
-//	private ProductType productType;
 
 	public ProductDTO() {
 	}
@@ -86,15 +85,6 @@ private Integer productId;
 	}
 
 
-
-
-//	public ProductType getProductType() {
-//		return productType;
-//	}
-//
-//	public void setProductType(ProductType productType) {
-//		this.productType = productType;
-//	}
 
 	public Integer getProductId() {
 		return productId;

@@ -14,7 +14,7 @@
     <script src="../template/template.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <jsp:include page="../HomePage.jsp" />
+    <jsp:include page="../../../HomePage.jsp" />
     <meta charset="UTF-8">
     <style>
         .custom-button {
@@ -52,7 +52,7 @@
                 <tbody>
                     <c:forEach var="shopping" items="${shoppings}">
                         <tr>
-                            <td><a href="/EEIT187-6/ShoppingController/ShowItemDetail?shoppingId=${shopping.shoppingId}">${shopping.shoppingId}</a></td>
+                            <td><a href="/EEIT187-6/ShoppingController/showItemDetail?shoppingId=${shopping.shoppingId}">${shopping.shoppingId}</a></td>
                             <td>${shopping.shoppingTotal}</td>
                             <td>${shopping.formattedShoppingDate}</td>
                             <td>${shopping.member.memberId}</td> 
@@ -60,7 +60,7 @@
                             <td>${shopping.shoppingStatus}</td>
                             <td>${shopping.shoppingMemo}</td>
                             <td>
-                                <form method="post" action="/EEIT187-6/ShoppingController/UpdateShopping">
+                                <form method="post" action="/EEIT187-6/ShoppingController/updateShopping">
                                     <input type="hidden" name="shoppingId" value="${shopping.shoppingId}">
                                     <button type="submit" class="custom-button">
                                         <i class="fa-regular fa-pen-to-square fa-xl"></i>
@@ -68,7 +68,7 @@
                                 </form>
                             </td>
                             <td>
-                                <form method="post" action="/EEIT187-6/ShoppingController/DelOrder">
+                                <form method="post" action="/EEIT187-6/ShoppingController/delOrder">
                                     <input type="hidden" name="shoppingId" value="${shopping.shoppingId}">
                                     <button type="submit" class="custom-button custom-button-delete">
                                         <i class="fa-solid fa-trash-arrow-up fa-xl"></i>

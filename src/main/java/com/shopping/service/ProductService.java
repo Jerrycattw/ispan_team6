@@ -20,6 +20,7 @@ public class ProductService {
 	
 	@Autowired
 	private ProductDao pDao;
+	@Autowired
 	private ItemDao iDao;
 	
 //	public ProductService(Session session) {
@@ -63,28 +64,11 @@ public class ProductService {
 	
 	public List<ProductDTO> searchAllProduct() {
 		
-		
 	    List<ProductBean> productBeans = pDao.searchAllProduct();
-	    
 	    List<ProductDTO> productDTOs = new ArrayList<>();
 
 	    for (ProductBean productBean : productBeans) {
-	    	
 	        ProductDTO productDTO = new ProductDTO(productBean);
-	        
-//	        productDTO.setProductId(productBean.getProductId());
-//	        productDTO.setProductName(productBean.getProductName());
-//	        productDTO.setProductPrice(productBean.getProductPrice());
-//	        productDTO.setProductPicture(productBean.getProductPicture());
-//	        productDTO.setProductStock(productBean.getProductStock());
-//	        productDTO.setProductStatus(productBean.getProductStatus());
-//	        productDTO.setProductDescription(productBean.getProductDescription());
-//	        
-////	        ProductType productType = productBean.getProductType();
-////	        productType.getProductId();
-//	        
-//	        productDTO.setProductTypeId(productBean.getProductType().getProductTypeId());
-//	        productDTO.setProductTypeName(productBean.getProductType().getProductTypeName());
 
 	        productDTOs.add(productDTO);
 	    }

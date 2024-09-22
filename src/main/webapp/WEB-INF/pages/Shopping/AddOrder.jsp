@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../template/table.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="../template/template.js"></script>
-    <jsp:include page="../HomePage.html"></jsp:include>
+    <jsp:include page="../../../HomePage.jsp"></jsp:include>
     <style>
         .error-container {
             display: flex;
@@ -27,7 +27,7 @@
     <div class="content" id="content">
         <div align="center">
             <h2>新增訂單明細</h2>
-            <form method="post" action="/EEIT187-6/ShoppingController/AddOrder">
+            <form method="post" action="/EEIT187-6/ShoppingController/addOrder">
                 請輸入以下資料 :<p>
                 會員: 
                 <select name="memberId">

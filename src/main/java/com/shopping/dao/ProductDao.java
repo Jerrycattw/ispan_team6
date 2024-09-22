@@ -17,14 +17,10 @@ import com.shopping.bean.ProductType;
 @Transactional
 public class ProductDao {
 
-//	private Session session;
 
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-//	public ProductDao(Session session) {
-//		this.session = session;
-//	}
 
 	// 新增
 	public ProductBean addProduct(ProductBean bean) {

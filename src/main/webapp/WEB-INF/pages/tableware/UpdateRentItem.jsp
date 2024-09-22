@@ -12,14 +12,14 @@
 
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>租 借 訂 單 項 目 資 料</h2>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rentItemController/getAll">
+			action="/EEIT187-6/RentItem/getAll">
 			<input type="submit" value="返回">
 		</form>
-		<form method="get" action="/EEIT187-6/rentItemController/update" onsubmit="return validateForm()">
+		<form method="get" action="/EEIT187-6/RentItem/update" onsubmit="return validateForm()">
 			<jsp:useBean id="rentItem" scope="request"
 				class="com.rent.bean.RentItem" />
 			<table>
@@ -58,10 +58,8 @@
                 <input type="radio" name="return_status" value="2" <%=rentItem.getReturnStatus() == 2 ? "checked" : ""%>>2:完全歸還
                 <input type="radio" name="return_status" value="3" <%=rentItem.getReturnStatus() == 3 ? "checked" : ""%>>3:完全歸還
 </td>
-			<input type="hidden" name="rent_id"
-					value="<%=rentItem.getRentId()%>">
-			<input type="hidden" name="tableware_id"
-					value="<%=rentItem.getTablewareId()%>">
+			<input type="hidden" name="rent_id" value="<%=rentItem.getRentId()%>">
+			<input type="hidden" name="tableware_id" value="<%=rentItem.getTablewareId()%>">
 			</table>
 			<input type="submit" value="確定更改">
 		</form>

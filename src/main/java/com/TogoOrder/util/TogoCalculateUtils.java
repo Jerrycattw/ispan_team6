@@ -22,11 +22,6 @@ public class TogoCalculateUtils {
 		int newTotalPrice = 0;
 		for(TogoItemBean item:togoItemList) {
 			newTotalPrice = newTotalPrice+ item.getTogoItemPrice();	
-//			System.out.println("訂單編號"+item.getTogoId());
-//			System.out.println("訂單價格"+item.getTogoItemPrice());
-//			System.out.println("數量"+item.getAmount());
-//			System.out.println("訂單加總"+newTotalPrice);
-//			System.out.println("==================");
 		}
 		System.out.println(togoId);
 		System.out.println("成功更新"+newTotalPrice);

@@ -59,15 +59,15 @@
 	<input type="hidden" name="reserveId" value="${reserve.reserveId}"/>
 	訂位編號 : <input type="text" disabled value="${reserve.reserveId}"/><p>
 	<input type="hidden" name="memberId" value="${reserve.memberId}"/>
-	會員編號 : <input type="text" name="memberId" disabled value="${reserve.member.memberId}"/><p>
-	<input type="hidden" name="memberId" value="${reserve.memberId}"/>
-	會員名稱 : <input type="text" name="memberName" disabled value="${reserve.member.memberName}"/><p>
-	<input type="hidden" name="memberId" value="${reserve.memberId}"/>
-	會員電話 : <input type="text" name="memberPhone" disabled value="${reserve.member.phone}"/><p>
+	會員編號 : <input type="text" name="memberId" disabled value="${reserve.memberId}"/><p>
+	<input type="hidden" name="memberName" value="${reserve.memberName}"/>
+	會員名稱 : <input type="text" name="memberName" disabled value="${reserve.memberName}"/><p>
+	<input type="hidden" name="memberPhone" value="${reserve.phone}"/>
+	會員電話 : <input type="text" name="memberPhone" disabled value="${reserve.phone}"/><p>
 	<input type="hidden" name="restaurantId" value="${reserve.restaurantId}"/>
 	餐廳編號 : <input type="text" name="restaurantId" disabled value="${reserve.restaurantId}"/><p>
-	<input type="hidden" name="restaurantName" id="restaurantName" value="${reserve.restaurant.restaurantName}"/>
-	餐廳名稱 : <input type="text" name="restaurantName" disabled value="${reserve.restaurant.restaurantName}"/><p>
+	<input type="hidden" name="restaurantName" id="restaurantName" value="${reserve.restaurantName}"/>
+	餐廳名稱 : <input type="text" name="restaurantName" disabled value="${reserve.restaurantName}"/><p>
 	
 	
 		選擇用餐人數 : 

@@ -15,16 +15,16 @@
 <script src="../template/template.js"></script>
 </head>
 <body >
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 	<h2>環 保 用 具 資 料</h2>
-	<form method="get" class="btn" action="/EEIT187-6/tableware/insert.html">
+	<form method="get" class="btn" action="/EEIT187-6/tableware/InsertTableware.html">
 	    <input type="submit" value="新增用具">
 	</form>
-	<form method="get" class="btn" action="/EEIT187-6/tableware/search.html">
+	<form method="get" class="btn" action="/EEIT187-6/tableware/SearchTableware.html">
 	    <input type="submit" value="搜尋用具">
 	</form>
-	<form method="get" class="btn" action="/EEIT187-6/tablewareController/getAll">
+	<form method="get" class="btn" action="/EEIT187-6/Tableware/getAll">
 	    <input type="submit" value="返回全資料">
 	</form>
 	<table class="table">
@@ -39,11 +39,11 @@
 			<td><%=tableware.getTablewareDescription()%>
 			<td><%=tableware.getTablewareStatus()%>
 			<td>
-			<form class="btn" method="get" action="/EEIT187-6/tablewareController/updateStatus">
+			<form class="btn" method="get" action="/EEIT187-6/Tableware/updateStatus">
 				<input type="submit" value="更改狀態" />
 				<input type="hidden" name="tableware_id" value="<%=tableware.getTablewareId()%>">
 			</form>
-			<form class="btn" method="get" action="/EEIT187-6/tablewareController/get">
+			<form class="btn" method="get" action="/EEIT187-6/Tableware/get">
 				<input type="submit" value="修正更新資料" />
 				<input type="hidden" name="tableware_id" value="<%=tableware.getTablewareId()%>">
 			</form>

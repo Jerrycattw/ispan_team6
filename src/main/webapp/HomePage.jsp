@@ -18,7 +18,7 @@
         <a href="#" onclick="showSidebar('reservation')">餐廳訂位管理</a>
         <a href="#" onclick="showSidebar('points')">會員積分優惠券管理</a>
     </div>
-<div class="sidebar" id="sidebar"></div>
+<div class="sidebar" id="sidebar"></div> -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     showSidebar('');

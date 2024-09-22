@@ -26,7 +26,7 @@ i{
 
 	<div class="content" id="content">
 	<h2>餐 廳 桌 位 種 類</h2>
-	<span class="addTableType">新增桌位種類: <a href="/EEIT187-6/reserve/AddTableType.jsp"><i class="fa-solid fa-plus"></i></a></span>
+	<span class="addTableType">新增桌位種類: <a href="/EEIT187-6/reserve/AddTableType"><i class="fa-solid fa-plus"></i></a></span>
 	<table border="1">
 	<tr style="background-color:#a8fefa">
 	<th>桌位種類代碼<th>桌位種類座位數<th>刪除該種桌位

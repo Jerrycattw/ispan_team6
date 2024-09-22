@@ -43,8 +43,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 	}
 	
-	
-	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
@@ -55,7 +53,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 	}
 	
 	
-	
+		
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
 		
@@ -96,8 +94,24 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
 		
+		//去tableware下找html檔
+		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
+		//去tablewareImage下找圖檔
+		registry.addResourceHandler("/tablewareImage/**").addResourceLocations("/WEB-INF/pages/tableware/tablewareImage/");
 		
+
+		
+    registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
+		
+
 		registry.addResourceHandler("/coupon/**").addResourceLocations("/WEB-INF/resources/Html/coupon/");
+
+		
+		
+
+		registry.addResourceHandler("/ProductImg/**").addResourceLocations("file:///C:/upload/ProductImg");
+
+
 	}
 
 
@@ -109,9 +123,24 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 //		registry.addViewController("/wonderland").setViewName("loginSystem");
 		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
+
 		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
 		registry.addViewController("/point/InsertBatchPoint").setViewName("/point/InsertBatchPoint");
 		registry.addViewController("/point/InsertPoint").setViewName("/point/InsertPoint");
+
+
+		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
+		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
+
+
+		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
+		registry.addViewController("/Shopping/SearchAllShopping").setViewName("Shopping/SearchAllShopping");
+		registry.addViewController("/Shopping/AddOrder").setViewName("Shopping/AddOrder");
+		registry.addViewController("/Shopping/ItemDetail").setViewName("Shopping/ItemDetail");
+		registry.addViewController("/Shopping/UpdateShopping").setViewName("Shopping/UpdateShopping");
+		registry.addViewController("/Shopping/UpdateItem").setViewName("Shopping/UpdateItem");
+
+
 		
 	}
 	

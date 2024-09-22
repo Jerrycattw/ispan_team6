@@ -6,180 +6,143 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.reserve.bean.Restaurant;
 import com.reserve.bean.RestaurantDTO;
-import com.reserve.service.ReserveService;
 import com.reserve.service.RestaurantService;
-import com.reserve.service.RestaurantTableService;
-import com.reserve.service.TableTypeService;
-import com.util.HibernateUtil;
 
-//import com.fatboyindustrial.gsonjavatime.Converters;
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-//import com.reserve.bean.RestaurantBean;
-//import com.reserve.dao.RestaurantDao;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-
-//@MultipartConfig
 @Controller
 @RequestMapping("/Restaurant/*")
 public class RestaurantController{
 
 	@Autowired
-	private TableTypeService tableTypeService;
-	@Autowired
 	private RestaurantService restaurantService;
-	@Autowired
-	private ReserveService reserveService;
-	@Autowired
-	private RestaurantTableService restaurantTableService;
 	
 	
 	
 	@PostMapping("add")
-	public String addRestaurant(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	   public String addRestaurant(
+	            @RequestParam("rname") String rname,
+	            @RequestParam("raddress") String raddress,
+	            @RequestParam("rphone") String rphone,
+	            @RequestParam("ropen") String ropenStr,
+	            @RequestParam("rclose") String rcloseStr,
+	            @RequestParam("reattime") Integer eattime,
+	            @RequestParam("rimg") MultipartFile rimg,
+	            Model model) throws IOException {
 
-		Integer defaultStatus = 3;
-		
-		Restaurant restaurant = new Restaurant();
-		String rname = request.getParameter("rname");
-		restaurant.setRestaurantName(rname);
-		restaurant.setRestaurantAddress(request.getParameter("raddress"));
-		restaurant.setRestaurantPhone(request.getParameter("rphone"));
-		LocalTime ropen = LocalTime.parse(request.getParameter("ropen"));
-		LocalTime rclose = LocalTime.parse(request.getParameter("rclose"));
-		restaurant.setRestaurantOpentime(ropen);
-		restaurant.setRestaurantClosetime(rclose);
-		restaurant.setEattime(Integer.parseInt(request.getParameter("reattime")));
-		restaurant.setRestaurantStatus(defaultStatus);
-		
-//		String uploadPath = getServletContext().getRealPath("/") + "reserve" + File.separator + "restaurantIMG";
-//	    File fileSaveDir = new File(uploadPath);
-//	    if (!fileSaveDir.exists()) {
-//	        fileSaveDir.mkdirs();
-//	    }
+	        Integer defaultStatus = 3;
 
-	    Part part = request.getPart("rimg");
-	    if (part != null && part.getSize() > 0) {
-	        String fileName = part.getSubmittedFileName();
-	        String extension = fileName.substring(fileName.lastIndexOf("."));
-	        String newFileName = request.getParameter("rname") + "_" + System.currentTimeMillis() + extension;
-	        
-	        // 將檔案寫入指定路徑
-//	        System.out.println(uploadPath + File.separator + newFileName);
-//	        part.write(uploadPath + File.separator + newFileName);
-	        String restaurantImg = "/EEIT187-6/reserve/restaurantIMG/" + newFileName;
-	        System.out.println(restaurantImg);
-	        restaurant.setRestaurantImg(restaurantImg);
+	        // 創建 Restaurant 物件並設置參數
+	        Restaurant restaurant = new Restaurant();
+	        restaurant.setRestaurantName(rname);
+	        restaurant.setRestaurantAddress(raddress);
+	        restaurant.setRestaurantPhone(rphone);
+	        LocalTime ropen = LocalTime.parse(ropenStr);
+	        LocalTime rclose = LocalTime.parse(rcloseStr);
+	        restaurant.setRestaurantOpentime(ropen);
+	        restaurant.setRestaurantClosetime(rclose);
+	        restaurant.setEattime(eattime);
+	        restaurant.setRestaurantStatus(defaultStatus);
+
+	        // 處理圖片上傳
+	        String uploadPath = "C:/upload/restaurantIMG";
+	        File fileSaveDir = new File(uploadPath);
+	        if (!fileSaveDir.exists()) {
+	            fileSaveDir.mkdirs();
+	        }
+
+	        if (!rimg.isEmpty()) {
+	            String fileName = rimg.getOriginalFilename();
+	            String extension = fileName.substring(fileName.lastIndexOf("."));
+	            String newFileName = rname + "_" + System.currentTimeMillis() + extension;
+
+	            // 將檔案寫入指定路徑
+	            File fileToSave = new File(uploadPath + File.separator + newFileName);
+	            rimg.transferTo(fileToSave);
+
+	            restaurant.setRestaurantImg("/EEIT187-6/restaurantIMG/" + newFileName);
+	        }
+
+	        restaurantService.insert(restaurant);
+
+	        return "redirect:/Restaurant/getAll";
 	    }
-		
-		
-		restaurantService.insert(restaurant);
-		
-		return "redirect:/Restaurant/getAll";
-
-	}
+	
 	
 	
 	@GetMapping("del")
-	public String delRestaurant(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		restaurantService.delete(request.getParameter("restaurantId"));
-
+	public String delRestaurant(@RequestParam("restaurantId") String restaurantId, Model model) {
+		restaurantService.delete(restaurantId);
 		return "redirect:/Restaurant/getAll";
 	}
 	
 	
 	@GetMapping("get")
-	public String getRestaurant(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		Restaurant restaurant = restaurantService.selectById(request.getParameter("restaurantId"));
-		request.setAttribute("restaurant", restaurant);
-		
-		return "reserve/GetRestaurant";
-
+	public String getRestaurant(@RequestParam("restaurantId") String restaurantId, Model model) {
+	    Restaurant restaurant = restaurantService.selectById(restaurantId);
+	    model.addAttribute("restaurant", restaurant);
+	    return "reserve/GetRestaurant";
 	}
 	
 	
 	
 	@GetMapping("getAll")
-	public String getAllRestaurant(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		System.out.println("test");
-		
-		List<Restaurant> restaurants = restaurantService.selectAll();
-		request.setAttribute("restaurants", restaurants);
-		
-		
-		return "reserve/GetAllRestaurants";
-
+	public String getAllRestaurant(Model model) {
+	    List<Restaurant> restaurants = restaurantService.selectAll();
+	    model.addAttribute("restaurants", restaurants);
+	    return "reserve/GetAllRestaurants";
 	}
 	
 	
 	
-	@GetMapping("list")
-	public void getRestaurantList(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-	    String restaurantName = request.getParameter("restaurantName");
-	    String restaurantAddress = request.getParameter("restaurantAddress");
-	    String restaurantStatus = request.getParameter("restaurantStatus");
+	
+	@GetMapping(value = "list", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getRestaurantList(
+	        @RequestParam(value = "restaurantName", required = false) String restaurantName,
+	        @RequestParam(value = "restaurantAddress", required = false) String restaurantAddress,
+	        @RequestParam(value = "restaurantStatus", required = false) String restaurantStatus) {
 
+	    // 查詢餐廳列表
 	    List<Restaurant> restaurants = restaurantService.selectList(restaurantName, restaurantAddress, restaurantStatus);
-	    List<RestaurantDTO> restaurantDTOs = new ArrayList<RestaurantDTO>();
-	    RestaurantDTO restaurantDTO = null;
-	    for(Restaurant restaurant : restaurants) {
-	    	restaurantDTO = new RestaurantDTO(restaurant);
-	    	restaurantDTOs.add(restaurantDTO);
+	    List<RestaurantDTO> restaurantDTOs = new ArrayList<>();
+
+	    // 將餐廳物件轉換為 DTO
+	    for (Restaurant restaurant : restaurants) {
+	        RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant);
+	        restaurantDTOs.add(restaurantDTO);
 	    }
-	    
-	    
-		GsonBuilder gsonBuilder = new GsonBuilder();
-	    Converters.registerLocalTime(gsonBuilder);
+
+	    // 使用 Gson 轉換為 JSON
+	    GsonBuilder gsonBuilder = new GsonBuilder();
+	    Converters.registerLocalTime(gsonBuilder);  // 假設你有自定義 LocalTime 的序列化器
 	    Gson gson = gsonBuilder.create();
-        String json = gson.toJson(restaurantDTOs);
 	    
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
-		
+	    // 返回 JSON 字符串
+	    return gson.toJson(restaurantDTOs);
 	}
 	
 	
 	
 	@GetMapping("set")
-	public String setRestaurant(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public String setRestaurant(@RequestParam("restaurantId") String restaurantId, Model model) {
 		
-		String restaurantId = request.getParameter("restaurantId");
 		Restaurant restaurant = restaurantService.selectById(restaurantId);
-		request.setAttribute("restaurant", restaurant);
-		
-		
+		model.addAttribute("restaurant", restaurant);
 		return "reserve/SetRestaurant";
 
 	}
@@ -187,56 +150,60 @@ public class RestaurantController{
 	
 	
 	@PostMapping("set2")
-	public String setRestaurant2(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		Restaurant restaurant = new Restaurant();
-		String restaurantId = request.getParameter("restaurantId");
-		
-		restaurant.setRestaurantId(restaurantId);
-		restaurant.setRestaurantName(request.getParameter("rname"));
-		restaurant.setRestaurantAddress(request.getParameter("raddress"));
-		restaurant.setRestaurantPhone(request.getParameter("rphone"));
-		LocalTime ropen = LocalTime.parse(request.getParameter("ropen"));
-		LocalTime rclose = LocalTime.parse(request.getParameter("rclose"));
-		restaurant.setRestaurantOpentime(ropen);
-		restaurant.setRestaurantClosetime(rclose);
-		restaurant.setEattime(Integer.parseInt(request.getParameter("reattime")));
-		restaurant.setRestaurantStatus(Integer.parseInt(request.getParameter("restaurantStatus")));
-		
-	    
-//	    String uploadPath = getServletContext().getRealPath("/") + "reserve" + File.separator + "restaurantIMG";
-//	    File fileSaveDir = new File(uploadPath);
-//	    if (!fileSaveDir.exists()) {
-//	        fileSaveDir.mkdirs();
-//	    }
+	public String setRestaurant2(
+	        @RequestParam("restaurantId") String restaurantId,
+	        @RequestParam("rname") String rname,
+	        @RequestParam("raddress") String raddress,
+	        @RequestParam("rphone") String rphone,
+	        @RequestParam("ropen") String ropenStr,
+	        @RequestParam("rclose") String rcloseStr,
+	        @RequestParam("reattime") Integer eattime,
+	        @RequestParam("restaurantStatus") Integer restaurantStatus,
+	        @RequestParam("rimg") MultipartFile rimg,
+	        Model model) throws IOException {
 
-	    Part part = request.getPart("rimg");
-	    if (part != null && part.getSize() > 0) {
-	        String fileName = part.getSubmittedFileName();
+	    // 創建 Restaurant 物件並設置參數
+	    Restaurant restaurant = new Restaurant();
+	    restaurant.setRestaurantId(restaurantId);
+	    restaurant.setRestaurantName(rname);
+	    restaurant.setRestaurantAddress(raddress);
+	    restaurant.setRestaurantPhone(rphone);
+	    LocalTime ropen = LocalTime.parse(ropenStr);
+	    LocalTime rclose = LocalTime.parse(rcloseStr);
+	    restaurant.setRestaurantOpentime(ropen);
+	    restaurant.setRestaurantClosetime(rclose);
+	    restaurant.setEattime(eattime);
+	    restaurant.setRestaurantStatus(restaurantStatus);
+
+	    // 處理圖片上傳
+	    String uploadPath = "C:/upload/restaurantIMG";
+	    File fileSaveDir = new File(uploadPath);
+	    if (!fileSaveDir.exists()) {
+	        fileSaveDir.mkdirs();
+	    }
+
+	    if (!rimg.isEmpty()) {
+	        String fileName = rimg.getOriginalFilename();
 	        String extension = fileName.substring(fileName.lastIndexOf("."));
-	        String newFileName = request.getParameter("rname") + "_" + System.currentTimeMillis() + extension;
-	        
+	        String newFileName = rname + "_" + System.currentTimeMillis() + extension;
+
 	        // 將檔案寫入指定路徑
-//	        System.out.println(uploadPath + File.separator + newFileName);
-//	        part.write(uploadPath + File.separator + newFileName);
-	        String restaurantImg = "/EEIT187-6/reserve/restaurantIMG/" + newFileName;
-	        System.out.println(restaurantImg);
-	        restaurant.setRestaurantImg(restaurantImg);
+	        File fileToSave = new File(uploadPath + File.separator + newFileName);
+	        rimg.transferTo(fileToSave);
+
+	        restaurant.setRestaurantImg("/EEIT187-6/restaurantIMG/" + newFileName);
 	    } else {
-	        if (restaurantId != null) {
-	            // 保留現有照片
-	            Restaurant existingRestaurant = restaurantService.selectById(restaurantId);
+	        // 如果沒有上傳新的圖片，保留現有圖片
+	        Restaurant existingRestaurant = restaurantService.selectById(restaurantId);
+	        if (existingRestaurant != null) {
 	            restaurant.setRestaurantImg(existingRestaurant.getRestaurantImg());
 	        }
 	    }
-		
-		restaurantService.update(restaurant);
-		
-		
-		
-		return "redirect:/Restaurant/getAll";
 
+	    // 更新餐廳資料
+	    restaurantService.update(restaurant);
+
+	    return "redirect:/Restaurant/getAll";
 	}
 	
 }

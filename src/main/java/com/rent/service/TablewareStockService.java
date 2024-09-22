@@ -4,17 +4,24 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.rent.bean.TablewareStock;
 import com.rent.dao.TablewareStockDao;
 
+@Service
+@Transactional
 public class TablewareStockService {
+	@Autowired
 	private TablewareStockDao tablewareStockDao;
-	private Session session;
+//	private Session session;
 
-	public TablewareStockService(Session session) {
-		this.session = session;
-		this.tablewareStockDao = new TablewareStockDao(session);
-	}
+//	public TablewareStockService(Session session) {
+//		this.session = session;
+//		this.tablewareStockDao = new TablewareStockDao(session);
+//	}
 
 	public TablewareStock insert(Integer tablewareId, Integer restaurantId, Integer stock) {
 		TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);

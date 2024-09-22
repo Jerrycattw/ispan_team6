@@ -2,7 +2,7 @@ package com.TogoOrder.bean;
 
 import java.io.Serializable;
 
-import com.google.gson.annotations.Expose;
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,40 +11,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+@Component
 @Entity @Table(name = "menu")
 public class MenuBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Expose
 	@Id @Column(name = "food_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer foodId;
 	
-	@Expose
 	@Column(name = "food_name")
 	private String foodName;
 	
-	@Expose
 	@Column(name = "food_picture")
 	private String foodPicture;
 	
-	@Expose
 	@Column(name = "food_price")
 	private Integer foodPrice;
 	
-	@Expose
 	@Column(name = "food_kind")
 	private String foodKind;
 	
-	@Expose
 	@Column(name = "food_stock")
 	private Integer foodStock;
 	
-	@Expose
 	@Column(name = "food_description")
 	private String foodDescription;
 	
-	@Expose
 	@Column(name = "food_status")
 	private Integer foodStatus;
 	
@@ -65,10 +58,6 @@ public class MenuBean implements Serializable{
 		this.foodStatus = foodStatus;
 	}
 
-
-
-
-
 	public MenuBean(String foodName, String foodPicture, Integer foodPrice, String foodKind, Integer foodStock,
 			String foodDescription, Integer foodStatus) {
 		super();
@@ -80,10 +69,6 @@ public class MenuBean implements Serializable{
 		this.foodDescription = foodDescription;
 		this.foodStatus = foodStatus;
 	}
-
-
-
-
 
 	public Integer getFoodId() {
 		return foodId;

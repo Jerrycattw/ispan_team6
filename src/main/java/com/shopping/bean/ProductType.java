@@ -3,6 +3,8 @@ package com.shopping.bean;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-
+@Component
 @Entity @Table(name="product_type")
 public class ProductType {
 	
@@ -30,34 +32,31 @@ public class ProductType {
 		
 		@OneToMany(fetch= FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="productType")
 		private Set<ProductBean> products;
-		
-		
+
+
 		public ProductType() {
-			super();
 		}
 
-		public ProductType(Integer productId, String productName) {
-			this.productTypeId = productId;
-			this.productTypeName = productName;
+		public ProductType(Integer productTypeId, String productTypeName) {
+			this.productTypeId = productTypeId;
+			this.productTypeName = productTypeName;
 		}
 
-		public Integer getProductId() {
+		public Integer getProductTypeId() {
 			return productTypeId;
 		}
 
-		public void setProductId(Integer productId) {
-			this.productTypeId = productId;
+		public void setProductTypeId(Integer productTypeId) {
+			this.productTypeId = productTypeId;
 		}
 
-		public String getProductName() {
+		public String getProductTypeName() {
 			return productTypeName;
 		}
 
-		public void setProductName(String productName) {
-			this.productTypeName = productName;
+		public void setProductTypeName(String productTypeName) {
+			this.productTypeName = productTypeName;
 		}
-		
-		
 
 		public Set<ProductBean> getProducts() {
 			return products;
@@ -69,8 +68,9 @@ public class ProductType {
 
 		@Override
 		public String toString() {
-			return "ProductBean [productId=" + productTypeId + ", productName=" + productTypeName + "]";
+			return "ProductType [productTypeId=" + productTypeId + ", productTypeName=" + productTypeName
+					+ ", products=" + products + "]";
 		}
 		
-	
+		
 }

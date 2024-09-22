@@ -13,10 +13,10 @@ function showSidebar(menu) {
                     break;
                 case 'store':
                     menuItems = `
-					<a href="/EEIT187-6/Product/AddProduct.html">新增商品</a>
-					<a href="/EEIT187-6/ProductController/SearchAllProduct">查詢所有商品</a>
-					<a href="/EEIT187-6/ShoppingController/ShowAddOrder">新增訂單</a>
-					<a href="/EEIT187-6/ShoppingController/SearchAllShopping">查詢所有訂單</a>
+					<a href="/EEIT187-6/Product/AddProduct">新增商品</a>
+					<a href="/EEIT187-6/ProductController/searchAllProduct">查詢所有商品</a>
+					<a href="/EEIT187-6/ShoppingController/showAddOrder">新增訂單</a>
+					<a href="/EEIT187-6/ShoppingController/searchAllShopping">查詢所有訂單</a>
                     `;
                     break;
                 case 'order':

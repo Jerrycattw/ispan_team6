@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../template/template.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="../template/template.js"></script>
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 <meta charset="UTF-8">
 <script src="https://kit.fontawesome.com/a260a05f7c.js" crossorigin="anonymous"></script>
 <style>
@@ -28,7 +28,7 @@
 <div class="content" id="content">
     <div align="center">
         <h2>訂單明細</h2>
-        <form method="post" action="/EEIT187-6/ItemController/AddItem">
+        <form method="post" action="/EEIT187-6/ItemController/addItemD">
             <input type="hidden" name="shoppingId" value="${shopping.shoppingId}">
            <!-- <input type="text" name="shoppingId" value="${shopping.shoppingId}"> -->
             <select name="productId" id="productId">
@@ -65,7 +65,7 @@
                         <td>${item.product.productPrice}</td>
                         <td>${item.shoppingItemQuantity * item.product.productPrice}</td>
                         <td>
-                            <form method="post" action="/EEIT187-6/ItemController/ShowUpdateItem">
+                            <form method="post" action="/EEIT187-6/ItemController/showUpdateItem">
                                 <input type="hidden" name="shoppingId" value="${item.shoppingId}">
                                 <input type="hidden" name="productId" value="${item.productId}">
                                 <button type="submit" style="background: none; border: none; cursor: pointer; color: #9d80f4;">
@@ -74,7 +74,7 @@
                             </form>
                         </td>
                         <td>
-                            <form method="post" action="/EEIT187-6/ItemController/DelItem">
+                            <form method="post" action="/EEIT187-6/ItemController/delItem">
                                 <input type="hidden" name="shoppingId" value="${item.shoppingId}">
                                 <input type="hidden" name="productId" value="${item.productId}">
                                 <!-- <input type="hidden" name="shoppingItemQuantity" value="${item.shoppingItemQuantity}"> -->

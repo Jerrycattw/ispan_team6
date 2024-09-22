@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.coupon.bean.CouponBean;
 import com.coupon.bean.TagBean;
@@ -23,10 +24,14 @@ import com.coupon.dto.TagDTO;
 
 
 @Service
+@Transactional
 public class CouponService2 {
 	
 	@Autowired
 	private CouponDao2 couponDao2;
+	
+	@Autowired
+    private CouponService2 self;
 	
 	//convert distributeDTO
 	public CouponDistributeDTO convertCouponDistributeDTO(CouponBean couponBean) {
@@ -113,8 +118,8 @@ public class CouponService2 {
 	
 	//insert Coupon
 	public void insertCoupon(CouponBean couponBean,String[] productTags, String[] togoTags) {
-		addTags(couponBean,productTags,"product");
-		addTags(couponBean,togoTags,"togo");
+		self.addTags(couponBean,productTags,"product");
+		self.addTags(couponBean,togoTags,"togo");
 		couponDao2.insertCoupon(couponBean);
 	}
 	
@@ -128,8 +133,8 @@ public class CouponService2 {
 	//update
 	public void updateCoupon(CouponBean couponBean, String[] productTags, String[] togoTags) {
 		System.out.println("touch");
-		addTags(couponBean,productTags,"product");
-		addTags(couponBean,togoTags,"togo");
+		self.addTags(couponBean,productTags,"product");
+		self.addTags(couponBean,togoTags,"togo");
 		System.out.println("addtags done");
 		couponDao2.updateCoupon(couponBean);
 		System.out.println("dao DONE");
@@ -171,7 +176,7 @@ public class CouponService2 {
 	            TagBean tagBean = new TagBean();
 	            tagBean.setTagType(tagType);
 	            
-	            if (coupon.getCouponId() > 0) {
+	            if (coupon.getCouponId() != null) {
 	            	tagBean.setTagId(new TagId(coupon.getCouponId(),tag));//修改透過coupon的ID
 	            }else {
 	            	tagBean.setTagId(new TagId(tag));//新增的COUPON沒有ID，透過關聯coupon identity新增

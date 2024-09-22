@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.grammars.hql.HqlParser.CurrentDateFunctionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.coupon.dao.CouponDao;
 import com.point.bean.PointBean;
@@ -23,6 +24,7 @@ import com.point.dto.PointMemberDTO;
 import com.util.DateUtils;
 
 @Service
+@Transactional
 public class PointService {
 	
 	@Autowired

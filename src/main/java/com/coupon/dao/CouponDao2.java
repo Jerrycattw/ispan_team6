@@ -70,6 +70,8 @@ public class CouponDao2 {
 		Session session = sessionFactory.getCurrentSession();
 		CouponBean updateBean = session.get(CouponBean.class, couponBean.getCouponId());
 		if (updateBean != null) {
+			System.out.println("new "+couponBean);
+			System.out.println("old "+updateBean);
 			session.merge(couponBean);
 		}	
 	}

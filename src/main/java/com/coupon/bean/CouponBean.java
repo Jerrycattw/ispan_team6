@@ -35,7 +35,7 @@ public class CouponBean implements Serializable{
 
 	@Id @Column(name = "coupon_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int couponId;
+	private Integer couponId;
 	
 
 	@Column(name = "coupon_code")
@@ -126,7 +126,7 @@ public class CouponBean implements Serializable{
 		this.maxDiscount = maxDiscount;
 	}
 	
-	public CouponBean(int couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
+	public CouponBean(Integer couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
 			LocalDate couponEndDate, int maxCoupon, int perMaxCoupon, String couponStatus, String rulesDescription,
 			String discountType, int discount, int minOrderDiscount, int maxDiscount) {
 		this.couponId=couponId;
@@ -146,10 +146,10 @@ public class CouponBean implements Serializable{
 	
 
 
-	public int getCouponId() {
+	public Integer getCouponId() {
 		return couponId;
 	}
-	public void setCouponId(int couponId) {
+	public void setCouponId(Integer couponId) {
 		this.couponId = couponId;
 	}
 	public String getCouponCode() {

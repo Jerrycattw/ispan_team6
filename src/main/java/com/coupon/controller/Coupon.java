@@ -64,7 +64,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/Coupon")
-@Transactional
 public class Coupon  {
 
 	
@@ -151,7 +150,10 @@ public class Coupon  {
 	}
  	
  	@PostMapping("/updateExcute")
- 	private String updateCouponWithTags(CouponBean couponBean,@RequestParam("hiddenCouponId") int couponId, @RequestParam("product") String[] productTags,@RequestParam("togo") String[] togoTags) {
+ 	private String updateCouponWithTags(CouponBean couponBean,
+ 										@RequestParam("hiddenCouponId") int couponId, 
+ 										@RequestParam(value = "product",required = false) String[] productTags,
+										@RequestParam(value = "togo",required = false) String[] togoTags) {
  		couponBean.setCouponId(couponId);
  		couponService2.updateCoupon(couponBean,productTags,togoTags);
  		return "redirect:/coupon/Home.html";
@@ -197,64 +199,22 @@ public class Coupon  {
  	}
  	
  	//新增
- 	private void insertCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
- 		
- 		request.setCharacterEncoding("UTF-8");
-		String couponCode = request.getParameter("couponCode");
-		String couponDescription = request.getParameter("couponDescription");
-		LocalDate couponStartDate = LocalDate.parse(request.getParameter("couponStartDate"));
-		LocalDate couponEndDate = LocalDate.parse(request.getParameter("couponEndDate"));
-		int maxCoupon = Integer.parseInt(request.getParameter("maxCoupon"));
-		int perMaxCoupon=Integer.parseInt(request.getParameter("perMaxCoupon"));
-		String couponStatus = request.getParameter("couponStatus");
-		String rulesDescription = request.getParameter("rulesDescription");
-		String discountType = request.getParameter("discountType");
-		int discount = Integer.parseInt(request.getParameter("discount"));
-		int minOrderDiscount = Integer.parseInt(request.getParameter("minOrderDiscount"));
-		int maxDiscount = Integer.parseInt(request.getParameter("maxDiscount"));
- 		String[] productTags = request.getParameterValues("product");
- 		String[] togoTags = request.getParameterValues("togo");
- 		CouponBean couponBean = new CouponBean(couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount);
- 		
- 		couponService2.insertCoupon(couponBean,productTags,togoTags);
- 		
- 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
- 	}
- 	
  	@PostMapping("/insertExcute")
- 	public String insertCouponWithTags(CouponBean couponBean, int couponId, @RequestParam("product") String[] productTags,@RequestParam("togo") String[] togoTags) {
- 		System.out.println("insert touch");
+ 	public String insertCouponWithTags(CouponBean couponBean, 
+ 										@RequestParam(value = "product",required = false) String[] productTags,
+ 										@RequestParam(value = "togo",required = false) String[] togoTags) {
  		couponService2.insertCoupon(couponBean,productTags,togoTags);
  		return "redirect:/coupon/Home.html";
  	}
  	
  	//刪除
- 	private void deleteCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{	
- 		
- 		String couponId = request.getParameter("couponId");
+ 	@GetMapping("delete")
+ 	public String deleteCoupon(@RequestParam("couponId") String couponId) {
  		couponService2.deleteCouponById(couponId);
- 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
+ 		return "redirect:/coupon/Home.html";
  	}
  	
  	//search
- 	private void searchCoupon(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
- 		
- 		String keyWord = request.getParameter("search");
- 		List<CouponDTO> coupons = couponService2.searchCoupons(keyWord);
- 		
- 		// 使用自定义的Gson实例
- 	    Gson gson = new GsonBuilder()
- 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
- 	        .create();
- 	    
- 	    String jsonCoupons = gson.toJson(coupons);
-//		request.setAttribute("jsonCoupons", jsonCoupons);
-		response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write(jsonCoupons);
- 	}
- 	
- 	
  	@GetMapping("/search")
  	@ResponseBody
  	public List<CouponDTO> searchCoupon(@RequestParam("search") String keyWord){

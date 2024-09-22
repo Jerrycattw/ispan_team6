@@ -19,10 +19,6 @@ public class MenuDaoImpl implements MenuDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-//	public MenuDaoImpl(Session session) {
-//		this.session = session;
-//	}
-
 	@Override
 	public MenuBean addFood(MenuBean food) {
 		Session session = sessionFactory.getCurrentSession();

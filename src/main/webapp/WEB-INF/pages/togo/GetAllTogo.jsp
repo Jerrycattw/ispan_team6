@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
 	<div class="content" id="content">
 	<h2>訂單總覽</h2>

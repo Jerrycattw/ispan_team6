@@ -49,7 +49,12 @@ public class WebAppConfig implements WebMvcConfigurer {
 		return irv;
 	}
 	
-	
+	@Bean
+	public InternalResourceViewResolver irViewResolverHtml() {
+	    InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/", ".html");
+	    irv.setOrder(2); // 在 JSP 之後
+	    return irv;
+	}
 		
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
@@ -96,6 +101,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 		
         registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
+        registry.addResourceHandler("/foodIMG/**").addResourceLocations("file:///C:/upload/foodIMG/");
 		
 		
 		

@@ -24,7 +24,7 @@
 </style>
 </head>
 <body>
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<jsp:useBean id = "togo" scope = "request" class = "com.TogoOrder.bean.TogoBean"/>
 	
     <div class="content" id="content">

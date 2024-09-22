@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 	<h2>菜單</h2>
 	<form action="../Togo/AddMenu.html" method="get" style="margin-bottom: 20px;">
@@ -28,7 +28,7 @@
 		<tr style = "background-color: #a8fefa">
 			<th>編號</th><th>名稱</th><th>圖片</th><th>價格</th><th>種類</th><th>庫存</th>
 			<th>說明</th><th>狀態</th><th>刪除</th><th>更新</th></tr>	
-			<c:forEach var="food" items="${foods}">
+			<c:forEach var="food" items="${foodList}">
             <tr>
             	<td>${food.foodId}</td>
                 <td>${food.foodName}</td>
@@ -64,8 +64,8 @@
 
         const deleteSuccess = "${deleteSuccess}";
         const updateSuccess = "${updateSuccess}"
-        
         if (deleteSuccess === 'true') {
+        	console.log("123");
             Swal.fire({
                 icon: 'success',
                 title: '成功刪除!',
@@ -73,7 +73,7 @@
                 showConfirmButton: false,
                 timer: 1500
             }).then(function() {
-                window.location.href = '/EEIT187-6/MenuController/getAll';
+                window.location.href = '/EEIT187-6/MenuController/getAllMenu';
             });
         } else if (deleteSuccess === 'false') {
             Swal.fire({
@@ -83,7 +83,7 @@
                 showConfirmButton: false,
                 timer: 1500
             }).then(function() {
-                window.location.href = '/EEIT187-6/MenuController/getAll';
+                window.location.href = '/EEIT187-6/MenuController/getAllMenu';
             });
         }
         if (updateSuccess === 'true') {

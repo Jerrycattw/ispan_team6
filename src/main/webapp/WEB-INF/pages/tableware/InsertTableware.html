@@ -133,10 +133,20 @@ function addStockEntry() {
             <tr>
                 <td>用具庫存: <input type="text" name="stock${stockIndex}" /></td>
             </tr>
+            <tr>
+	            <td><button type="button" onclick="removeStockEntry(this)">刪除</button></td>
+	        </tr>
         </table>
     `;
     container.appendChild(newEntry);
     stockIndex++;
+}
+
+function removeStockEntry(button) {
+    const entry = button.closest('.stock-entry');
+    if (entry) {
+        entry.remove();
+    }
 }
 </script>
 </body>

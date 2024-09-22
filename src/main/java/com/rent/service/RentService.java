@@ -25,8 +25,7 @@ public class RentService {
 //		this.rentItemDao = new RentItemDao(session);
 //	}
 
-	public Rent insert(int rentDeposit, Date rentDate, String restaurantId, int memberId, Date dueDate) {
-		Rent rent = new Rent(rentDeposit, rentDate, restaurantId, memberId, dueDate, null, 1, "未歸還");
+	public Rent insert(Rent rent) {
 		return rentDao.insert(rent);
 	}
 
@@ -38,22 +37,8 @@ public class RentService {
 		return rentDao.getById(rentId);
 	}
 
-	public Rent update(Integer rentId, Integer rentDeposit, Date rentDate, String restaurantId, Integer memberId,
-			Date dueDate, Date returnDate, Integer rentStatus, String rentMemo, String returnRestaurantId) {
-		Rent rent = rentDao.getById(rentId);
-		if (rent != null) {
-			rent.setRentDeposit(rentDeposit);
-			rent.setRentDate(rentDate);
-			rent.setRestaurantId(restaurantId);
-			rent.setMemberId(memberId);
-			rent.setDueDate(dueDate);
-			rent.setReturnDate(returnDate);
-			rent.setRentStatus(rentStatus);
-			rent.setRentMemo(rentMemo);
-			rent.setReturnRestaurantId(returnRestaurantId);
-			rentDao.update(rent);
-		}
-		return rent;
+	public Rent update(Rent rent) {
+		return rentDao.update(rent);
 	}
 
 	public boolean delete(Integer rentId) {

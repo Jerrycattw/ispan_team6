@@ -22,9 +22,7 @@ public class TablewareService {
 //		this.tablewareDao = new TablewareDao(session);
 //	}
 
-	public Tableware insert(String tablewareName, int tablewareDeposit, String tablewareImage,
-			String tablewareDescription) {
-		Tableware tableware = new Tableware(tablewareName, tablewareDeposit, tablewareImage, tablewareDescription, 1);
+	public Tableware insert(Tableware tableware) {
 		return tablewareDao.insert(tableware);
 	}
 
@@ -40,18 +38,8 @@ public class TablewareService {
 		return tablewareDao.search(keyword);
 	}
 
-	public Tableware update(Integer tablewareId, String tablewareName, Integer tablewareDeposit, String tablewareImage,
-			String tablewareDescription, int tablewareStatus) {
-		Tableware tableware = tablewareDao.getById(tablewareId);
-		if (tableware != null) {
-			tableware.setTablewareDeposit(tablewareDeposit);
-			tableware.setTablewareName(tablewareName);
-			tableware.setTablewareImage(tablewareImage);
-			tableware.setTablewareDescription(tablewareDescription);
-			tableware.setTablewareStatus(tablewareStatus);
-			tablewareDao.update(tableware);
-		}
-		return tableware;
+	public Tableware update(Tableware tableware) {
+		return tablewareDao.update(tableware);
 	}
 
 	public Tableware updateStatus(Integer tablewareId) {

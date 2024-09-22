@@ -106,6 +106,15 @@
 					if(key != 'discountType' && key != 'couponStatus'){   //tag跟ra以外，也不是dt跟cs 執行這個
 						cell.innerHTML=`${label} : <input type="text" name=${key} value=${data.coupon[key]}>`
 						row.appendChild(cell);            				
+						 //if (key === 'couponStartDate' || key === 'couponEndDate') {
+			                    // 将日期格式化为 yyyy-MM-dd
+			                   // const dateValue = new Date(data.coupon[key]);
+			                   // const formattedDate = dateValue.toISOString().split('T')[0]; // yyyy-MM-dd 格式
+			                    //cell.innerHTML = `${label} : <input type="date" name="${key}" value="${formattedDate}">`;
+			                    //console.log(formattedDate);
+			               // } else {
+			                   // cell.innerHTML = `${label} : <input type="text" name="${key}" value="${data.coupon[key]}">`;
+			               // }
 					}else if(key === 'discountType'){   //dt執行這個
 						cell.innerHTML=`${label} : <select name=${key} value=${data.coupon[key]}>
 													<option ${data.coupon[key] === '固定金額' ? 'selected' : ''}>固定金額</option>

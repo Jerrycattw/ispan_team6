@@ -29,12 +29,12 @@
     </style>
 </head>
 <body>
-    <jsp:include page="../HomePage.html"></jsp:include>
+    <jsp:include page="../../../HomePage.jsp"></jsp:include>
 
     <div align="center">
         <div class="content">
             <h2>更新商品資料</h2>
-            <form method="post" action="/EEIT187-6/ProductController/UpdateDataProduct" enctype="multipart/form-data">
+            <form method="post" action="/EEIT187-6/ProductController/updateDataProduct" enctype="multipart/form-data">
                 <c:choose>
                     <c:when test="${not empty product}">
                         <p>
@@ -96,7 +96,7 @@
                         <p>
                             <div class="form-group">
                                 <label for="productTypeId">商品類別編號:</label>
-                                <input type="text" id="productTypeId" name="productTypeId" value="${product.productType.productId}" />
+                                <input type="text" id="productTypeId" name="productTypeId" value="${product.productType.productTypeId}" />
                                 <p>
                                     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     (1.商品 2.甜點 3.客製化蛋糕)</span>

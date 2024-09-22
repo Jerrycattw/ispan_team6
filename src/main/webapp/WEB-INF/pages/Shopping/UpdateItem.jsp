@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../template/template.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="../template/template.js"></script>
-    <jsp:include page="../HomePage.html"></jsp:include>
+    <jsp:include page="../../../HomePage.jsp"></jsp:include>
     <script>
     function updateItemPrice() {
         var quantity = document.getElementById("shoppingItemQuantity").value;
@@ -39,7 +39,7 @@
 <div class="content" id="content">
     <div align="center">
         <h2>更新訂單項目</h2>
-        <form method="post" action="/EEIT187-6/ItemController/UpdateItem">
+        <form method="post" action="/EEIT187-6/ItemController/updateItem">
             <c:choose>
             <c:when test="${not empty item}">
                     <input type="hidden" name="shoppingId" value="${item.shoppingId}" />

@@ -20,6 +20,22 @@ public class RentItemDao {
 //	public RentItemDao(Session session) {
 //		this.session = session;
 //	}
+	
+	public RentItem getByIds(Integer rentId, Integer tablewareId) {
+		Session session = sessionFactory.getCurrentSession();
+		RentItemId rentItemId = new RentItemId(rentId, tablewareId);
+		return session.get(RentItem.class, rentItemId);
+	}
+
+	public List<RentItem> getById(Integer rentId) {
+		Session session = sessionFactory.getCurrentSession();
+		return session.createQuery("from RentItem where rentId = :rentId", RentItem.class).setParameter("rentId", rentId).list();
+	}
+
+	public List<RentItem> getAll() {
+		Session session = sessionFactory.getCurrentSession();
+		return session.createQuery("from RentItem", RentItem.class).list();
+	}
 
 	public RentItem insert(RentItem rentItem) {
 		Session session = sessionFactory.getCurrentSession();
@@ -29,36 +45,20 @@ public class RentItemDao {
 		}
 		return null;
 	}
-
-	public List<RentItem> getAll() {
-		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from RentItem", RentItem.class).list();
-	}
-
-	public List<RentItem> getById(Integer rentId) {
-		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from RentItem where rentId = :rentId", RentItem.class)
-				.setParameter("rentId", rentId).list();
-	}
-
-	public RentItem getByIds(Integer rentId, Integer tablewareId) {
-		Session session = sessionFactory.getCurrentSession();
-		RentItemId rentItemId = new RentItemId(rentId, tablewareId);
-		return session.get(RentItem.class, rentItemId);
-	}
-
+	
 	public RentItem update(RentItem rentItem) {
 		Session session = sessionFactory.getCurrentSession();
 		if (rentItem != null) {
 			session.merge(rentItem);
+			return rentItem;
 		}
-		return rentItem;
+		return null;
 	}
 
 	public boolean delete(RentItem rentItem) {
 		Session session = sessionFactory.getCurrentSession();
 		if (rentItem != null) {
-			session.delete(rentItem);
+			session.remove(rentItem);
 			return true;
 		}
 		return false;

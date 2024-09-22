@@ -3,21 +3,28 @@ package com.shopping.service;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shopping.bean.ItemBean;
 import com.shopping.bean.ShoppingBean;
 import com.shopping.dao.ItemDao;
 import com.shopping.dao.ShoppingDao;
 
+@Service
+@Transactional
 public class ItemService {
 
+	@Autowired
     private ItemDao itemDao;
+	@Autowired
     private ShoppingDao shoppingDao;
 
-    public ItemService(Session session) {
-        this.itemDao = new ItemDao(session);
-        this.shoppingDao = new ShoppingDao(session);
-    }
+//    public ItemService(Session session) {
+//        this.itemDao = new ItemDao(session);
+//        this.shoppingDao = new ShoppingDao(session);
+//    }
 
     public void addItem(ItemBean itemBean) {
         itemDao.addItem(itemBean);

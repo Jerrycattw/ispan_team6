@@ -3,18 +3,27 @@ package com.rent.service;
 
 import java.util.List;
 
-import org.hibernate.Session;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.rent.bean.RentItem;
 import com.rent.dao.RentItemDao;
 
-public class RentItemService {
-	private final RentItemDao rentItemDao;
-	private final Session session;
 
-	public RentItemService(Session session) {
-		this.session = session;
-		this.rentItemDao = new RentItemDao(session);
-	}
+@Service
+@Transactional
+public class RentItemService {
+	
+	@Autowired
+	private RentItemDao rentItemDao;
+//	private Session session;
+
+//	public RentItemService(Session session) {
+//		this.session = session;
+//		this.rentItemDao = new RentItemDao(session);
+//	}
 
 	public RentItem insert(Integer rentId, Integer tablewareId, Integer rentItemQuantity, Integer rentItemDeposit) {
 		RentItem rentItem = new RentItem(rentId, tablewareId, rentItemQuantity, rentItemDeposit, "未歸還", 1);
@@ -41,7 +50,7 @@ public class RentItemService {
 			rentItem.setRentItemDeposit(rentItemDeposit);
 			rentItem.setReturnMemo(returnMemo);
 			rentItem.setReturnStatus(returnStatus);
-			session.update(rentItem);
+			rentItemDao.update(rentItem);
 			return true;
 		}
 		return false;

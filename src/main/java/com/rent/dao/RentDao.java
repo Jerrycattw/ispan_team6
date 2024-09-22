@@ -3,17 +3,26 @@ package com.rent.dao;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.rent.bean.Rent;
 
+@Repository
 public class RentDao {
-	private Session session;
-
-	public RentDao(Session session) {
-		this.session = session;
-	}
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+//	private Session session;
+//
+//	public RentDao(Session session) {
+//		this.session = session;
+//	}
 
 	public Rent insert(Rent rent) {
+		Session session = sessionFactory.getCurrentSession();
 		if (rent != null) {
 			session.persist(rent);
 			return rent;
@@ -22,20 +31,24 @@ public class RentDao {
 	}
 
 	public List<Rent> getAll() {
+		Session session = sessionFactory.getCurrentSession();
 		return session.createQuery("from Rent", Rent.class).list();
 	}
 
 	public Rent getById(Integer rentId) {
+		Session session = sessionFactory.getCurrentSession();
 		return session.get(Rent.class, rentId);
 	}
 
 	public List<Rent> getOver() {
+		Session session = sessionFactory.getCurrentSession();
 		return session.createQuery("from Rent where dueDate < current_date() and returnDate is null", Rent.class)
 				.list();
 	}
 
 	public List<Rent> search(Integer rentId, Integer memberId, String restaurantId, Integer rentStatus,
 			Date rentDateStart, Date rentDateEnd) {
+		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("from Rent where 1=1");
 		if (rentId != null)
 			hql.append(" and rentId = :rentId");
@@ -66,6 +79,7 @@ public class RentDao {
 	}
 
 	public Rent update(Rent rent) {
+		Session session = sessionFactory.getCurrentSession();
 		if (rent != null) {
 			session.update(rent);
 			return rent;
@@ -74,6 +88,7 @@ public class RentDao {
 	}
 
 	public boolean delete(Rent rent) {
+		Session session = sessionFactory.getCurrentSession();
 		if (rent != null) {
 			session.delete(rent);
 			return true;
@@ -82,6 +97,7 @@ public class RentDao {
 	}
 	
 	public List<Integer> getRentId(){
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "SELECT rentId FROM Rent";
 		Query<Integer> query = session.createQuery(hql, Integer.class);
 		List<Integer> rentIds = query.getResultList();

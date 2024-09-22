@@ -16,22 +16,22 @@
 
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>租 借 訂 單 資 料</h2>
 		<form method="GET" class="btn"
-			action="/EEIT187-6/rentController/getOption">
+			action="/EEIT187-6/Rent/getOption">
 			<input type="submit" value="新增訂單">
 		</form>
-		<form method="get" class="btn" action="/EEIT187-6/rentController/searchOption">
+		<form method="get" class="btn" action="/EEIT187-6/Rent/searchOption">
 			<input type="submit" value="訂單搜尋">
 		</form>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rentController/getOver">
+			action="/EEIT187-6/Rent/getOver">
 			<input type="submit" value="超時未歸還">
 		</form>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rentController/getAll">
+			action="/EEIT187-6/Rent/getAll">
 			<input type="submit" value="返回全資料">
 		</form>
 		<table class="table">
@@ -63,19 +63,19 @@
 				<td><%=rent.getReturnRestaurantId()%>
 				<td>
 					<form class="btn" method="get"
-						action="/EEIT187-6/rentController/getById">
+						action="/EEIT187-6/Rent/getById">
 						<input type="submit" value="更新資料" /> 
 						<input type="hidden" name="rent_id" value="<%=rent.getRentId()%>">
 						<input type="hidden" name="action" value="update">
 					</form>
 					<form class="btn" method="get"
-						action="/EEIT187-6/rentController/getById">
+						action="/EEIT187-6/Rent/getById">
 						<input type="submit" value="歸還" /> 
 						<input type="hidden" name="rent_id" value="<%=rent.getRentId()%>">
 						<input type="hidden" name="action" value="restore">
 					</form> 
 					<form class="btn" method="get"
-						action="/EEIT187-6/rentController/delete">
+						action="/EEIT187-6/Rent/delete">
 						<input type="submit" value="刪除" /> 
 						<input type="hidden" name="rent_id" value="<%=rent.getRentId()%>">
 					</form> 

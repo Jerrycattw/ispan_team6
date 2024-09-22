@@ -50,7 +50,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 	}
 	
 	
-	
+		
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
 		
@@ -91,6 +91,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
 		
+		//去tableware下找html檔
+		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
 		
 		
         registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");

@@ -13,14 +13,14 @@
 
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>租 借 訂 單 資 料</h2>
 		<form method="get" class="btn"
-			action="/EEIT187-6/rentController/getAll">
+			action="/EEIT187-6/Rent/getAll">
 			<input type="submit" value="返回">
 		</form>
-		<form method="get" action="/EEIT187-6/rentController/insert" onsubmit="return validateForm()">
+		<form method="get" action="/EEIT187-6/Rent/insert" onsubmit="return validateForm()">
 			<jsp:useBean id="rent" scope="request" class="com.rent.bean.Rent" />
 			<table>
 				<tr>

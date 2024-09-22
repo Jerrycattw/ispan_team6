@@ -38,8 +38,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 	}
 	
-	
-	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
@@ -96,11 +94,15 @@ public class WebAppConfig implements WebMvcConfigurer {
 		//去tablewareImage下找圖檔
 		registry.addResourceHandler("/tablewareImage/**").addResourceLocations("/WEB-INF/pages/tableware/tablewareImage/");
 		
+
 		
         registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
 		
 		
 		
+
+		registry.addResourceHandler("/ProductImg/**").addResourceLocations("file:///C:/upload/ProductImg");
+
 	}
 
 
@@ -112,8 +114,18 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 //		registry.addViewController("/wonderland").setViewName("loginSystem");
 		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
+
 		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
 		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
+
+		//registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
+		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
+		registry.addViewController("/Shopping/SearchAllShopping").setViewName("Shopping/SearchAllShopping");
+		registry.addViewController("/Shopping/AddOrder").setViewName("Shopping/AddOrder");
+		registry.addViewController("/Shopping/ItemDetail").setViewName("Shopping/ItemDetail");
+		registry.addViewController("/Shopping/UpdateShopping").setViewName("Shopping/UpdateShopping");
+		registry.addViewController("/Shopping/UpdateItem").setViewName("Shopping/UpdateItem");
+
 		
 	}
 	

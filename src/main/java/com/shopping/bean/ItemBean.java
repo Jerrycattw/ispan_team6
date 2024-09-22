@@ -1,6 +1,8 @@
 package com.shopping.bean;
 
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@Component
 @Entity @Table(name="shopping_item")
 @IdClass(ItemId.class)
 public class ItemBean {
@@ -125,28 +128,6 @@ public class ItemBean {
 		this.shoppingBean = shoppingBean;
 	}
 	
-
-
-//	@Override
-//	public String toString() {
-//		return "ItemBean [shopping_Id=" + shopping_Id + ", product_id=" + product_id + ", product_name=" + product_name
-//				+ ", shopping_Item_Quantity=" + shopping_Item_Quantity + ", product_price=" + product_price
-//				+ ", shopping_Item_Price=" + shopping_Item_Price + "]";
-//	}
-
-//	 @Override
-//	    public String toString() {
-//	        return "ItemBean{" +
-//	                "shopping_Id=" + shoppingId +
-//	                ", product_id=" + productId +
-//	                ", product_name='" + product_name + '\'' +
-//	                ", shopping_Item_Quantity=" + shoppingItemQuantity +
-//	                ", product_price=" + product_price +
-//	                ", shopping_Item_Price=" + shoppingItemPrice +
-//	                '}';
-//	 }
-
-
 
 	@Override
 	public String toString() {

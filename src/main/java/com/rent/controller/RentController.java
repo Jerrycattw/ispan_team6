@@ -75,7 +75,8 @@ public class RentController{
 		rent.setRestaurantId(restaurantId);
 		rent.setMemberId(memberId);
 		rent.setDueDate(dueDate);
-		rent.setRentStatus(1);		rent.setRentMemo("未歸還");
+		rent.setRentStatus(1);
+		rent.setRentMemo("未歸還");
 		rentService.insert(rent);
 
 		int rentId = rent.getRentId();
@@ -237,3 +238,4 @@ public class RentController{
 		return "tableware/GetAllRent";
 	}
 }
+

@@ -2,38 +2,33 @@ package com.TogoOrder.bean;
 
 import java.io.Serializable;
 
-import com.google.gson.annotations.Expose;
+import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+@Component
 @Entity @Table(name = "togo_item")
 public class TogoItemBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Expose
 	@Id @Column(name = "togo_id")
 	private Integer togoId;
 	
-	@Expose
 	@Id @Column(name = "food_id")
 	private Integer foodId;
 	
-	@Expose
 	@Column(name = "food_name")
 	private String foodName;
 	
-	@Expose
 	@Column(name = "food_price")
 	private Integer foodPrice;
 	
-	@Expose
 	@Column(name = "amount")
 	private Integer amount;
 	
-	@Expose
 	@Column(name = "togo_item_price")
 	private Integer togoItemPrice;
 	

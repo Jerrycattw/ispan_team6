@@ -51,7 +51,7 @@ public class TablewareStockDao {
 		return tablewareStock;
 	}
 	
-	public List<TablewareStock> search(Integer restaurantId, Integer tablewareId) throws SQLException {
+	public List<TablewareStock> search(String restaurantId, Integer tablewareId) throws SQLException {
 		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("FROM TablewareStock WHERE 1=1");
         if (restaurantId != null) {

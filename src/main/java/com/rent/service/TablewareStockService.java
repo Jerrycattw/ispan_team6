@@ -23,7 +23,7 @@ public class TablewareStockService {
 //		this.tablewareStockDao = new TablewareStockDao(session);
 //	}
 
-	public TablewareStock insert(Integer tablewareId, Integer restaurantId, Integer stock) {
+	public TablewareStock insert(Integer tablewareId, String restaurantId, Integer stock) {
 		TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);
 		return tablewareStockDao.insert(tablewareStock);
 	}
@@ -32,12 +32,12 @@ public class TablewareStockService {
 		return tablewareStockDao.getAll();
 	}
 
-	public TablewareStock getById(Integer tablewareId,Integer restaurantId) {
+	public TablewareStock getById(Integer tablewareId,String restaurantId) {
 		TablewareStock.TablewareStockId id = new TablewareStock.TablewareStockId(tablewareId, restaurantId);
 		return tablewareStockDao.getById(id);
 	}
 
-	public TablewareStock update(Integer tablewareId, Integer restaurantId, Integer stock) {
+	public TablewareStock update(Integer tablewareId, String restaurantId, Integer stock) {
 		TablewareStock.TablewareStockId id = new TablewareStock.TablewareStockId(tablewareId, restaurantId);
 		TablewareStock tablewareStock = tablewareStockDao.getById(id);
 		if (tablewareStock != null) {
@@ -47,7 +47,7 @@ public class TablewareStockService {
 		return tablewareStock;
 	}
 
-	public List<TablewareStock> search(Integer restaurantId, Integer tablewareId) {
+	public List<TablewareStock> search(String restaurantId, Integer tablewareId) {
 		try {
 			return tablewareStockDao.search(restaurantId, tablewareId);
 		} catch (SQLException e) {

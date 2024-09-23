@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rent.bean.TablewareStock;
+import com.rent.service.TablewareService;
 import com.rent.service.TablewareStockService;
+import com.reserve.service.RestaurantService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -24,13 +26,32 @@ public class TablewareStockController extends HttpServlet {
 	
 	@Autowired
 	TablewareStockService tablewareStockService;
+	@Autowired
+	RestaurantService restaurantService;
+	@Autowired
+	TablewareService tablewareService;
+	
+	@GetMapping("getOption")
+	public String getOption(@RequestParam("action") String action, Model model) {
+		List<Integer> tablewareIds = tablewareService.getTablewareIds();
+		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+		model.addAttribute("tablewareIds",tablewareIds);
+		model.addAttribute("restaurantNames",restaurantNames);
+		if ("insert".equals(action)) {
+			return "tableware/InsertStock";
+	    } else if ("search".equals(action)) {
+	    	return "tableware/SearchStock";
+	    }
+		return null;
+	}
 
 	@GetMapping("insert")
 	protected String insert(
-			@RequestParam("tableware_id") Integer tablewareId,
-			@RequestParam("restaurant_id") Integer restaurantId,
+			@RequestParam("tablewareId") Integer tablewareId,
+			@RequestParam("restaurantName") String restaurantName,
 			@RequestParam("stock") Integer stock,
 			Model model) {
+		String restaurantId = restaurantService.getRestaurantId(restaurantName);
 		TablewareStock tablewareStock = tablewareStockService.insert(tablewareId, restaurantId, stock);
 		model.addAttribute("tableware_stock", tablewareStock);
 		return "redirect:/TablewareStock/getAll";
@@ -47,7 +68,7 @@ public class TablewareStockController extends HttpServlet {
 	@GetMapping("update")
 	protected String update(
 			@RequestParam("tableware_id") Integer tablewareId,
-			@RequestParam("restaurant_id") Integer restaurantId,
+			@RequestParam("restaurant_id") String restaurantId,
 			@RequestParam("stock") Integer stock,
 			Model model) {
 		TablewareStock tablewareStock = tablewareStockService.update(tablewareId, restaurantId, stock);
@@ -57,9 +78,10 @@ public class TablewareStockController extends HttpServlet {
 
 	@GetMapping("search")
 	protected String search(
-			@RequestParam("tableware_id") Integer tablewareId,
-			@RequestParam("restaurant_id") Integer restaurantId,
+			@RequestParam(value = "tablewareId", required = false) Integer tablewareId,
+			@RequestParam(value = "restaurantName", required = false) String restaurantName,
 			Model model) {
+		String restaurantId = restaurantService.getRestaurantId(restaurantName);
 		List<TablewareStock> tablewareStocks = tablewareStockService.search(restaurantId, tablewareId);
 		model.addAttribute("stock", tablewareStocks);
 		return "tableware/GetAllStock";
@@ -68,7 +90,7 @@ public class TablewareStockController extends HttpServlet {
 	@GetMapping("getById")
 	protected String getById(
 			@RequestParam("tableware_id") Integer tablewareId,
-			@RequestParam("restaurant_id") Integer restaurantId,
+			@RequestParam("restaurant_id") String restaurantId,
 			Model model) {
 		TablewareStock tablewareStock = tablewareStockService.getById(tablewareId, restaurantId);
 		model.addAttribute("stock", tablewareStock);

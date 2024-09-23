@@ -1,26 +1,21 @@
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>環保用具庫存資料</title>
+<title>租借訂單</title>
 <link rel="stylesheet" href="../template/template.css">
-<link rel="stylesheet" href="../template/rent.css">
 <link rel="stylesheet" href="../template/table1.css">
+<link rel="stylesheet" href="../template/rent.css">
 <script src="../template/template.js"></script>
+
 </head>
 <body>
-	<div class="top-menu">
-		<a href="#" onclick="showSidebar('member')">會員管理</a> <a href="#"
-			onclick="showSidebar('store')">商城管理</a> <a href="#"
-			onclick="showSidebar('order')">訂餐管理</a> <a href="#"
-			onclick="showSidebar('rental')">租借用具管理</a> <a href="#"
-			onclick="showSidebar('reservation')">餐廳訂位管理</a> <a href="#"
-			onclick="showSidebar('points')">會員積分優惠券管理</a>
-	</div>
-	<div class="sidebar" id="sidebar"></div>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
-		<h2>輸入餐具庫存資料</h2>
+		<h2>新增環保餐具資料</h2>
 		<form method="get" class="btn"
 			action="/EEIT187-6/TablewareStock/getAll">
 			<input type="submit" value="返回">
@@ -29,28 +24,25 @@
 			onsubmit="return validateForm()">
 			<table>
 				<tr>
-					<td>用具編號 <select id="tableware_id" name="tableware_id">
-							<option value="" selected disabled>請選擇用具編號</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
+					<td>用具編號 
+					<select name="tablewareId" id="tablewareId">
+							<option value="" selected disabled>請選擇餐具編號</option>
+							<c:forEach items="${tablewareIds}" var="tablewareId">
+								<option value="${tablewareId}">${tablewareId}</option>
+							</c:forEach>
 					</select>
 					</td>
 				</tr>
 				<tr>
-					<td>餐廳編號 <select id="restaurant_id" name="restaurant_id">
-							<option value="" selected disabled>請選擇餐廳編號</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
+					<td>餐廳名稱 
+					<select name="restaurantName" id="restaurantName">
+							<option value="" selected disabled>請選擇餐廳名稱</option>
+							<c:if test="${not empty param.restaurantName}">
+								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+							</c:if>
+							<c:forEach items="${restaurantNames}" var="restaurantName">
+								<option value="${restaurantName}">${restaurantName}</option>
+							</c:forEach>
 					</select>
 					</td>
 				</tr>

@@ -56,7 +56,7 @@
 					<td>歸還狀態
    				<input type="radio" name="return_status" value="1" <%=rentItem.getReturnStatus() == 1 ? "checked" : ""%>>1:未歸還
                 <input type="radio" name="return_status" value="2" <%=rentItem.getReturnStatus() == 2 ? "checked" : ""%>>2:完全歸還
-                <input type="radio" name="return_status" value="3" <%=rentItem.getReturnStatus() == 3 ? "checked" : ""%>>3:完全歸還
+                <input type="radio" name="return_status" value="3" <%=rentItem.getReturnStatus() == 3 ? "checked" : ""%>>3:部分歸還
 </td>
 			<input type="hidden" name="rent_id" value="<%=rentItem.getRentId()%>">
 			<input type="hidden" name="tableware_id" value="<%=rentItem.getTablewareId()%>">

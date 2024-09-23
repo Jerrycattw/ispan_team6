@@ -18,7 +18,7 @@
 <jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 	<h2>環 保 用 具 資 料</h2>
-	<form method="get" class="btn" action="/EEIT187-6/tableware/InsertTableware.html">
+	<form method="get" class="btn" action="/EEIT187-6/Tableware/getOption">
 	    <input type="submit" value="新增用具">
 	</form>
 	<form method="get" class="btn" action="/EEIT187-6/tableware/SearchTableware.html">

@@ -1,14 +1,23 @@
 package com.members.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.members.bean.Member;
-
+//@Repository
+//@Transactional
 public class MemberDao {
+	
+//	@Autowired
+//	private SessionFactory sessionFactory;
 
 	private Session session;
 
@@ -18,7 +27,6 @@ public class MemberDao {
 
 	public Member register(String name, String account, String hashedPassword, Date birthday, String email,
 			String address, String phone) {
-
 		Member member = new Member();
 
 		try {
@@ -175,5 +183,28 @@ public class MemberDao {
 		}
 		return isUsed;
 	}
+	
+	
+	
+	//Rent使用
+//	public List<String> getAllMemberName() {
+//		Session session = sessionFactory.getCurrentSession();
+//	    List<String> memberNames = null;
+//	    try {
+//	        Query<String> query = session.createQuery("SELECT DISTINCT m.memberName FROM Member m", String.class);
+//	        memberNames = query.list();
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	    }
+//	    return memberNames;
+//	}
+//	
+//	public Integer getMemberId(String memberName) {
+//		Session session = sessionFactory.getCurrentSession();
+//	    String hql = "SELECT m.memberId FROM Member m WHERE m.memberName = :memberName";
+//	    Query<Integer> query = session.createQuery(hql, Integer.class);
+//	    query.setParameter("memberName", memberName);
+//	    return query.uniqueResult();
+//	}
 
 }

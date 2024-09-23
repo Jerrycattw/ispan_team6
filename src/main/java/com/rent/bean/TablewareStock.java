@@ -22,7 +22,7 @@ public class TablewareStock implements Serializable{
 	@Id@Column(name = "tableware_id")
 	private int tablewareId;
 	@Id@Column(name = "restaurant_id")
-	private int restaurantId;
+	private String restaurantId;
 	@Column(name = "stock")
 	private int stock;
 	
@@ -34,7 +34,7 @@ public class TablewareStock implements Serializable{
 	public TablewareStock() {
 		super();
 	}
-	public TablewareStock(int tablewareId, int restaurantId, int stock) {
+	public TablewareStock(int tablewareId, String restaurantId, int stock) {
 		super();
 		this.tablewareId = tablewareId;
 		this.restaurantId = restaurantId;
@@ -46,10 +46,10 @@ public class TablewareStock implements Serializable{
 	public void setTablewareId(int tablewareId) {
 		this.tablewareId = tablewareId;
 	}
-	public int getRestaurantId() {
+	public String getRestaurantId() {
 		return restaurantId;
 	}
-	public void setRestaurantId(int restaurantId) {
+	public void setRestaurantId(String restaurantId) {
 		this.restaurantId = restaurantId;
 	}
 	public int getStock() {
@@ -61,12 +61,12 @@ public class TablewareStock implements Serializable{
 	
 	public static class TablewareStockId implements Serializable {
         private int tablewareId;
-        private int restaurantId;
+        private String restaurantId;
 
         // Default constructor
         public TablewareStockId() {}
 
-        public TablewareStockId(int tablewareId, int restaurantId) {
+        public TablewareStockId(int tablewareId, String restaurantId) {
             this.tablewareId = tablewareId;
             this.restaurantId = restaurantId;
         }
@@ -80,11 +80,11 @@ public class TablewareStock implements Serializable{
             this.tablewareId = tablewareId;
         }
 
-        public int getRestaurantId() {
+        public String getRestaurantId() {
             return restaurantId;
         }
 
-        public void setRestaurantId(int restaurantId) {
+        public void setRestaurantId(String restaurantId) {
             this.restaurantId = restaurantId;
         }
 

@@ -30,6 +30,7 @@
 				<tr>
 					<td>租借餐廳:
 					<select name="restaurantName" id="restaurantName">
+					<option value="" selected disabled>請選擇租借餐廳</option>
 							<c:if test="${not empty param.restaurantName}">
 								<!-- 顯示 URL 中的餐廳名稱 -->
 								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
@@ -41,29 +42,35 @@
 					</td>
 				</tr>
 				<tr>
-					<td>租借會員:<select id="member_id" name="member_id">
-							<option value="" selected disabled>請選擇會員編號</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
+					<td>租借會員:
+					<select name="member_id" id="member_id">
+						<option value="" selected disabled>請選擇會員編號</option>
+						<option value="1">1</option>
+                		<option value="2">2</option>
+                		<option value="3">3</option>
+		                <option value="4">4</option>
+		                <option value="5">5</option>
 					</select>
+					<!--  
+					<select name="memberName" id="memberName">
+							<c:if test="${not empty param.memberName}">
+								<option value="${param.memberName}" selected>${param.memberName}</option>
+							</c:if>
+							<c:forEach items="${memberNames}" var="memberName">
+								<option value="${memberName}">${memberName}</option>
+							</c:forEach>
+					</select> 
+					-->
 					</td>
 				</tr>
 			</table>
-			<h3>租借訂單明細</h3>
 			<div id="rentItemsContainer">
+				<h2>租借訂單明細</h2>
 				<!-- 动态添加订单明细的部分 -->
 				<div class="rent-item">
 					<table>
 						<tr>
-							<td>餐具編號: <select name="tablewareId0" id="tablewareId0">
+							<td>餐具編號: <select name="tablewareId0" id="tablewareId0" >
 									<option value="" selected disabled>請選擇餐具編號</option>
 									<c:forEach items="${tablewareIds}" var="tablewareId">
 										<option value="${tablewareId}">${tablewareId}</option>

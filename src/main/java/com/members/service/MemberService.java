@@ -2,14 +2,21 @@ package com.members.service;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.members.bean.Member;
 import com.members.dao.MemberDao;
 
+import jakarta.transaction.Transactional;
+//@Service
+//@Transactional
 public class MemberService {
-
+//	@Autowired
 	private MemberDao memberDao;
 
 	public MemberService(MemberDao memberDao) {
@@ -110,6 +117,16 @@ public class MemberService {
 		return memberDao.updatePassword(account, newHashedPassword);
 	}
 
-
+	
+	
+	
+	//Rent使用
+//	public List<String> getAllMemberName() {
+//		return memberDao.getAllMemberName();
+//	}
+//
+//	public Integer getMemberId(String memberName) {
+//		return memberDao.getMemberId(memberName);
+//	}
 
 }

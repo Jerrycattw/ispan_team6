@@ -2,19 +2,21 @@ package com.TogoOrder.service;
 
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.TogoOrder.bean.MenuBean;
+import com.TogoOrder.dao.MenuDao;
 import com.TogoOrder.dao.MenuDaoImpl;
 
+import jakarta.transaction.Transactional;
 
+@Service
+@Transactional
 public class MenuServiceImpl implements MenuService {
-	private MenuDaoImpl menuDao;
 	
-	public MenuServiceImpl(Session session) {
-		menuDao = new MenuDaoImpl(session);
-	}
+	@Autowired
+	private MenuDao menuDao;
 	
 	@Override
 	public MenuBean addFood(MenuBean food) {

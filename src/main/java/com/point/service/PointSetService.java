@@ -1,16 +1,24 @@
 package com.point.service;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.point.bean.PointSetBean;
 import com.point.dao.PointSetDAO;
 
+@Service
+@Transactional
 public class PointSetService {
+	
+	@Autowired
 	private PointSetDAO pointSetDao;
 	
-	public PointSetService(Session session) {
-		pointSetDao = new PointSetDAO(session);
-	}
+//	public PointSetService(Session session) {
+//		pointSetDao = new PointSetDAO(session);
+//	}
 	
 	public PointSetBean getPointSet() {
 		PointSetBean pointSet = pointSetDao.getPointSet();
@@ -31,8 +39,8 @@ public class PointSetService {
 	}
 	
 	
-	public Boolean UpdatePoint(int anountPerPoint,int pointsEarned,int pointRatio,String expiryMonth,String expiryday,String birthDay,String setDescription,String isExpiry) {
-		return pointSetDao.UpdatePoint(anountPerPoint, pointsEarned, pointRatio, expiryMonth, expiryday, birthDay, setDescription, isExpiry);
+	public Boolean UpdatePoint(PointSetBean pointSet) {
+		return pointSetDao.UpdatePoint(pointSet);
 		
 	}
 }

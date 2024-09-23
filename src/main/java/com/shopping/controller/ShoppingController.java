@@ -6,9 +6,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.members.bean.Member;
 import com.shopping.bean.ItemBean;
 import com.shopping.bean.ProductBean;
+import com.shopping.bean.ProductDTO;
 import com.shopping.bean.ShoppingBean;
 import com.shopping.service.ShoppingService;
 import com.shopping.service.ProductService;
@@ -16,191 +26,115 @@ import com.shopping.service.ItemService;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ShoppingController/*")
-public class ShoppingController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+@RequestMapping("/ShoppingController/*")
+@Transactional
+@Controller
+public class ShoppingController  {
 
-	Session session = null;
-	ItemService itemService = null;
-	ProductService productService = null;
-	ShoppingService shoppingService =null;
+	@Autowired
+	ItemService itemService;
+	@Autowired
+	ProductService productService;
+	@Autowired
+	ShoppingService shoppingService;
 	
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		
-		session = (Session)request.getAttribute("hibernateSession");
-		itemService = new ItemService(session);
-		productService = new ProductService(session);
-		shoppingService = new ShoppingService(session);
-		
-		String action = request.getPathInfo().substring(1);
-		System.out.println(action+"=========================================");
-
-		switch (action) {
-		case "ShowAddOrder":
-			ShowAddOrder(request, response);
-			break;
-		case "ShowItemDetail":
-			ShowItemDetail(request, response);
-			break;
-		case "AddOrder":
-			AddOrder(request, response);
-			break;
-		case "AddShopping":
-			AddShopping(request, response);
-			break;
-		case "DelOrder":
-			DelOrder(request, response);
-			break;
-		case "UpdateShopping":
-			UpdateShopping(request, response);
-			break;
-		case "UpdateDataShopping":
-			UpdateDataShopping(request,response);
-			break;
-		case "SearchAllShopping":
-			SearchAllShopping(request, response);
-			break;
-		}
-
-	}
 	
-	protected void ShowAddOrder(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
+	@GetMapping("showAddOrder")
+	protected String showAddOrder(Model m) {
 
 		List<Member> members = shoppingService.searchAllMembers();
-	    List<ProductBean> products = shoppingService.searchAllProduct();
+//	    List<ProductBean> products = shoppingService.searchAllProduct();
+		List<ProductDTO> products = productService.searchAllProduct();
 	    
-//	    System.out.println("=========================================");
-//	    System.out.println(members);
-//	    System.out.println(products);
+	    System.out.println("showAddOrder.con");
 	    
-	    request.setAttribute("members", members);
-	    request.setAttribute("products", products);
-	    
-	    request.getRequestDispatcher("/Shopping/AddOrder.jsp").forward(request, response);
+	   m.addAttribute("members", members);
+	   m.addAttribute("products", products);
+	   return "Shopping/AddOrder";
 	    
 	}
 	
-	 protected void ShowItemDetail(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-		 
-	        
-	        String shoppingIdParam = request.getParameter("shoppingId");
-	        Integer shoppingId = Integer.parseInt(shoppingIdParam);
-	        
-	        List<ItemBean> items = shoppingService.searchItemsByShoppingId(shoppingId); 
-	        List<ProductBean> productList = shoppingService.searchAllProduct(); 
-	        
-	        Integer totalAmount = shoppingService.calculateTotalAmount(shoppingId); 
-	        ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
-	        
-	        request.setAttribute("items", items);
-	        request.setAttribute("productList", productList);
-	        request.setAttribute("shopping",shopping);
-	        
-	        request.getRequestDispatcher("/Shopping/ItemDetail.jsp").forward(request, response);
+	@GetMapping("showItemDetail")
+    public String showItemDetail(@RequestParam("shoppingId") Integer shoppingId, Model m) {
+
+		List<ItemBean> items = shoppingService.searchItemsByShoppingId(shoppingId);
+		List<ProductDTO> productList = productService.searchAllProduct();
+//        List<ProductBean> productList = shoppingService.searchAllProduct();
+        Integer totalAmount = shoppingService.calculateTotalAmount(shoppingId);
+        ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
+        
+        m.addAttribute("items", items);
+        m.addAttribute("productList", productList);
+        m.addAttribute("shopping", shopping);
+        m.addAttribute("totalAmount", totalAmount);
+
+        return "Shopping/ItemDetail"; 
+    }
+	
+	 
+	 @PostMapping("addOrder")
+	 public String addOrder(@RequestParam Integer memberId,
+	                        @RequestParam Integer productId,
+	                        @RequestParam Integer shoppingItemQuantity,
+	                        Model m) {
+
+			
+			System.out.println(memberId);
+			ShoppingBean shoppingBean = new ShoppingBean(memberId, 1);
+			ShoppingBean order = shoppingService.addOrder(shoppingBean);
+			
+		    return "redirect:/ItemController/addItem?shoppingId=" + order.getShoppingId() + 
+		            "&productId=" + productId + 
+		            "&shoppingItemQuantity=" + shoppingItemQuantity;
+		}
+	
+
+	 @PostMapping("/delOrder")
+	    public String delOrder(@RequestParam int shoppingId, Model model) {
+	        boolean deleteAllItem = itemService.deleteAllItem(shoppingId);
+	        System.out.println(deleteAllItem);
+
+	        shoppingService.deleteShopping(shoppingId);
+
+	        return "redirect:/ShoppingController/searchAllShopping"; 
 	    }
 	
+
+
+	@PostMapping("updateShopping")
+    public String updateShopping(@RequestParam("shoppingId") int shoppingId, Model m) {
+        ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
+        m.addAttribute("shoppingBean", shopping);
+        return "Shopping/UpdateShopping"; 
+    }
+
 	
+	@PostMapping("updateDataShopping")
+	 public String updateDataShopping(@RequestParam("shoppingId") int shoppingId,
+	                                      @RequestParam("memberId") int memberId,
+	                                      @RequestParam("shoppingStatus") int shoppingStatus,
+	                                      @RequestParam("shoppingMemo") String shoppingMemo) {
+	        int shoppingTotal = shoppingService.calculateTotalAmount(shoppingId);
+	        ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
+
+	        shopping.setShoppingTotal(shoppingTotal);
+	        shopping.setMemberId(memberId);
+	        shopping.setShoppingStatus(shoppingStatus);
+	        shopping.setShoppingMemo(shoppingMemo);
+
+	        shoppingService.updateShopping(shopping);
+	        return "redirect:/ShoppingController/searchAllShopping"; 
+	    }
 	
-	private void AddOrder(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
 
-		request.setCharacterEncoding("UTF-8");
-
-		int memberId = Integer.parseInt(request.getParameter("memberId"));
-		int productId = Integer.parseInt(request.getParameter("productId"));
-		int shoppingItemQuantity = Integer.parseInt(request.getParameter("shoppingItemQuantity"));
+	@GetMapping("searchAllShopping")
+	public String searchAllShopping(Model m) {
 		
-		System.out.println(memberId);
-		ShoppingBean shoppingBean = new ShoppingBean(memberId, 1);
-		ShoppingBean order = shoppingService.addOrder(shoppingBean);
-		
-		
-		request.setAttribute("shoppingId", order.getShoppingId());
-		request.getRequestDispatcher("/ItemController/AddItem").forward(request, response);
-	}
-
-	private void AddShopping(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		request.setCharacterEncoding("UTF-8");
-
-
-		int shoppingTotal = Integer.parseInt(request.getParameter("shoppingTotal"));
-		int memberId = Integer.parseInt(request.getParameter("memberId"));
-		String memberName = request.getParameter("memberName");
-		int shoppingStatus = Integer.parseInt(request.getParameter("shoppingStatus"));
-		String shoppingMemo = request.getParameter("shoppingMemo");
-
-		ShoppingBean shoppingBean = new ShoppingBean(shoppingTotal, memberId, shoppingStatus, shoppingMemo,
-				shoppingStatus);
-		shoppingService.addOrder(shoppingBean);
-
-		request.getRequestDispatcher("/ShoppingController/SearchAllShopping").forward(request, response);
-	}
-
-	protected void DelOrder(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		int shoppingId = Integer.parseInt(request.getParameter("shoppingId"));
-		
-		boolean deleteAllItem = itemService.deleteAllItem(shoppingId);
-		System.out.println(deleteAllItem);
-		
-		shoppingService.deleteShopping(shoppingId);
-
-		request.getRequestDispatcher("/ShoppingController/SearchAllShopping").forward(request, response);
-	}
-
-
-	protected void UpdateShopping(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		int shoppingId = Integer.parseInt(request.getParameter("shoppingId"));
-		
-		ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
-		
-		request.setAttribute("shoppingBean", shopping);
-		request.getRequestDispatcher("/Shopping/UpdateShopping.jsp").forward(request, response);
-
-	}
-
-	protected void UpdateDataShopping(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-
-		int shoppingId = Integer.parseInt(request.getParameter("shoppingId"));
-		int shoppingTotal = shoppingService.calculateTotalAmount(shoppingId);
-		int memberId = Integer.parseInt(request.getParameter("memberId"));
-		int shoppingStatus = Integer.parseInt(request.getParameter("shoppingStatus"));
-		String shoppingMemo = request.getParameter("shoppingMemo");
-
-		ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
-		
-		shopping.setShoppingTotal(shoppingTotal);
-		shopping.setMemberId(memberId);
-		shopping.setShoppingStatus(shoppingStatus);
-		shopping.setShoppingMemo(shoppingMemo);
-
-		shoppingService.updateShopping(shopping);
-		
-		response.sendRedirect(request.getContextPath() + "/ShoppingController/SearchAllShopping");
-	}
-
-	protected void SearchAllShopping(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+		System.out.println("searchAllShopping.con");
 		List<ShoppingBean> shoppings = shoppingService.searchAllShopping();
-		request.setAttribute("shoppings", shoppings);
-		request.getRequestDispatcher("/Shopping/SearchAllShopping.jsp").forward(request, response);
+		m.addAttribute("shoppings", shoppings);
+		return "Shopping/SearchAllShopping";
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+	
 }

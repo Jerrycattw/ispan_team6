@@ -3,6 +3,8 @@ package com.rent.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@Component
 @Entity@Table(name = "tableware_stock")
 @IdClass(TablewareStock.TablewareStockId.class)
 public class TablewareStock implements Serializable{

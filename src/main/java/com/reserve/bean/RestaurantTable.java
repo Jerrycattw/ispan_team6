@@ -1,6 +1,8 @@
 package com.reserve.bean;
 
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.annotations.Expose;
 
 import jakarta.persistence.Column;
@@ -11,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+
+@Component
 @Entity @Table(name = "restaurant_table")
 public class RestaurantTable {
     @EmbeddedId

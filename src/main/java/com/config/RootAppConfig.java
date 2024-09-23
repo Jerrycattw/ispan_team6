@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 // = beans.config.xml
 @Configuration //宣告為java組態檔
-@ComponentScan(basePackages = {"tw.jerry"})
+@ComponentScan(basePackages = {"com"})
 @EnableTransactionManagement //<tx:annotation-driven transaction-manager="transactionManager"/>
 public class RootAppConfig {
 	
@@ -43,7 +43,7 @@ public class RootAppConfig {
 		
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
-		sessionFactory.setPackagesToScan("tw.jerry");
+		sessionFactory.setPackagesToScan("com");
 		
 		Properties properties = new Properties();
 		//properties.put("hibernate.dialect", org.hibernate.dialect.MySQLDialect.class);

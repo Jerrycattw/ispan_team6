@@ -6,9 +6,21 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
@@ -45,123 +57,70 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/Reserve/*")
-public class ReserveController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	Session session = null;
-	TableTypeService tableTypeService = null;
-	RestaurantService restaurantService = null;
-	ReserveService reserveService = null;
-	RestaurantTableService restaurantTableService = null;
+@Controller
+@RequestMapping("/Reserve/*")
+public class ReserveController{
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		session = (Session) request.getAttribute("hibernateSession");
-		tableTypeService = new TableTypeService(session);
-		restaurantService = new RestaurantService(session);
-		reserveService = new ReserveService(session);
-		restaurantTableService = new RestaurantTableService(session);
-		
-		// 獲取URL中的操作名稱
-		String action = request.getPathInfo().substring(1);
-
-		System.out.println(action);
-
-		switch (action) {
-		case "getAllRestaurantName":
-			getAllRestaurantName(request, response);
-			break;
-		case "addNew":
-			addReserveNew(request, response);
-			break;
-		case "del":
-			delReserve(request, response);
-			break;
-		case "get":
-			getReserve(request, response);
-			break;
-		case "getAll":
-			getAllReserve(request, response);
-			break;
-		case "set":
-			setReserve(request, response);
-			break;
-		case "set2":
-			setReserve2(request, response);
-			break;
-		case "list":
-			getReserveList(request, response);
-			break;
-		case "listName":
-			getAllRestaurantNameForList(request, response);
-			break;
-		case "checkTable":
-			checkReserveTable(request, response);
-			break;
-		default:
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-
+	@Autowired
+	TableTypeService tableTypeService;
+	@Autowired
+	RestaurantService restaurantService;
+	@Autowired
+	ReserveService reserveService;
+	@Autowired
+	RestaurantTableService restaurantTableService;
+	
+	
+	
+	@GetMapping("getAllRestaurantName")
+	public String getAllRestaurantName(Model model) {
+	    List<String> restaurantNames = restaurantService.getAllRestaurantName();
+	    model.addAttribute("restaurantNames", restaurantNames);
+	    return "reserve/AddReserveNew";
 	}
 
-	private void getAllRestaurantName(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		List<String> restaurantNames = restaurantService.getAllRestaurantName();
-		request.setAttribute("restaurantNames", restaurantNames);
-		request.getRequestDispatcher("/reserve/AddReserveNew.jsp").forward(request, response);
-
-	}
-	
-	private void getAllRestaurantNameForList(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		List<String> restaurantNames = restaurantService.getAllRestaurantName();
-		List<TableType> allTableType = tableTypeService.selectAll();
-		request.setAttribute("tableTypes", allTableType);
-		request.setAttribute("restaurantNames", restaurantNames);
-		request.getRequestDispatcher("/reserve/GetListReserve.jsp").forward(request, response);
-		
+	@GetMapping("listName")
+	public String getAllRestaurantNameForList(Model model) {
+	    List<String> restaurantNames = restaurantService.getAllRestaurantName();
+	    List<TableType> allTableTypes = tableTypeService.selectAll();
+	    
+	    model.addAttribute("tableTypes", allTableTypes);
+	    model.addAttribute("restaurantNames", restaurantNames);
+	    
+	    return "reserve/GetListReserve";
 	}
 	
 	
-	private void getReserveList(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		String memberId = request.getParameter("memberId");
-	    String memberName = request.getParameter("memberName");
-	    String phone = request.getParameter("phone");
-	    
-	    String restaurantId = null;
-	    if(request.getParameter("restaurantId").equals("---")) {
-	    	restaurantId=null;
-	    } else {
-	    	restaurantId=restaurantService.getRestaurantId(request.getParameter("restaurantId"));
+	
+	
+	
+	@GetMapping(value = "list", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getReserveList(
+		        @RequestParam(value = "memberId", required = false) String memberId,
+		        @RequestParam(value = "memberName", required = false) String memberName,
+		        @RequestParam(value = "phone", required = false) String phone,
+		        @RequestParam(value = "restaurantId", required = false) String restaurantId,
+		        @RequestParam(value = "restaurantAddress", required = false) String restaurantAddress,
+		        @RequestParam(value = "tableTypeId", required = false) String tableTypeId,
+		        @RequestParam(value = "reserveTime", required = false) LocalDateTime reserveTime,
+		        @RequestParam(value = "finishedTime", required = false) LocalDateTime finishedTime) {
+
+	    if (restaurantId != null && restaurantId.equals("---")) {
+	        restaurantId = null;
+	    } else if (restaurantId != null) {
+	        restaurantId = restaurantService.getRestaurantId(restaurantId);
 	    }
-	    
-	    String restaurantAddress = request.getParameter("restaurantAddress");
-	    
-	    String tableTypeId = null;
-	    if(request.getParameter("tableTypeId").equals("---")) {
-	    	tableTypeId=null;
-	    } else {
-	    	tableTypeId=request.getParameter("tableTypeId");
+
+	    if (tableTypeId != null && tableTypeId.equals("---")) {
+	        tableTypeId = null;
 	    }
+
+	    List<Reserve> reserves = reserveService.getReserveByCriteria(
+	            memberName, phone, memberId, restaurantId, tableTypeId, restaurantAddress, reserveTime, finishedTime);
+
 	    
-	    
-	    LocalDateTime reserveTime = null;
-	    LocalDateTime finishedTime = null;
-	    
-	    if(request.getParameter("reserveTime")!=null && !request.getParameter("reserveTime").isEmpty()) {
-	    	reserveTime = LocalDateTime.parse(request.getParameter("reserveTime"));
-	    }
-	    if(request.getParameter("finishedTime")!=null && !request.getParameter("finishedTime").isEmpty()) {
-	    	finishedTime = LocalDateTime.parse(request.getParameter("finishedTime"));
-	    }
-	    
-	    List<Reserve> reserves = reserveService.getReserveByCriteria(memberName, phone, memberId, restaurantId, tableTypeId, restaurantAddress, reserveTime, finishedTime);
 	    List<ReserveDTO> reserveDTOs = new ArrayList<ReserveDTO>();
 	    ReserveDTO reserveDTO = null;
 	    
@@ -173,150 +132,157 @@ public class ReserveController extends HttpServlet {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 	    Converters.registerLocalDateTime(gsonBuilder);
 	    Gson gson = gsonBuilder.create();
-	    String json = gson.toJson(reserveDTOs);
 
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.getWriter().write(json);
-		
-		
+	    return gson.toJson(reserveDTOs);
+	    
+	    
 	}
 	
 	
-	private void checkReserveTable(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
-		String reserveSeat = request.getParameter("reserveSeat");
-		String tableTypeId = reserveService.getTableTypeId(Integer.parseInt(reserveSeat));
-		
-		LocalDate checkDate = null;
-		if(request.getParameter("checkDate")!=null && !request.getParameter("checkDate").isEmpty()) {
-			checkDate = LocalDate.parse( request.getParameter("checkDate"));
-		}
-		
-		System.out.println(restaurantId);
-		System.out.println(reserveSeat);
-		System.out.println(checkDate);
-		
-		List<ReserveCheckBean> reserveChecks = reserveService.getReserveCheck(restaurantId, tableTypeId, checkDate);
-		
-		System.out.println(reserveChecks);
-		
-		GsonBuilder gsonBuilder = new GsonBuilder();
+	
+	
+	
+	@GetMapping("checkTable")
+	@ResponseBody
+	public String checkReserveTable(
+	        @RequestParam("restaurantName") String restaurantName,
+	        @RequestParam("reserveSeat") String reserveSeat,
+	        @RequestParam(value = "checkDate", required = false) String checkDateStr) {
+
+	    String restaurantId = restaurantService.getRestaurantId(restaurantName);
+	    String tableTypeId = reserveService.getTableTypeId(Integer.parseInt(reserveSeat));
+
+	    LocalDate checkDate = null;
+	    if (checkDateStr != null && !checkDateStr.isEmpty()) {
+	        checkDate = LocalDate.parse(checkDateStr);
+	    }
+
+	    System.out.println(restaurantId);
+	    System.out.println(reserveSeat);
+	    System.out.println(checkDate);
+
+	    List<ReserveCheckBean> reserveChecks = reserveService.getReserveCheck(restaurantId, tableTypeId, checkDate);
+
+	    System.out.println(reserveChecks);
+
+	    GsonBuilder gsonBuilder = new GsonBuilder();
 	    Converters.registerLocalTime(gsonBuilder);
 	    Gson gson = gsonBuilder.create();
-		String json = gson.toJson(reserveChecks);
-		
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
-		
-	}
-	
-	
-	private void addReserveNew(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		
-		// 餐廳
-		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
-		// 座位數
-		Integer reserveSeat = Integer.parseInt(request.getParameter("reserveSeat"));
-		// 依座位數預定對應桌子種類ID
-		String tableTypeId = reserveService.getTableTypeId(reserveSeat);
-		
-		// 用餐時間範圍
-		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDate checkDate = LocalDate.parse(request.getParameter("checkDate"));
-		LocalTime reserveTime = LocalTime.parse(request.getParameter("reserveTime"));
-		// 使用 atTime 方法將 LocalDate 和 LocalTime 合併成 LocalDateTime
-		LocalDateTime reserveDateTime = checkDate.atTime(reserveTime);
-		LocalDateTime finishedTime = reserveDateTime.plusMinutes(restaurantService.selectById(restaurantId).getEattime());
-		
-		// 會員ID
-		String memberId = request.getParameter("memberId");
-		
-		Reserve reserve = new Reserve(memberId, restaurantId, reserveSeat, tableTypeId, reserveDateTime, finishedTime);
-		reserveService.insert(reserve);
-		request.getRequestDispatcher("/Reserve/listName").forward(request, response);
-		
-	}
 
-	private void delReserve(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		reserveService.delete(request.getParameter("reserveId"));
-		request.getRequestDispatcher("/Reserve/listName").forward(request, response);
-
-	}
-
-	private void getReserve(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		Reserve reserve = reserveService.selectById(request.getParameter("reserveId"));
-		request.setAttribute("reserve", reserve);
-		request.getRequestDispatcher("/reserve/GetReserve.jsp").forward(request, response);
-
-	}
-
-	private void getAllReserve(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		List<Reserve> reserves = reserveService.selectAll();
-		request.setAttribute("reserves", reserves);
-		request.getRequestDispatcher("/reserve/GetAllReserve.jsp").forward(request, response);
-
-	}
-
-	private void setReserve(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		Reserve reserve = reserveService.selectById(request.getParameter("reserveId"));
-		request.setAttribute("reserve", reserve);
-		request.getRequestDispatcher("/reserve/SetReserveNew.jsp").forward(request, response);
-
-	}
-
-	private void setReserve2(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		Reserve reserve = reserveService.selectById(request.getParameter("reserveId"));
-		
-		// 餐廳
-		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
-		// 座位數
-		Integer reserveSeat = Integer.parseInt(request.getParameter("reserveSeat"));
-		// 依座位數預定對應桌子種類ID
-		String tableTypeId = reserveService.getTableTypeId(reserveSeat);
-		
-		// 用餐時間範圍
-		LocalDate checkDate = LocalDate.parse(request.getParameter("checkDate"));
-		LocalTime reserveTime = LocalTime.parse(request.getParameter("reserveTime"));
-		// 使用 atTime 方法將 LocalDate 和 LocalTime 合併成 LocalDateTime
-		LocalDateTime reserveDateTime = checkDate.atTime(reserveTime);
-		LocalDateTime finishedTime = reserveDateTime.plusMinutes(restaurantService.selectById(restaurantId).getEattime());
-		
-		// 會員ID
-		String memberId = request.getParameter("memberId");
-		
-		reserve.setRestaurantId(restaurantId);
-		reserve.setReserveSeat(reserveSeat);
-		reserve.setTableTypeId(tableTypeId);
-		reserve.setReserveTime(reserveDateTime);
-		reserve.setFinishedTime(finishedTime);
-		reserve.setMemberId(memberId);
-		
-		reserveService.update(reserve);
-		
-		request.getRequestDispatcher("/Reserve/listName").forward(request, response);
+	    return gson.toJson(reserveChecks);
 
 	}
 	
 	
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
+	@PostMapping("addNew")
+	public String addReserveNew(
+	        @RequestParam("restaurantName") String restaurantName,
+	        @RequestParam("reserveSeat") Integer reserveSeat,
+	        @RequestParam("checkDate") String checkDateStr,
+	        @RequestParam("reserveTime") String reserveTimeStr,
+	        @RequestParam("memberId") String memberId) throws IOException {
+
+	    // 餐廳
+	    String restaurantId = restaurantService.getRestaurantId(restaurantName);
+	    
+	    // 依座位數預定對應桌子種類ID
+	    String tableTypeId = reserveService.getTableTypeId(reserveSeat);
+	    
+	    // 用餐時間範圍
+	    LocalDate checkDate = LocalDate.parse(checkDateStr);
+	    LocalTime reserveTime = LocalTime.parse(reserveTimeStr);
+	    
+	    // 使用 atTime 方法將 LocalDate 和 LocalTime 合併成 LocalDateTime
+	    LocalDateTime reserveDateTime = checkDate.atTime(reserveTime);
+	    LocalDateTime finishedTime = reserveDateTime.plusMinutes(restaurantService.selectById(restaurantId).getEattime());
+	    
+	    // 創建 Reserve 對象並插入資料
+	    Reserve reserve = new Reserve(memberId, restaurantId, reserveSeat, tableTypeId, reserveDateTime, finishedTime);
+	    reserveService.insert(reserve);
+	    
+	    // 重定向到訂位列表頁面
+	    return "redirect:/Reserve/listName";
 	}
+	
+	
+	
+	@GetMapping("del")
+	public String delReserve(@RequestParam("reserveId") String reserveId) {
+	    reserveService.delete(reserveId);
+	    return "redirect:/Reserve/listName";
+	}
+
+	
+	
+	@GetMapping("get")
+	public String getReserve(@RequestParam("reserveId") String reserveId, Model model) {
+	    Reserve reserve = reserveService.selectById(reserveId);
+	    model.addAttribute("reserve", reserve);
+	    return "reserve/GetReserve";
+	}
+
+	
+	
+	@GetMapping("getAll")
+	public String getAllReserve(Model model) {
+	    List<Reserve> reserves = reserveService.selectAll();
+	    model.addAttribute("reserves", reserves);
+	    return "reserve/GetAllReserve";
+	}
+
+	
+	
+	@GetMapping("set")
+	public String setReserve(@RequestParam("reserveId") String reserveId, Model model) {
+	    Reserve reserve = reserveService.selectById(reserveId);
+	    ReserveDTO reserveDTO = new ReserveDTO(reserve);
+	    model.addAttribute("reserve", reserveDTO);
+	    return "reserve/SetReserveNew";
+	}
+	
+	
+	
+	
+	@PostMapping("set2")
+	public String setReserve2(
+	        @RequestParam("reserveId") String reserveId,
+	        @RequestParam("restaurantName") String restaurantName,
+	        @RequestParam("reserveSeat") Integer reserveSeat,
+	        @RequestParam("checkDate") String checkDateStr,
+	        @RequestParam("reserveTime") String reserveTimeStr,
+	        @RequestParam("memberId") String memberId) {
+
+	    // 獲取預約信息
+	    Reserve reserve = reserveService.selectById(reserveId);
+	    
+	    // 餐廳
+	    String restaurantId = restaurantService.getRestaurantId(restaurantName);
+	    
+	    // 依座位數預定對應桌子種類ID
+	    String tableTypeId = reserveService.getTableTypeId(reserveSeat);
+	    
+	    // 用餐時間範圍
+	    LocalDate checkDate = LocalDate.parse(checkDateStr);
+	    LocalTime reserveTime = LocalTime.parse(reserveTimeStr);
+	    
+	    // 合併成 LocalDateTime
+	    LocalDateTime reserveDateTime = checkDate.atTime(reserveTime);
+	    LocalDateTime finishedTime = reserveDateTime.plusMinutes(restaurantService.selectById(restaurantId).getEattime());
+	    
+	    // 更新預約信息
+	    reserve.setRestaurantId(restaurantId);
+	    reserve.setReserveSeat(reserveSeat);
+	    reserve.setTableTypeId(tableTypeId);
+	    reserve.setReserveTime(reserveDateTime);
+	    reserve.setFinishedTime(finishedTime);
+	    reserve.setMemberId(memberId);
+	    
+	    reserveService.update(reserve);
+	    
+	    return "redirect:/Reserve/listName";
+	}
+	
+	
+	
 }

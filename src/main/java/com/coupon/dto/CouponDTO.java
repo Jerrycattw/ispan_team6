@@ -3,8 +3,14 @@ package com.coupon.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+
+
+@Component
 public class CouponDTO {
-	private int couponId;
+
+	private Integer couponId;
 	private String couponCode;
 	private String couponDescription;
 	private LocalDate couponStartDate;
@@ -21,10 +27,11 @@ public class CouponDTO {
 	private int receivedAmount;
 	
 	public CouponDTO() {
+		
 	}
 	
 	
-	public CouponDTO(int couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
+	public CouponDTO(Integer couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
 			LocalDate couponEndDate, int maxCoupon, int perMaxCoupon, String couponStatus, String rulesDescription,
 			String discountType, int discount, int minOrderDiscount, int maxDiscount, List<TagDTO> tags,
 			int receivedAmount) {
@@ -46,10 +53,10 @@ public class CouponDTO {
 	}
 
 
-	public int getCouponId() {
+	public Integer getCouponId() {
 		return couponId;
 	}
-	public void setCouponId(int couponId) {
+	public void setCouponId(Integer couponId) {
 		this.couponId = couponId;
 	}
 	public String getCouponCode() {

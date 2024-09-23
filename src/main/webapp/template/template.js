@@ -13,15 +13,15 @@ function showSidebar(menu) {
                     break;
                 case 'store':
                     menuItems = `
-					<a href="/EEIT187-6/Product/AddProduct.html">新增商品</a>
-					<a href="/EEIT187-6/ProductController/SearchAllProduct">查詢所有商品</a>
-					<a href="/EEIT187-6/ShoppingController/ShowAddOrder">新增訂單</a>
-					<a href="/EEIT187-6/ShoppingController/SearchAllShopping">查詢所有訂單</a>
+					<a href="/EEIT187-6/Product/AddProduct">新增商品</a>
+					<a href="/EEIT187-6/ProductController/searchAllProduct">查詢所有商品</a>
+					<a href="/EEIT187-6/ShoppingController/showAddOrder">新增訂單</a>
+					<a href="/EEIT187-6/ShoppingController/searchAllShopping">查詢所有訂單</a>
                     `;
                     break;
                 case 'order':
                     menuItems = `
-						<a href="/EEIT187-6/MenuController/getAll">菜單管理</a>
+						<a href="/EEIT187-6/MenuController/getAllMenu">菜單管理</a>
 						<a href="/EEIT187-6/Togo/GetMenu.html">菜單查詢</a>
 						<a href="/EEIT187-6/TogoController/getAll">訂單管理</a>
 						<a href="/EEIT187-6/Togo/GetTogo.html">訂單查詢</a>
@@ -29,16 +29,16 @@ function showSidebar(menu) {
                     break;
                 case 'rental':
                     menuItems = `
-						<a href="/EEIT187-6/tablewareController/getAll">環保用具管理</a>
-						<a href="/EEIT187-6/tablewareStockController/getAll">環保用具庫存管理</a>
-						<a href="/EEIT187-6/rentController/getAll">租借訂單管理</a>
-						<a href="/EEIT187-6/rentItemController/getAll">租借訂單項目管理</a>
+						<a href="/EEIT187-6/Tableware/getAll">環保用具管理</a>
+						<a href="/EEIT187-6/TablewareStock/getAll">環保用具庫存管理</a>
+						<a href="/EEIT187-6/Rent/getAll">租借訂單管理</a>
+						<a href="/EEIT187-6/RentItem/getAll">租借訂單項目管理</a>
                     `;
                     break;
                 case 'reservation':
                     menuItems = `
-                         <a href="/EEIT187-6/reserve/AddRestaurant.jsp">新增餐廳</a>
-                         <a href="/EEIT187-6/reserve/GetListRestaurants.jsp">查詢餐廳</a>
+                         <a href="/EEIT187-6/reserve/AddRestaurant">新增餐廳</a>
+                         <a href="/EEIT187-6/reserve/GetListRestaurants">查詢餐廳</a>
                          <a href="/EEIT187-6/Restaurant/getAll">查詢所有餐廳</a>
                          <a href="/EEIT187-6/TableType/getAllType">桌位種類管理</a>
                          <a href="/EEIT187-6/Reserve/getAllRestaurantName">新增訂位</a>

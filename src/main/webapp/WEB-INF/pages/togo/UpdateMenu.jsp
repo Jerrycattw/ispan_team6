@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }).then(data => {
                 Swal.fire({
                     icon: 'success',
-                    title: '新增成功',
+                    title: '更新成功',
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {

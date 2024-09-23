@@ -22,7 +22,7 @@
 	<div class="content" id="content">
 	<h2>訂單總覽</h2>
 	
-	<form action="../Togo/AddTogo.html" method="get" style="margin-bottom: 20px;">
+	<form action="../togo/AddTogo.html" method="get" style="margin-bottom: 20px;">
 	    <button type="submit">新增訂單</button>
 	</form>
 	
@@ -63,7 +63,7 @@
                     </form></td>
                 <td>
                 
-                <form action="../Togo/AddTogoItem.html?togoId=${togo.togoId}" method="get">                
+                <form action="../togo/AddTogoItem.html?togoId=${togo.togoId}" method="get">                
                         <input type="hidden" name="togoId" value="${togo.togoId}">
                         <button type="submit">新增明細</button>
                     </form></td>

@@ -1,14 +1,7 @@
 package com.TogoOrder.controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TogoOrder.bean.TogoBean;
 import com.TogoOrder.service.TogoService;
-import com.TogoOrder.service.TogoServiceImpl;
 
 
 @Controller
@@ -28,70 +20,70 @@ public class TogoController {
 	@Autowired
     private TogoService togoService;
 	
-	@GetMapping("getAllTogo")
+	@GetMapping("getAll")
 	public String getAllTogo(Model model) {
 		List<TogoBean> togoList = togoService.getAllTogo();	
 		model.addAttribute("togoList", togoList);
-		return "togo/GetAllTogo";
+		return "togo/GetAllTogo"; //jsp
  	}
 	
-	protected void addTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-//		togoService = new TogoServiceImpl();
-		int memberId = Integer.parseInt(request.getParameter("memberId"));
-		String tgName = request.getParameter("tgName");
-		String tgPhone = request.getParameter("tgPhone");
-		int totalPrice = Integer.parseInt(request.getParameter("totalPrice"));
-		int rentId = Integer.parseInt(request.getParameter("rentId"));
-		int togoStatus = Integer.parseInt(request.getParameter("togoStatus"));
-		int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
-		String togoMemo = request.getParameter("togoMemo");
+	@GetMapping("add")
+	public String addTogo(
+			@RequestParam("memberId") Integer memberId,
+			@RequestParam("tgName") String tgName,
+			@RequestParam("tgPhone") String tgPhone,
+			@RequestParam("totalPrice") Integer totalPrice,
+			@RequestParam("rentId") Integer rentId,
+			@RequestParam("togoStatus") Integer togoStatus,
+			@RequestParam("restaurantId") Integer restaurantId,
+			@RequestParam("togoMemo") String togoMemo,
+			Model model) {	
 		TogoBean togo = new TogoBean(memberId, tgName, tgPhone, totalPrice, rentId, togoStatus, restaurantId, togoMemo);
+		System.out.println("會員編號.................."+togo.getMemberId());
 		togoService.addTogo(togo);
-		request.setAttribute("togo", togo);	
-		request.getRequestDispatcher("/TogoController/getAll").forward(request, response);
+		model.addAttribute("togo", togo);	
+		return "redirect:/TogoController/getAll";
 	}
 	
-	protected void deleteTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-//		togoService = new TogoServiceImpl();
-		int togoId = Integer.parseInt(request.getParameter("togoId"));
+	@GetMapping("delete")
+	public String deleteTogo(@RequestParam("togoId") Integer togoId, Model model) {	
 		TogoBean togoDelete = togoService.getTogoById(togoId);
 		togoService.deleteTogoById(togoDelete.getTogoId());	
-		request.setAttribute("deleteSuccess", true); // 添加成功標籤
-		request.getRequestDispatcher("/TogoController/getAll").forward(request, response);
+		model.addAttribute("deleteSuccess", true); // 添加成功標籤
+		return "redirect:/TogoController/getAll";
 	}
 	
-	protected void getTogoForUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		togoService = new TogoServiceImpl();		
-		int togoId = Integer.parseInt(request.getParameter("togoId"));
+	@GetMapping("getForUpdate")
+	public String getTogoForUpdate(@RequestParam("togoId") Integer togoId, Model model) {
 		TogoBean togo = togoService.getTogoById(togoId);
-		request.setAttribute("togo", togo);	
-		request.getRequestDispatcher("/Togo/UpdateTogo.jsp").forward(request, response);
+		model.addAttribute("togo", togo);	
+		return "togo/UpdateTogo";
 	}
 	
-	@GetMapping("getTogo")
+	@GetMapping("get")
 	public String getTogo(@RequestParam("tgPhone") String tgPhone, Model model) {
 		List<TogoBean> togoList = togoService.getTogoByPhone(tgPhone);
 	    model.addAttribute("togoList", togoList);	    
-		return "togo/GetTogo";
-	}
-
-	protected void updateTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		togoService = new TogoServiceImpl();	
-		int togoId = Integer.parseInt(request.getParameter("togoId"));
-		int memberId = Integer.parseInt(request.getParameter("memberId"));
-		String tgName = request.getParameter("tgName");
-		String tgPhone = request.getParameter("tgPhone");
-		int totalPrice = Integer.parseInt(request.getParameter("totalPrice"));
-		int rentId = Integer.parseInt(request.getParameter("rentId"));
-		int togoStatus = Integer.parseInt(request.getParameter("togoStatus"));
-		int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
-		String togoMemo = request.getParameter("togoMemo");
-		TogoBean togo = new TogoBean(togoId, memberId, tgName, tgPhone, totalPrice, rentId, togoStatus, restaurantId, togoMemo);	
-		togoService.updateTogoById(togo);
-		request.setAttribute("togo", togo);
-		request.setAttribute("updateSuccess", true); // 添加成功標籤
-		request.getRequestDispatcher("/TogoController/getAll").forward(request, response);
+		return "togo/GetTogo"; // jsp
 	}
 	
-
+	@GetMapping("update")
+	public String updateTogo(
+			@RequestParam("togoId") Integer togoId,
+			@RequestParam("memberId") Integer memberId,
+			@RequestParam("tgName") String tgName,
+			@RequestParam("tgPhone") String tgPhone,
+			@RequestParam("totalPrice") Integer totalPrice,
+			@RequestParam("rentId") Integer rentId,
+			@RequestParam("togoStatus") Integer togoStatus,
+			@RequestParam("restaurantId") Integer restaurantId,
+			@RequestParam("togoMemo") String togoMemo,
+			Model model) {
+		TogoBean togo = new TogoBean(togoId, memberId, tgName, tgPhone, totalPrice, rentId, togoStatus, restaurantId, togoMemo);	
+		togoService.updateTogoById(togo);
+		model.addAttribute("togo", togo);
+		model.addAttribute("updateSuccess", true); // 添加成功標籤
+		return "redirect:/TogoController/getAll";
+	}
+	
 }

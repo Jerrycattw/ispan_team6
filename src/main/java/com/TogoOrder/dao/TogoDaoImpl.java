@@ -19,14 +19,10 @@ public class TogoDaoImpl implements TogoDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-//	public TogoDaoImpl() {
-//		SessionFactory factory = HibernateUtil.getSessionFactory();
-//		session = factory.getCurrentSession();
-//	}
-
 	@Override
 	public TogoBean addTogo(TogoBean togo) {
 		Session session = sessionFactory.getCurrentSession();
+		System.out.println("dao memberid......."+togo.getMemberId());
 		togo.setTogoCreateTime(LocalDateTime.now());
 		session.persist(togo);
 		return togo;

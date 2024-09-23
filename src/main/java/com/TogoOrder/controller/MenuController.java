@@ -23,35 +23,34 @@ public class MenuController {
 	
 	@Autowired
 	private MenuService menuService;
-	@Autowired
-	private MenuBean food;
 	
-	@PostMapping("addMenu")
+	@PostMapping("add")
 	public String addMenu(
 			@RequestParam("foodName") String foodName,
-			@RequestParam("foodPicture") MultipartFile foodPicture,
+			@RequestParam("foodPicture") MultipartFile file,
             @RequestParam("foodPrice") Integer foodPrice,
             @RequestParam("foodKind") String foodKind,
             @RequestParam("foodStock") Integer foodStock,
             @RequestParam("foodDescription") String foodDescription,
             @RequestParam("foodStatus") Integer foodStatus,
             Model model) throws IOException {
-		String uploadPath = "C:/upload/foodIMG";
+		String uploadPath = "C:/upload/menuIMG";
         File fileSaveDir = new File(uploadPath);
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdirs();
         }
-        String fileName = "";
-        if (!foodPicture.isEmpty()) {
-        	fileName = Paths.get(foodPicture.getOriginalFilename()).getFileName().toString();
-        	// 將文件保存到指定路徑
-			foodPicture.transferTo(new File(uploadPath + File.separator + fileName));
+        String foodPicture = "";
+        if (!file.isEmpty()) { // 檢查文件是否為空
+            String fileName = file.getOriginalFilename(); // 獲取文件名
+            File destinationFile = new File(uploadPath + File.separator + fileName);
+            file.transferTo(destinationFile); // 保存文件到指定路徑
+            // 設置 foodPicture 為圖片的相對路徑（或 URL 路徑）
+            foodPicture = "/EEIT187-6/menuIMG/" + fileName;
         }
-        String foodPicturePath = "/EEIT187-6/togo/MenuImages/" + fileName;
-		MenuBean food = new MenuBean(foodName, foodPicturePath, foodPrice, foodKind, foodStock, foodDescription, foodStatus);		
+		MenuBean food = new MenuBean(foodName, foodPicture, foodPrice, foodKind, foodStock, foodDescription, foodStatus);		
 		menuService.addFood(food);
 		model.addAttribute("menu", food);		
-		return "redirect:/MenuController/getAllMenu";
+		return "redirect:/MenuController/getAll";
 	}
 	
 	@GetMapping("delete")
@@ -68,32 +67,32 @@ public class MenuController {
 		
 	}
 	
-	@GetMapping("getMenu")
+	@GetMapping("get")
 	public String getMenu(@RequestParam("foodName") String foodName, Model model) {
 		List<MenuBean> foodList = menuService.getFoodByName(foodName);
 		model.addAttribute("menu", foodList);		
-		return "togo/GetMenu";
+		return "togo/GetMenu"; // jsp
 	}
 	
-	@GetMapping("getMenuForUpdate")
+	@GetMapping("getForUpdate")
 	public String getMenuForUpdate(@RequestParam("foodId") Integer foodId, Model model) {	
 		MenuBean foods = menuService.getFoodById(foodId);
 		model.addAttribute("menu", foods);	
-		return "togo/UpdateMenu";
+		return "togo/UpdateMenu"; // jsp
 	}
 	
-	@GetMapping("getAllMenu")
+	@GetMapping("getAll")
 	public String getAllMenu(Model model) {
  		List<MenuBean> foodList = menuService.getAllFoods();
  		model.addAttribute("foodList", foodList);
  		return "togo/GetAllMenu"; // jsp
  	}
 	
-	@PostMapping("updateMenu")
+	@PostMapping("update")
 	public String updateMenu(
 			@RequestParam("foodId") Integer foodId,
 	        @RequestParam("foodName") String foodName,
-	        @RequestParam(value = "foodPicture", required = false) MultipartFile foodPicture,
+	        @RequestParam(value = "foodPicture", required = false) MultipartFile file,
             @RequestParam("foodPrice") Integer foodPrice,
             @RequestParam("foodKind") String foodKind,
             @RequestParam("foodStock") Integer foodStock,
@@ -102,24 +101,25 @@ public class MenuController {
             Model model)  throws IOException {				
 		// 獲取現有的食物資料
 	    MenuBean existingFood = menuService.getFoodById(foodId);
-	    String foodPicturePath = existingFood.getFoodPicture();
+	    String foodPicture = existingFood.getFoodPicture();
 	    // 如果上傳了新的圖片，則更新圖片路徑
 	    if (foodPicture != null && !foodPicture.isEmpty()) {
-	        String fileName = Paths.get(foodPicture.getOriginalFilename()).getFileName().toString();
-	        String uploadPath = "C:/upload/foodIMG"; // 設定圖片存儲的路徑
+	        String uploadPath = "C:/upload/menuIMG"; // 設定圖片存儲的路徑
 	        File uploadDir = new File(uploadPath);
 	        if (!uploadDir.exists()) {
 	            uploadDir.mkdirs(); // 如果路徑不存在，則創建
 	        }
-	        // 將文件保存到指定路徑
-	        foodPicture.transferTo(new File(uploadPath + File.separator + fileName));
-	        foodPicturePath = "/EEIT187-6/togo/MenuImages/" + fileName; // 更新路徑
+	        String fileName = file.getOriginalFilename(); // 獲取文件名
+            File destinationFile = new File(uploadPath + File.separator + fileName);
+            file.transferTo(destinationFile); // 保存文件到指定路徑
+            // 設置 foodPicture 為圖片的相對路徑（或 URL 路徑）
+            foodPicture = "/EEIT187-6/menuIMG/" + fileName;
 	    }
-		MenuBean food = new MenuBean(foodId, foodName, foodPicturePath, foodPrice, foodKind, foodStock, foodDescription, foodStatus);	
+		MenuBean food = new MenuBean(foodId, foodName, foodPicture, foodPrice, foodKind, foodStock, foodDescription, foodStatus);	
 		menuService.updateFoodById(food);
 		model.addAttribute("menu", food);	
 		model.addAttribute("updateSuccess", true); // 添加成功標籤
-		return "redirect:/MenuController/getAllMenu";
+		return "redirect:/MenuController/getAll";
 	}
 
 }

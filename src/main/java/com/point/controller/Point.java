@@ -69,7 +69,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/Point")
 @SessionAttributes(names = { "pointMemberIndex", "memberIds", "message" })
-@Transactional
 public class Point {
 
 	@Autowired

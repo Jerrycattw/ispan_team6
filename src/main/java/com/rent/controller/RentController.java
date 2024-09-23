@@ -72,7 +72,7 @@ public class RentController extends HttpServlet {
 	    try {
 	        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 	        TablewareService tablewareService = new TablewareService(session);
-	        RestaurantService restaurantService = new RestaurantService(session);
+	        RestaurantService restaurantService = new RestaurantService();
 	        List<String> restaurantNames = restaurantService.getAllRestaurantName();
 	        List<Integer> tablewareIds = tablewareService.getTablewareIds();
 	        request.setAttribute("restaurantNames", restaurantNames);
@@ -88,7 +88,7 @@ public class RentController extends HttpServlet {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
 		RentItemService rentItemService = new RentItemService(session);
-		RestaurantService restaurantService = new RestaurantService(session);
+		RestaurantService restaurantService = new RestaurantService();
 		
 		java.util.Date rentDate = new java.util.Date();
 		Calendar calendar = Calendar.getInstance();
@@ -140,7 +140,7 @@ public class RentController extends HttpServlet {
 		RentService rentService = new RentService(session);
 		int rentId = Integer.parseInt(request.getParameter("rent_id"));
 		Rent rent = rentService.getById(rentId);
-		RestaurantService restaurantService = new RestaurantService(session);
+		RestaurantService restaurantService = new RestaurantService();
 		List<String> restaurantNames = restaurantService.getAllRestaurantName();
 		request.setAttribute("restaurantNames", restaurantNames);
 		request.setAttribute("rent", rent);
@@ -156,7 +156,7 @@ public class RentController extends HttpServlet {
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService(session);
+		RestaurantService restaurantService = new RestaurantService();
 		try {
 			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
 			Integer rentDeposit = Integer.parseInt(request.getParameter("rent_deposit"));
@@ -196,7 +196,7 @@ public class RentController extends HttpServlet {
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService(session);
+		RestaurantService restaurantService = new RestaurantService();
 		try {
 			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
 			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("return_date"));
@@ -221,7 +221,7 @@ public class RentController extends HttpServlet {
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService(session);
+		RestaurantService restaurantService = new RestaurantService();
 		List<Integer> rentIds = rentService.getRentId();
 		List<String> restaurantNames = restaurantService.getAllRestaurantName();
 		request.setAttribute("rentIds", rentIds);
@@ -233,7 +233,7 @@ public class RentController extends HttpServlet {
 			throws ServletException, IOException {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService(session);
+		RestaurantService restaurantService = new RestaurantService();
 		try {
 			Integer rentId = request.getParameter("rentId") != null && !request.getParameter("rentId").isEmpty() 
 	                ? Integer.parseInt(request.getParameter("rentId")) : null;

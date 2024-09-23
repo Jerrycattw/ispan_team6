@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+    <header>
+        <h1>登入頁面</h1>
+        <nav>
+            <button id="homeButton">首頁</button>
+        </nav>
+    </header>
+
+    <main id="contentArea">
+        <h2>請登入</h2>
+        <div>
+            <form id="loginForm" action="login" method="post">
+                <label for="username">帳號:</label>
+                <input type="text" id="account" name="account" required>
+                <br>
+                <label for="password">密碼:</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <button type="submit">登入</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/login.js"></script>
+</body>
+
+</html>

@@ -31,20 +31,16 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 public class WebAppConfig implements WebMvcConfigurer {
 
 	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {	
 		//依這邊設定為主
-		configurer.enable();
-		
+		configurer.enable();		
 	}
-	
-	
 	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
-//		irv.setPrefix("/WEB-INF/pages/");
-		//irv.setSuffix(".jsp");
+		irv.setPrefix("/WEB-INF/pages/");
+		irv.setSuffix(".jsp");
 		irv.setOrder(1);
 		return irv;
 	}

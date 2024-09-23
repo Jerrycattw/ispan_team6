@@ -20,43 +20,48 @@ import com.point.bean.PointSetBean;
 
 @Repository
 public class PointSetDAO {
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 //	private Session session;
 //
 //	public PointSetDAO(Session session) {
 //		this.session = session;
 //	}
-	
 
-	//查詢所有(總共也只有一筆)
+	// 查詢所有(總共也只有一筆)
 	public PointSetBean getPointSet() {
-		//"SELECT * FROM point_set"
+		// "SELECT * FROM point_set"
 		Session session = sessionFactory.getCurrentSession();
-		Query<PointSetBean> query = session.createQuery("from PointSetBean",PointSetBean.class);
+		Query<PointSetBean> query = session.createQuery("from PointSetBean", PointSetBean.class);
 		return query.uniqueResult();
 	}
-	//修改
-		public Boolean UpdatePoint(PointSetBean pointSetBean) {
-			//"UPDATE point_set SET amount_per_point=?,points_earned=?,point_ratio=?, expiry_month=?,expiry_day=?,birth_type=?,set_description=?,is_expiry=?"
-			Session session = sessionFactory.getCurrentSession();
-			PointSetBean resultBean = session.get(PointSetBean.class,pointSetBean.getPointSetName());
-			
-			if(resultBean!=null) {
-				resultBean.setAmountPerPoint(pointSetBean.getAmountPerPoint());
-				resultBean.setPointsEarned(pointSetBean.getPointsEarned());
-				resultBean.setPointRatio(pointSetBean.getPointRatio());
-				resultBean.setExpiryMonth(pointSetBean.getExpiryMonth());
-				resultBean.setExpiryDay(pointSetBean.getExpiryDay());
-				resultBean.setBirthType(pointSetBean.getBirthType());
-				resultBean.setSetDescription(pointSetBean.getSetDescription());
-				resultBean.setIsExpiry(pointSetBean.getIsExpiry());
-				return true;
-			}
-			return false;
-			
+
+	// 修改
+	public Boolean UpdatePoint(PointSetBean pointSetBean) {
+		// "UPDATE point_set SET amount_per_point=?,points_earned=?,point_ratio=?,
+		// expiry_month=?,expiry_day=?,birth_type=?,set_description=?,is_expiry=?"
+		Session session = sessionFactory.getCurrentSession();
+		PointSetBean resultBean = session.get(PointSetBean.class, pointSetBean.getPointSetName());
+
+		if (resultBean != null) {
+			resultBean.setAmountPerPoint(pointSetBean.getAmountPerPoint());
+			resultBean.setPointsEarned(pointSetBean.getPointsEarned());
+			resultBean.setPointRatio(pointSetBean.getPointRatio());
+			resultBean.setExpiryMonth(pointSetBean.getExpiryMonth());
+			resultBean.setExpiryDay(pointSetBean.getExpiryDay());
+			resultBean.setBirthType(pointSetBean.getBirthType());
+			resultBean.setSetDescription(pointSetBean.getSetDescription());
+			resultBean.setIsExpiry(pointSetBean.getIsExpiry());
+			return true;
 		}
-	
+		return false;
+
+	}
+	//新增
+	public void insertPointSet(PointSetBean pointSetBean) {
+		Session session = sessionFactory.getCurrentSession();
+		session.persist(pointSetBean);
+	}
 }

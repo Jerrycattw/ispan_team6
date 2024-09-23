@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.annotations.Expose;
 import com.members.bean.Member;
 
@@ -45,11 +46,11 @@ public class CouponBean implements Serializable{
 	@Column(name = "coupon_description")
 	private String couponDescription;
 	
-	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name = "coupon_start_date")
 	private LocalDate couponStartDate;
 	
-	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name = "coupon_end_date")
 	private LocalDate couponEndDate;
 	

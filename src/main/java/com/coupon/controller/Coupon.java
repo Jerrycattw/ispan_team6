@@ -78,31 +78,7 @@ public class Coupon  {
  		return couponDTOs;
  	}
  	
- 	//查詢單筆
- 	private void getOneCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		BufferedReader reader = request.getReader();
-        String couponId = reader.readLine();
-        CouponDTO couponDTO = couponService2.getCouponById(couponId);
-        Map<String, List<String>> tagOptions = couponService2.getTagOptions();
-        
-     // 使用自定义的Gson实例
- 	    Gson gson = new GsonBuilder()
- 	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
- 	        .create();
- 	    
- 	   JsonElement jsonCoupon = gson.toJsonTree(couponDTO);
-       JsonElement jsonTagOptions = gson.toJsonTree(tagOptions);
-       
-       JsonObject jsonResponse = new JsonObject();
-       jsonResponse.add("coupon", jsonCoupon);
-       jsonResponse.add("tagOptions", jsonTagOptions);
-       
- 	   response.setContentType("application/json");
- 	   response.setCharacterEncoding("UTF-8");
- 	   response.getWriter().write(jsonResponse.toString());		
- 	   
- 	}
- 	
+ 	//查詢單筆	
  	@PostMapping("/update")
  	@ResponseBody
  	public Map<String, Object> getOneCouponWithTagss(@RequestBody String couponId) {
@@ -115,40 +91,7 @@ public class Coupon  {
  		return data;
  	}
  	
- 	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(LocalDate.class, "couponStartDate",
-				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-		binder.registerCustomEditor(LocalDate.class, "couponEndDate",
-				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-	}
- 	
  	//修改單筆
- 	private void updateCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		int couponId = Integer.parseInt(request.getParameter("hiddenCouponId"));
-		String couponCode = request.getParameter("couponCode");
-		String couponDescription = request.getParameter("couponDescription");
-		LocalDate couponStartDate = LocalDate.parse(request.getParameter("couponStartDate"));
-		LocalDate couponEndDate = LocalDate.parse(request.getParameter("couponEndDate"));
-		int maxCoupon = Integer.parseInt(request.getParameter("maxCoupon"));
-		int perMaxCoupon=Integer.parseInt(request.getParameter("perMaxCoupon"));
-		String couponStatus = request.getParameter("couponStatus");
-		String rulesDescription = request.getParameter("rulesDescription");
-		String discountType = request.getParameter("discountType");
-		int discount = Integer.parseInt(request.getParameter("discount"));
-		int minOrderDiscount = Integer.parseInt(request.getParameter("minOrderDiscount"));
-		int maxDiscount = Integer.parseInt(request.getParameter("maxDiscount"));
- 		String[] productTags = request.getParameterValues("product");
- 		String[] togoTags = request.getParameterValues("togo");
- 		
- 		CouponBean couponBean = new CouponBean(couponId,couponCode,couponDescription,couponStartDate,couponEndDate,maxCoupon,perMaxCoupon,couponStatus,rulesDescription,discountType,discount,minOrderDiscount, maxDiscount);
- 		couponService2.updateCoupon(couponBean,productTags,togoTags);
- 		
- 		response.sendRedirect(request.getContextPath() + "/coupon/Home.html");
- 		
- 		
-	}
- 	
  	@PostMapping("/updateExcute")
  	private String updateCouponWithTags(CouponBean couponBean,
  										@RequestParam("hiddenCouponId") int couponId, 
@@ -161,30 +104,6 @@ public class Coupon  {
  	
 
  	//查詢預設
- 	private void getDefaultCouponWithTags(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
- 		
-		CouponDTO couponDTO=new CouponDTO();
-		Map<String, List<String>> tagOptions = couponService2.getTagOptions();
-		
-	// 使用自定义的Gson实例
-	    Gson gson = new GsonBuilder()
-	        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())//null 序列化為""
-	        .registerTypeAdapter(String.class, new StringAdapter())//null 序列化為""
-	        .registerTypeAdapter(Integer.class, new IntegerAdapter())//0 序列化為""
-	        .create();
-	    
-	   JsonElement jsonCoupon = gson.toJsonTree(couponDTO);
-      JsonElement jsonTagOptions = gson.toJsonTree(tagOptions);
-      
-      JsonObject jsonResponse = new JsonObject();
-      jsonResponse.add("coupon", jsonCoupon);
-      jsonResponse.add("tagOptions", jsonTagOptions);
-	   response.setContentType("application/json");
-	   response.setCharacterEncoding("UTF-8");
-	   response.getWriter().write(jsonResponse.toString());
- 		
- 	}
- 	
  	@GetMapping("/insert")
  	@ResponseBody
  	public Map<String, Object> getDefaultCouponWithTags(){

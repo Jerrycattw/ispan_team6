@@ -187,12 +187,12 @@ public class Point {
 	}
 	
 	//映射格式-------------------------
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(Date.class, "createDate",
-				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-		binder.registerCustomEditor(Date.class, "expiryDate",
-				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-	}
+//	@InitBinder
+//	public void initBinder(WebDataBinder binder) {
+//		binder.registerCustomEditor(Date.class, "createDate",
+//				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+//		binder.registerCustomEditor(Date.class, "expiryDate",
+//				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+//	}
 
 }

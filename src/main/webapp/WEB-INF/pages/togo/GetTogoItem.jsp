@@ -25,7 +25,7 @@
 	<form action="/EEIT187-6/TogoController/getAll" method="get">
         <button type="submit">返回全部訂單</button>
     </form><p>
-	<form class="addForm" action="../Togo/AddTogoItem.html?togoId=${togoItem.togoId}" method="get">
+	<form class="addForm" action="../togo/AddTogoItem.html?togoId=${togoItem.togoId}" method="get">
     <c:forEach var="togoItem" items="${togoItemList}">
     	<c:set var="firstTogoId" value="${togoItemList[0].togoId}" />
         <input type="hidden" name="togoId" value="${togoItem.togoId}">

@@ -22,7 +22,7 @@
 	<form action="/EEIT187-6/TogoController/getAll" method="get">
         <button type="submit">返回全部訂單</button>
     </form><p>
-    <form action="../Togo/GetTogo.html" method="get">
+    <form action="../togo/GetTogo.html" method="get">
         <button type="submit">重新查詢</button>
     </form><p>
 <c:choose>

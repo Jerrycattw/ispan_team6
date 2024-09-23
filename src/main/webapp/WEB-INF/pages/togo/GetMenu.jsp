@@ -22,7 +22,7 @@
 	<form action="/EEIT187-6/MenuController/getAll" method="get">
         <button type="submit">返回菜單</button>
     </form><p>
-	<form action="../Togo/GetMenu.html" method="get">
+	<form action="../togo/GetMenu.html" method="get">
         <button type="submit">重新查詢</button>
     </form><p>
 	

@@ -31,7 +31,7 @@ public class TogoBean implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer togoId;
 	
-	@Column(name = "member_id", insertable = false, updatable = false)
+	@Column(name = "member_id")
 	private Integer memberId;
 	
 	@Column(name = "tg_name")
@@ -46,7 +46,7 @@ public class TogoBean implements Serializable{
 	@Column(name = "togo_create_time")
 	private LocalDateTime togoCreateTime;
 	
-	@Column(name = "rent_id", insertable = false, updatable = false)
+	@Column(name = "rent_id")
 	private Integer rentId;
 	
 	@Column(name = "togo_status")

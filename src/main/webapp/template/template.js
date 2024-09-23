@@ -21,7 +21,7 @@ function showSidebar(menu) {
                     break;
                 case 'order':
                     menuItems = `
-						<a href="/EEIT187-6/MenuController/getAll">菜單管理</a>
+						<a href="/EEIT187-6/MenuController/getAllMenu">菜單管理</a>
 						<a href="/EEIT187-6/Togo/GetMenu.html">菜單查詢</a>
 						<a href="/EEIT187-6/TogoController/getAll">訂單管理</a>
 						<a href="/EEIT187-6/Togo/GetTogo.html">訂單查詢</a>

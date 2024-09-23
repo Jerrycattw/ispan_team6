@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="../template/table.css">
 </head>
 <body>
-<jsp:include page="../HomePage.html"></jsp:include>
+<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
 	<div class="content" id="content">
 	<h2>查詢結果</h2>

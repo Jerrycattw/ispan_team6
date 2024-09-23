@@ -9,55 +9,30 @@ import java.io.IOException;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TogoOrder.bean.TogoBean;
+import com.TogoOrder.service.TogoService;
 import com.TogoOrder.service.TogoServiceImpl;
 
 
-
-@WebServlet("/TogoController/*")
-public class TogoController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-    private TogoServiceImpl togoService;
+@Controller
+@RequestMapping("/TogoController/*")
+public class TogoController {
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Session session = (Session) request.getAttribute("hibernateSession");
-		togoService = new TogoServiceImpl(session);
-		
-		// 獲取URL中的操作名稱
-		String action = request.getPathInfo().substring(1);
-		System.out.println(action);
-
-		switch (action) {
-			case "add":
-				addTogo(request, response);
-				break;
-			case "delete":
-	            deleteTogo(request, response);
-				break;
-			case "get":
-				getTogo(request, response);
-				break;
-			case "getForUpdate":
-				getTogoForUpdate(request, response);
-				break;
-			case "getAll":
-				getAllTogo(request, response);
-				break;
-			case "update":
-				updateTogo(request, response);
-				break;
-			default:
-				response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-	}
+	@Autowired
+    private TogoService togoService;
 	
-
-	protected void getAllTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		togoService = new TogoServiceImpl();
+	@GetMapping("getAllTogo")
+	public String getAllTogo(Model model) {
 		List<TogoBean> togoList = togoService.getAllTogo();	
-		request.setAttribute("togoList", togoList);
-		request.getRequestDispatcher("/Togo/GetAllTogo.jsp").forward(request, response);
+		model.addAttribute("togoList", togoList);
+		return "togo/GetAllTogo";
  	}
 	
 	protected void addTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
@@ -93,12 +68,11 @@ public class TogoController extends HttpServlet {
 		request.getRequestDispatcher("/Togo/UpdateTogo.jsp").forward(request, response);
 	}
 	
-	protected void getTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		togoService = new TogoServiceImpl();		
-		String tgPhone =request.getParameter("tgPhone");		
+	@GetMapping("getTogo")
+	public String getTogo(@RequestParam("tgPhone") String tgPhone, Model model) {
 		List<TogoBean> togoList = togoService.getTogoByPhone(tgPhone);
-	    request.setAttribute("togoList", togoList);	    
-		request.getRequestDispatcher("/Togo/GetTogo.jsp").forward(request, response);
+	    model.addAttribute("togoList", togoList);	    
+		return "togo/GetTogo";
 	}
 
 	protected void updateTogo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -119,9 +93,5 @@ public class TogoController extends HttpServlet {
 		request.getRequestDispatcher("/TogoController/getAll").forward(request, response);
 	}
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		doGet(request, response);
-	}
 
 }

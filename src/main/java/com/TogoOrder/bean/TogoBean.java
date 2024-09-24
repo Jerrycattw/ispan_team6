@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.stereotype.Component;
+
 import com.google.gson.annotations.Expose;
 import com.members.bean.Member;
 import com.rent.bean.Rent;
@@ -20,58 +22,48 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 
+@Component
 @Entity @Table(name = "togo")
 public class TogoBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Expose
 	@Id @Column(name = "togo_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer togoId;
 	
-	@Expose
-	@Column(name = "member_id", insertable = false, updatable = false)
+	@Column(name = "member_id")
 	private Integer memberId;
 	
-	@Expose
 	@Column(name = "tg_name")
 	private String tgName;
 	
-	@Expose
 	@Column(name = "tg_phone")
 	private String tgPhone;
 	
-	@Expose
 	@Column(name = "total_price")
 	private Integer totalPrice;
 	
-	@Expose
 	@Column(name = "togo_create_time")
 	private LocalDateTime togoCreateTime;
 	
-	@Expose
-	@Column(name = "rent_id", insertable = false, updatable = false)
+	@Column(name = "rent_id")
 	private Integer rentId;
 	
-	@Expose
 	@Column(name = "togo_status")
 	private Integer togoStatus;
 	
-	@Expose
 	@Column(name = "restaurant_id")
 	private Integer restaurantId;
 	
-	@Expose
 	@Column(name = "togo_memo")
 	private String togoMemo;
 	
-	@ManyToOne
-	@JoinColumn(name = "member_id")
-	private Member member;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "rent_id")
-	private Rent rent;
+//	@JoinColumn(name = "member_id")
+//	private Member member;
+//	
+//	@OneToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "rent_id")
+//	private Rent rent;
 	
 //	@ManyToOne
 //	@JoinColumn(name = "restaurant_id")
@@ -195,21 +187,21 @@ public class TogoBean implements Serializable{
 		return serialVersionUID;
 	}
 
-	public Member getMember() {
-		return member;
-	}
-
-	public void setMember(Member member) {
-		this.member = member;
-	}
-
-	public Rent getRent() {
-		return rent;
-	}
-
-	public void setRent(Rent rent) {
-		this.rent = rent;
-	}
+//	public Member getMember() {
+//		return member;
+//	}
+//
+//	public void setMember(Member member) {
+//		this.member = member;
+//	}
+//
+//	public Rent getRent() {
+//		return rent;
+//	}
+//
+//	public void setRent(Rent rent) {
+//		this.rent = rent;
+//	}
 
 //	public RestaurantBean getRestaurant() {
 //		return restaurant;

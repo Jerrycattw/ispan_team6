@@ -1,6 +1,7 @@
 package com.members.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.members.bean.Member;
+
 
 @Repository
 public class MemberDao {

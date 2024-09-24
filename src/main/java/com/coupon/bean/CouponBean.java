@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.annotations.Expose;
 import com.members.bean.Member;
 
@@ -25,69 +28,70 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
+@Component
 @Entity @Table(name = "coupon")
 public class CouponBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Expose
+
 	@Id @Column(name = "coupon_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int couponId;
+	private Integer couponId;
 	
-	@Expose
+
 	@Column(name = "coupon_code")
 	private String couponCode;
 	
-	@Expose
+	
 	@Column(name = "coupon_description")
 	private String couponDescription;
 	
-	@Expose
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name = "coupon_start_date")
 	private LocalDate couponStartDate;
 	
-	@Expose
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name = "coupon_end_date")
 	private LocalDate couponEndDate;
 	
-	@Expose
+	
 	@Column(name = "max_coupon")
 	private int maxCoupon;
 	
-	@Expose
+	
 	@Column(name = "per_max_coupon")
 	private int perMaxCoupon;
 	
-	@Expose
+	
 	@Column(name = "coupon_status")
 	private String couponStatus;
 	
-	@Expose
+	
 	@Column(name = "rules_description")
 	private String rulesDescription;
 	
-	@Expose
+	
 	@Column(name = "discount_type")
 	private String discountType;
 	
-	@Expose
+	
 	@Column(name = "discount")
 	private int discount;
 	
-	@Expose
+	
 	@Column(name = "min_order_amount")
 	private int minOrderDiscount;
 	
-	@Expose
+	
 	@Column(name = "max_discount")
 	private int maxDiscount;
 	
-	@Expose
+	
 	@Transient
 	private int receivedAmount;
 	
 	
-	@Expose(serialize = false)//Gson
+	
 	@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "coupon",orphanRemoval=true)
 	private List<TagBean> tags=new ArrayList<TagBean>();
 	
@@ -95,7 +99,7 @@ public class CouponBean implements Serializable{
 	@JoinTable(name = "member_coupon",
 	joinColumns = @JoinColumn(name="coupon_id"),
 	inverseJoinColumns = @JoinColumn(name="member_id"))
-	private Set<Member> members; // 关联的 MemberBean 实体集合
+	private List<Member> members; // 关联的 MemberBean 实体集合
 	
 //	@Expose(serialize = false)//Gson
 //	@OneToMany(fetch = FetchType.LAZY, mappedBy = "coupon")
@@ -123,7 +127,7 @@ public class CouponBean implements Serializable{
 		this.maxDiscount = maxDiscount;
 	}
 	
-	public CouponBean(int couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
+	public CouponBean(Integer couponId, String couponCode, String couponDescription, LocalDate couponStartDate,
 			LocalDate couponEndDate, int maxCoupon, int perMaxCoupon, String couponStatus, String rulesDescription,
 			String discountType, int discount, int minOrderDiscount, int maxDiscount) {
 		this.couponId=couponId;
@@ -143,10 +147,10 @@ public class CouponBean implements Serializable{
 	
 
 
-	public int getCouponId() {
+	public Integer getCouponId() {
 		return couponId;
 	}
-	public void setCouponId(int couponId) {
+	public void setCouponId(Integer couponId) {
 		this.couponId = couponId;
 	}
 	public String getCouponCode() {
@@ -248,12 +252,12 @@ public class CouponBean implements Serializable{
 	}
 
 
-	public Set<Member> getMembers() {
+	public List<Member> getMembers() {
 		return members;
 	}
 
 
-	public void setMembers(Set<Member> members) {
+	public void Members(List<Member> members) {
 		this.members = members;
 	}
 

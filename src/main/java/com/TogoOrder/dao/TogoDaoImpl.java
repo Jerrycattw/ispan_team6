@@ -6,24 +6,23 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.TogoOrder.bean.TogoBean;
-import com.util.HibernateUtil;
 
+@Repository
+@Transactional
 public class TogoDaoImpl implements TogoDao {
-	private Session session;
 	
-//	public TogoDaoImpl() {
-//		SessionFactory factory = HibernateUtil.getSessionFactory();
-//		session = factory.getCurrentSession();
-//	}
-
-	public TogoDaoImpl(Session session) {
-		this.session = session;
-	}
-
+	@Autowired
+	private SessionFactory sessionFactory;
+	
 	@Override
 	public TogoBean addTogo(TogoBean togo) {
+		Session session = sessionFactory.getCurrentSession();
+		System.out.println("dao memberid......."+togo.getMemberId());
 		togo.setTogoCreateTime(LocalDateTime.now());
 		session.persist(togo);
 		return togo;
@@ -31,6 +30,7 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public boolean deleteTogoById(Integer togoId) {
+		Session session = sessionFactory.getCurrentSession();
 		TogoBean togo = session.get(TogoBean.class, togoId);
 		if (togo != null) {
 			togo.setTogoStatus(3);
@@ -41,8 +41,9 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public boolean deleteTogoByStatus(Integer togoStatus) {
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "delete from TogoBean where togo_status = :togoStatus";
-		Query query = session.createQuery(hql);
+		Query<TogoBean> query = session.createQuery(hql);
 		query.setParameter("togoStatus", togoStatus);
 		// 執行刪除操作，返回受影響的資料筆數
 	    int result = query.executeUpdate();
@@ -52,6 +53,7 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public TogoBean updateTogoById(TogoBean togo) {
+		Session session = sessionFactory.getCurrentSession();
 		TogoBean updateTogo = session.get(TogoBean.class, togo.getTogoId());
 		if (updateTogo != null) {
 			updateTogo.setTogoId(togo.getTogoId());
@@ -70,6 +72,7 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public TogoBean updateTogoStatusById(Integer togoId, Integer togoStatus) {
+		Session session = sessionFactory.getCurrentSession();
 		TogoBean togo = session.get(TogoBean.class, togoId);
 		if (togo != null) {
 			togo.setTogoStatus(togoStatus);
@@ -79,6 +82,7 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public TogoBean updateTotalPrice(Integer togoId, Integer totalPrice) {
+		Session session = sessionFactory.getCurrentSession();
 		TogoBean togo = session.get(TogoBean.class, togoId);
 		if (togo != null) {
 			togo.setTotalPrice(totalPrice);
@@ -88,12 +92,14 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public TogoBean getTogoById(Integer togoId) {
+		Session session = sessionFactory.getCurrentSession();
 		TogoBean togo = session.get(TogoBean.class, togoId);
 		return togo;
 	}
 
 	@Override
 	public List<TogoBean> getAllTogo() {
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "from TogoBean";
 		Query<TogoBean> query = session.createQuery(hql, TogoBean.class);
 		return query.list();
@@ -101,6 +107,7 @@ public class TogoDaoImpl implements TogoDao {
 
 	@Override
 	public List<TogoBean> getTogoByPhone(String tgPhone) {
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "from TogoBean where tgPhone like :tgPhone";
 		Query<TogoBean> query = session.createQuery(hql, TogoBean.class);
 		query.setParameter("tgPhone", "%"+tgPhone+"%");

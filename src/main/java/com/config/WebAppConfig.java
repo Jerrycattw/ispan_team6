@@ -35,11 +35,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class WebAppConfig implements WebMvcConfigurer {
 
 	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {	
 		//依這邊設定為主
-		configurer.enable();
-		
+		configurer.enable();		
 	}
 	
 	
@@ -47,8 +45,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
 		InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/",".jsp");
-//		irv.setPrefix("/WEB-INF/pages/");
-		//irv.setSuffix(".jsp");
+		irv.setPrefix("/WEB-INF/pages/");
+		irv.setSuffix(".jsp");
 		irv.setOrder(1);
 		return irv;
 	}
@@ -102,15 +100,14 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 		//去tableware下找html檔
 		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
-		//去tablewareImage下找圖檔
-		registry.addResourceHandler("/tablewareImage/**").addResourceLocations("/WEB-INF/pages/tableware/tablewareImage/");
 		
-
-		
-
-	    registry.addResourceHandler("/foodIMG/**").addResourceLocations("file:///C:/upload/foodIMG/");
+	
+	    registry.addResourceHandler("/menuIMG/**").addResourceLocations("file:///C:/upload/menuIMG/");
 	    
 	    registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
+	
+			
+	    registry.addResourceHandler("/tablewareIMG/**").addResourceLocations("file:///C:/upload/tablewareIMG/");
 
 		registry.addResourceHandler("/coupon/**").addResourceLocations("/WEB-INF/resources/Html/coupon/");
 

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 
 @Component
@@ -13,7 +15,9 @@ public class CouponDTO {
 	private Integer couponId;
 	private String couponCode;
 	private String couponDescription;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate couponStartDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate couponEndDate;
 	private int maxCoupon;
 	private int perMaxCoupon;

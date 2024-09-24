@@ -20,7 +20,7 @@
 <jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 	<h2>菜單</h2>
-	<form action="../Togo/AddMenu.html" method="get" style="margin-bottom: 20px;">
+	<form action="../togo/AddMenu.html" method="get" style="margin-bottom: 20px;">
 	    <button type="submit">新增菜單</button>
 	</form>
 	
@@ -73,7 +73,7 @@
                 showConfirmButton: false,
                 timer: 1500
             }).then(function() {
-                window.location.href = '/EEIT187-6/MenuController/getAllMenu';
+                window.location.href = '/EEIT187-6/MenuController/getAll';
             });
         } else if (deleteSuccess === 'false') {
             Swal.fire({
@@ -83,7 +83,7 @@
                 showConfirmButton: false,
                 timer: 1500
             }).then(function() {
-                window.location.href = '/EEIT187-6/MenuController/getAllMenu';
+                window.location.href = '/EEIT187-6/MenuController/getAll';
             });
         }
         if (updateSuccess === 'true') {

@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.admin.bean.Admin;
 import com.admin.dao.AdminDao;
 import com.members.bean.Member;
 
+@Service
 public class AdminService {
-
+	
+	
 	private AdminDao adminDao;
-
+	
+	@Autowired
 	public AdminService(AdminDao adminDao) {
 		this.adminDao = adminDao;
 	}
@@ -70,19 +76,4 @@ public class AdminService {
         Admin admin = findAdminById(adminId);
         return admin != null && admin.getRole() == 1;
     }
-	// 為管理員分配權限
-//	public void assignPermissionToAdmin(int adminId, String permissionName, int currentAdminId) {
-//        if (!isSuperAdmin(currentAdminId)) {
-//            throw new SecurityException("只有超級管理員才能分配權限。");
-//        }
-//
-//        PermissionService permissionService = new PermissionService();
-//        Permission permission = permissionService.getPermissionByName(permissionName);
-//
-//        if (permission != null) {
-//            // 實作邏輯來在 AdminPermission 表中插入資料
-//        }
-//    }
-
-
 }

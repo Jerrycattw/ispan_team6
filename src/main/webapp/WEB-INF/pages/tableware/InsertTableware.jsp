@@ -1,23 +1,19 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>環保用具資料</title>
+<title>租借訂單</title>
 <link rel="stylesheet" href="../template/template.css">
 <link rel="stylesheet" href="../template/table1.css">
 <link rel="stylesheet" href="../template/rent.css">
 <script src="../template/template.js"></script>
+
 </head>
 <body>
-	<div class="top-menu">
-		<a href="#" onclick="showSidebar('member')">會員管理</a> <a href="#"
-			onclick="showSidebar('store')">商城管理</a> <a href="#"
-			onclick="showSidebar('order')">訂餐管理</a> <a href="#"
-			onclick="showSidebar('rental')">租借用具管理</a> <a href="#"
-			onclick="showSidebar('reservation')">餐廳訂位管理</a> <a href="#"
-			onclick="showSidebar('points')">會員積分優惠券管理</a>
-	</div>
-	<div class="sidebar" id="sidebar"></div>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>新增環保餐具資料</h2>
 		<form method="get" class="btn"
@@ -47,23 +43,20 @@
 					<div class="stock-entry">
 						<table>
 							<tr>
-								<td>餐廳編號: <select name="restaurantId0">
-										<option value="" selected disabled>請選擇餐廳編號</option>
-										<option value="1">1</option>
-										<option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">5</option>
-										<option value="6">6</option>
-										<option value="7">7</option>
-										<option value="8">8</option>
-										<option value="9">9</option>
-										<option value="10">10</option>
+								<td>餐廳名稱: 
+								<select name="restaurantName0" id="restaurantName0">
+										<option value="" selected disabled>請選擇餐廳名稱</option>
+										<c:if test="${not empty param.restaurantName}">
+											<!-- 顯示 URL 中的餐廳名稱 -->
+											<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+										</c:if>
+										<c:forEach items="${restaurantNames}" var="restaurantName">
+											<option value="${restaurantName}">${restaurantName}</option>
+										</c:forEach>
 								</select>
 								</td>
-							</tr>
-							<tr>
 								<td>用具庫存: <input type="text" name="stock0" /></td>
+								<td><button type="button" onclick="removeStockEntry(this)">刪除</button></td>
 							</tr>
 						</table>
 					</div>
@@ -114,28 +107,21 @@ function addStockEntry() {
     newEntry.innerHTML = `
         <table>
             <tr>
-                <td>餐廳編號: 
-                    <select name="restaurantId${stockIndex}">
-                        <option value="" selected disabled>請選擇餐廳編號</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
+                <td>餐廳名稱: 
+                	<select name="restaurantName${stockIndex}" id="restaurantName${stockIndex}">
+							<option value="" selected disabled>請選擇餐廳名稱</option>
+							<c:if test="${not empty param.restaurantName}">
+								<!-- 顯示 URL 中的餐廳名稱 -->
+								<option value="${param.restaurantName}" selected>${param.restaurantName}</option>
+							</c:if>
+							<c:forEach items="${restaurantNames}" var="restaurantName">
+								<option value="${restaurantName}">${restaurantName}</option>
+							</c:forEach>
+					</select>
                 </td>
-            </tr>
-            <tr>
                 <td>用具庫存: <input type="text" name="stock${stockIndex}" /></td>
+                <td><button type="button" onclick="removeStockEntry(this)">刪除</button></td>
             </tr>
-            <tr>
-	            <td><button type="button" onclick="removeStockEntry(this)">刪除</button></td>
-	        </tr>
         </table>
     `;
     container.appendChild(newEntry);
@@ -150,4 +136,4 @@ function removeStockEntry(button) {
 }
 </script>
 </body>
-</html>
+</html></html>

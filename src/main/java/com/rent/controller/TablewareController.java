@@ -22,6 +22,8 @@ import com.rent.bean.Tableware;
 import com.rent.bean.TablewareStock;
 import com.rent.service.TablewareService;
 import com.rent.service.TablewareStockService;
+import com.reserve.bean.Restaurant;
+import com.reserve.service.RestaurantService;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -32,13 +34,19 @@ import jakarta.servlet.annotation.MultipartConfig;
 public class TablewareController{
 	
 	@Autowired
-	private ServletContext servletContext;
-	@Autowired
 	TablewareService tablewareService;
 	@Autowired
 	TablewareStockService tablewareStockService;
+	@Autowired
+	RestaurantService restaurantService;
 	
-	@SuppressWarnings("unused")
+	@GetMapping("getOption")
+	public String getOption(Model model) {
+		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+		model.addAttribute("restaurantNames", restaurantNames);
+		return "tableware/InsertTableware";
+	}
+	
 	@PostMapping("insert")
 	protected String insert(
 			@RequestParam("tableware_name") String tablewareName, 
@@ -47,53 +55,122 @@ public class TablewareController{
 			@RequestParam("tableware_description") String tablewareDescription,
 			@RequestParam Map<String, String> allParams,
 			Model model) throws IOException {
-		String uploadPath = servletContext.getRealPath("/tableware/tablewareImage");
-	    File uploadDir = new File(uploadPath);
-	    if (!uploadDir.exists()) {
-	        uploadDir.mkdirs(); // 确保递归创建目录
-	    }
-	    String fileName = Paths.get(timg.getOriginalFilename()).getFileName().toString();
-	    File filePart = new File(uploadPath + File.separator + fileName);
-		timg.transferTo(filePart);
-		String tablewareImage = "/EEIT187-6/tableware/tablewareImage/" + fileName;
 		
 		Tableware tableware = new Tableware();
 		tableware.setTablewareName(tablewareName);
 		tableware.setTablewareDeposit(tablewareDeposit);
-		tableware.setTablewareImage(tablewareImage);
 		tableware.setTablewareDescription(tablewareDescription);
 		tableware.setTablewareStatus(1);
+		
+		
+		String uploadPath = "C:/upload/tablewareIMG";
+		File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists()) {
+			uploadDir.mkdirs(); // 确保递归创建目录
+		}
+		if (!timg.isEmpty()) {
+			String fileName = timg.getOriginalFilename();
+			String extension = fileName.substring(fileName.lastIndexOf("."));
+			String newFileName = tablewareName + "_" + System.currentTimeMillis() + extension;
+			File filePart = new File(uploadPath + File.separator + newFileName);
+			timg.transferTo(filePart);
+			tableware.setTablewareImage("/EEIT187-6/tablewareIMG/" + newFileName);
+		}
 		tablewareService.insert(tableware);
 		
 		int tablewareId = tableware.getTablewareId();
-		List<String> restaurantIdParams = new ArrayList<>();
-	    List<String> stockParams = new ArrayList<>();
-	    for (Map.Entry<String, String> entry : allParams.entrySet()) {
-	        if (entry.getKey().startsWith("restaurantId")) {
-	            restaurantIdParams.add(entry.getValue());
-	        } else if (entry.getKey().startsWith("stock")) {
-	            stockParams.add(entry.getValue());
-	        }
-	    }
 		
-        List<TablewareStock> tablewareStocks = new ArrayList<>();
-        for (int i = 0; i < restaurantIdParams.size(); i++) {
-            String restaurantIdParam = restaurantIdParams.get(i);
-            String stockParam = stockParams.get(i);
-            if (restaurantIdParam != null && !restaurantIdParam.isEmpty() && stockParam != null && !stockParam.isEmpty()) {
-                Integer restaurantId = Integer.parseInt(restaurantIdParam);
-                Integer stock = Integer.parseInt(stockParam);
-
-                TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);
-                tablewareStocks.add(tablewareStock);
-            }
-        }
-        // 批量插入库存记录
-        for (TablewareStock tablewareStock : tablewareStocks) {
-            tablewareStockService.insert(tablewareStock.getTablewareId(), tablewareStock.getRestaurantId(), tablewareStock.getStock());
-        }
+		List<String> restaurantNameParams = new ArrayList<>();
+		List<String> stockParams = new ArrayList<>();
+		
+		for (Map.Entry<String, String> entry : allParams.entrySet()) {
+			if (entry.getKey().startsWith("restaurantName")) {
+				restaurantNameParams.add(entry.getValue());
+			} else if (entry.getKey().startsWith("stock")) {
+				stockParams.add(entry.getValue());
+			}
+		}
+		
+		List<TablewareStock> tablewareStocks = new ArrayList<>();
+		for (int i = 0; i < restaurantNameParams.size(); i++) {
+			String restaurantNameParam = restaurantNameParams.get(i);
+			String stockParam = stockParams.get(i);
+			System.out.println(restaurantNameParam);
+			if (restaurantNameParam != null && !restaurantNameParam.isEmpty() && stockParam != null && !stockParam.isEmpty()) {
+				String restaurantId = restaurantService.getRestaurantId(restaurantNameParam);
+				Integer stock = Integer.parseInt(stockParam);
+				
+				TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);
+				tablewareStocks.add(tablewareStock);
+			}
+		}
+		// 批量插入库存记录
+		for (TablewareStock tablewareStock : tablewareStocks) {
+			tablewareStockService.insert(tablewareStock.getTablewareId(), tablewareStock.getRestaurantId(), tablewareStock.getStock());
+		}
+		
 		return "redirect:/Tableware/getAll";
 	}
+	
+	
+//	@PostMapping("insert")
+//	protected String insert(
+//			@RequestParam("tableware_name") String tablewareName, 
+//			@RequestParam("tableware_deposit") Integer tablewareDeposit, 
+//			@RequestParam("tableware_image") MultipartFile timg,
+//			@RequestParam("tableware_description") String tablewareDescription,
+//			@RequestParam Map<String, String> allParams,
+//			Model model) throws IOException {
+//		
+//		Tableware tableware = new Tableware();
+//		tableware.setTablewareName(tablewareName);
+//		tableware.setTablewareDeposit(tablewareDeposit);
+//		tableware.setTablewareDescription(tablewareDescription);
+//		tableware.setTablewareStatus(1);
+//		
+//		
+//		String uploadPath = "C:/upload/tablewareIMG";
+//	    File uploadDir = new File(uploadPath);
+//	    if (!uploadDir.exists()) {
+//	        uploadDir.mkdirs(); // 确保递归创建目录
+//	    }
+//	    if (!timg.isEmpty()) {
+//	    	String fileName = timg.getOriginalFilename();
+//            String extension = fileName.substring(fileName.lastIndexOf("."));
+//            String newFileName = tablewareName + "_" + System.currentTimeMillis() + extension;
+//            File filePart = new File(uploadPath + File.separator + newFileName);
+//            timg.transferTo(filePart);
+//            tableware.setTablewareImage("/EEIT187-6/tablewareIMG/" + newFileName);
+//	    }
+//	    tablewareService.insert(tableware);
+//		int tablewareId = tableware.getTablewareId();
+//		List<String> restaurantIdParams = new ArrayList<>();
+//	    List<String> stockParams = new ArrayList<>();
+//	    for (Map.Entry<String, String> entry : allParams.entrySet()) {
+//	        if (entry.getKey().startsWith("restaurantId")) {
+//	            restaurantIdParams.add(entry.getValue());
+//	        } else if (entry.getKey().startsWith("stock")) {
+//	            stockParams.add(entry.getValue());
+//	        }
+//	    }
+//		
+//        List<TablewareStock> tablewareStocks = new ArrayList<>();
+//        for (int i = 0; i < restaurantIdParams.size(); i++) {
+//            String restaurantId = restaurantIdParams.get(i);
+//            String stockParam = stockParams.get(i);
+//            if (restaurantId != null && !restaurantId.isEmpty() && stockParam != null && !stockParam.isEmpty()) {
+//                Integer stock = Integer.parseInt(stockParam);
+//                TablewareStock tablewareStock = new TablewareStock(tablewareId, restaurantId, stock);
+//                tablewareStocks.add(tablewareStock);
+//            }
+//        }
+//        // 批量插入库存记录
+//        for (TablewareStock tablewareStock : tablewareStocks) {
+//            tablewareStockService.insert(tablewareStock.getTablewareId(), tablewareStock.getRestaurantId(), tablewareStock.getStock());
+//        }
+//        
+//		return "redirect:/Tableware/getAll";
+//	}
 
 	@GetMapping("getAll")
 	protected String getAll(Model model) {
@@ -118,33 +195,35 @@ public class TablewareController{
 			@RequestParam("tableware_description") String tablewareDescription,
 			@RequestParam("tableware_status") Integer tablewareStatus,
 			Model model) throws IOException {
-		Tableware existingTableware = tablewareService.getById(tablewareId);
-        String tablewareImage = existingTableware.getTablewareImage();
-        
-	    // 用户上传了新图片
-	    if (timg != null && timg.getSize() > 0) {
-	        String fileName = Paths.get(timg.getOriginalFilename()).getFileName().toString();
-	        tablewareImage = "/EEIT187-6/tableware/tablewareImage/" + fileName;
-	        try {
-	            // 获取上传路径
-	            String uploadPath = servletContext.getRealPath("/tableware/tablewareImage");
-	            File uploadDir = new File(uploadPath);
-	            if (!uploadDir.exists()) {
-	                uploadDir.mkdir(); // 如果目录不存在，则创建
-	            }
-	            // 将文件写入服务器
-	            File filePart = new File(uploadPath + File.separator + fileName);
-	    		timg.transferTo(filePart);
-	        } catch (Exception e) {
-	            e.printStackTrace();
+		Tableware tableware = tablewareService.getById(tablewareId);
+		tableware.setTablewareName(tablewareName);
+		tableware.setTablewareDeposit(tablewareDeposit);
+		tableware.setTablewareDescription(tablewareDescription);
+		tableware.setTablewareStatus(tablewareStatus);
+		
+        String uploadPath = "C:/upload/tablewareIMG";
+	    File fileSaveDir = new File(uploadPath);
+	    if (!fileSaveDir.exists()) {
+	        fileSaveDir.mkdirs();
+	    }
+
+	    if (!timg.isEmpty()) {
+	        String fileName = timg.getOriginalFilename();
+	        String extension = fileName.substring(fileName.lastIndexOf("."));
+	        String newFileName = tablewareName + "_" + System.currentTimeMillis() + extension;
+
+	        // 將檔案寫入指定路徑
+	        File fileToSave = new File(uploadPath + File.separator + newFileName);
+	        timg.transferTo(fileToSave);
+
+	        tableware.setTablewareImage("/EEIT187-6/tablewareIMG/" + newFileName);
+	    } else {
+	        // 如果沒有上傳新的圖片，保留現有圖片
+	        if (timg != null) {
+	        	tableware.setTablewareImage(tableware.getTablewareImage());
 	        }
 	    }
-	    existingTableware.setTablewareName(tablewareName);
-	    existingTableware.setTablewareDeposit(tablewareDeposit);
-	    existingTableware.setTablewareImage(tablewareImage);
-	    existingTableware.setTablewareDescription(tablewareDescription);
-	    existingTableware.setTablewareStatus(tablewareStatus);
-	    tablewareService.update(existingTableware);
+	    tablewareService.update(tableware);
 	    return "redirect:/Tableware/getAll";
 	}
 

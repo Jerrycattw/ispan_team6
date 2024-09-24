@@ -18,13 +18,13 @@
 	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>用 具 庫 存 資 料</h2>
-		<form method="GET" class="btn"
-			action="/EEIT187-6/tableware/InsertStock.html">
+		<form method="GET" class="btn" action="/EEIT187-6/TablewareStock/getOption">
 			<input type="submit" value="新增用具庫存">
+			<input type="hidden" name="action" value="insert">
 		</form>
-		<form method="get" class="btn"
-			action="/EEIT187-6/tableware/SearchStock.html">
+		<form method="get" class="btn" action="/EEIT187-6/TablewareStock/getOption">
 			<input type="submit" value="搜尋用具庫存">
+			<input type="hidden" name="action" value="search">
 		</form>
 		<form method="get" class="btn"
 			action="/EEIT187-6/TablewareStock/getAll">

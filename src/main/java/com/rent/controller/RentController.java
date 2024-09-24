@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.members.service.MemberService;
 import com.rent.bean.Rent;
 import com.rent.bean.RentItem;
 import com.rent.service.RentItemService;
@@ -37,6 +38,8 @@ public class RentController{
 	TablewareService tablewareService;
 	@Autowired
 	RentItemService rentItemService;
+//	@Autowired
+//	MemberService memberService;
 	
 	@GetMapping("getAll")
 	protected String getAll(Model model) {
@@ -48,8 +51,10 @@ public class RentController{
 	@GetMapping("getOption")
 	protected String getOption(Model model) {
 		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+//		List<String> memberNames = memberService.getAllMemberName();
 		List<Integer> tablewareIds = tablewareService.getTablewareIds();
 		model.addAttribute("restaurantNames", restaurantNames);
+//		model.addAttribute("memberNames", memberNames);
 		model.addAttribute("tablewareIds", tablewareIds);
 		return "tableware/InsertRent";
 	}
@@ -59,6 +64,7 @@ public class RentController{
 	protected String insert(
 			@RequestParam("rent_deposit") Integer rentDeposit,
 			@RequestParam("restaurantName") String restaurantName, 
+//			@RequestParam("memberName") String memberName,
 			@RequestParam("member_id") Integer memberId,
 			@RequestParam Map<String, String> allParams,
 			Model model) {
@@ -68,6 +74,7 @@ public class RentController{
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
 		java.util.Date dueDate = calendar.getTime();
 		String restaurantId = restaurantService.getRestaurantId(restaurantName);
+//		Integer memberId = memberService.getMemberId(memberName);
 		
 		Rent rent = new Rent();
 		rent.setRentDeposit(rentDeposit);

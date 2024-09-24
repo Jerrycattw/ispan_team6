@@ -19,12 +19,14 @@
 	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
 		<h2>租 借 訂 單 項 目 資 料</h2>
+		<!--  
 		<form method="GET" class="btn"
 			action="/EEIT187-6/tableware/InsertRentItem.html">
 			<input type="submit" value="新增訂單">
 		</form>
+		-->
 		<form method="get" class="btn"
-			action="/EEIT187-6/tableware/SearchRentItem.html">
+			action="/EEIT187-6/RentItem/getOption">
 			<input type="submit" value="搜尋用具">
 		</form>
 		<form method="get" class="btn"

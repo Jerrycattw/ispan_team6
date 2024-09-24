@@ -1,25 +1,21 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Get tableware data</title>
+<title>租借訂單</title>
 <link rel="stylesheet" href="../template/template.css">
-<link rel="stylesheet" href="../template/rent.css">
 <link rel="stylesheet" href="../template/table1.css">
+<link rel="stylesheet" href="../template/rent.css">
 <script src="../template/template.js"></script>
+
 </head>
 <body>
-	<div class="top-menu">
-		<a href="#" onclick="showSidebar('member')">會員管理</a> <a href="#"
-			onclick="showSidebar('store')">商城管理</a> <a href="#"
-			onclick="showSidebar('order')">訂餐管理</a> <a href="#"
-			onclick="showSidebar('rental')">租借用具管理</a> <a href="#"
-			onclick="showSidebar('reservation')">餐廳訂位管理</a> <a href="#"
-			onclick="showSidebar('points')">會員積分優惠券管理</a>
-	</div>
-	<div class="sidebar" id="sidebar"></div>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 	<div class="content" id="content">
-		<h2>請輸入訂單項目編號</h2>
+		<h2>請輸入搜尋項目</h2>
 		<form method="get" class="btn"
 			action="/EEIT187-6/RentItem/getAll">
 			<input type="submit" value="返回">
@@ -27,14 +23,13 @@
 		<form method="get" action="/EEIT187-6/RentItem/search" onsubmit="return validateForm()">
 			<table>
 				<tr>
-					<td>訂單編號:<select id="rent_id" name="rent_id" >
-					<option value="" selected disabled>請選擇訂單編號</option>
-						<option value="30000">30000</option>
-						<option value="30001">30001</option>
-						<option value="30002">30002</option>
-						<option value="30003">30003</option>
-						<option value="30004">30004</option>
-					</select> 
+					<td>訂單編號:
+					<select id="rentId" name="rentId">
+							<option value="" selected disabled>請選擇訂單編號</option>
+							<c:forEach items="${rentIds}" var="rentId">
+								<option value="${rentId}">${rentId}</option>
+							</c:forEach>
+					</select>
 					</td>
 				</tr>
 			</table>
@@ -48,7 +43,7 @@
 		
 		function validateForm() {
             // 获取表单字段的值
-            var rentId = document.getElementById("rent_id").value;
+            var rentId = document.getElementById("rentId").value;
             
 
             // 检查是否为空

@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>會員搜尋結果</title>
-<link rel="stylesheet" href="../views/css/memberSearchResult.css">
+<link rel="stylesheet" href="EEIT187-6/Admin/views/css/memberSearchResult.css">
 </head>
 <body>
 	<h2>搜尋結果</h2>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊頁面</title>
+	<link rel="stylesheet" href="css/register.css">
+   
+</head>
+
+<body>
+    <header>
+        <h1>註冊頁面</h1>
+        <nav>
+            <button id="homeButton">首頁</button>
+            <button id="loginButton">登入</button>
+        </nav>
+    </header>
+
+    <main>
+        <form>
+            <label for="memnberName">姓名:</label>
+            <input type="text" id="memberName" name="memberName" required>
+            <label for="account">帳號:</label>
+            <input type="text" id="account" name="account" required>
+            <label for="password">密碼:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="birthday">生日:</label>
+            <input type="date" id="birthday" name="birthday">
+            <label for="email">信箱:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="citySelect">地址:</label>
+            <div class="address-group">
+                <select id="citySelect">
+                    <option value="">城市</option>
+                </select>
+
+                <select id="districtSelect">
+                    <option value="">地區</option>
+                </select>
+                <input type="text" id="addressInput" name="detailedAddress" placeholder="詳細地址">
+                <input type="hidden" id="address" name="address">
+            </div>
+            <label for="phone">電話:</label>
+            <input type="tel" id="phone" name="phone">
+            <button type="submit" class="login-button">提交</button>
+        </form>
+        <script src="js/register.js"></script>
+        <script src="js/taiwan_districts.js"></script>
+    </main>
+</body>
+
+</html>

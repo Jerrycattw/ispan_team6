@@ -5,18 +5,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>搜尋會員結果</title>
+<title>管理員一覽</title>
 <link rel="stylesheet" href="/EEIT187-6/template/template.css">
 <script src="/EEIT187-6/template/template.js"></script>
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
 	<!-- 把JSP的內容放到這個div content裡面!!! -->
 	<div class="content" id="content">
-		<jsp:include page="views/memberSearchResult.jsp"></jsp:include>
-
-
+		<jsp:include page="views/findAllAdminsResult.jsp"></jsp:include>
 	</div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {

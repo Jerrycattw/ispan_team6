@@ -10,11 +10,11 @@
 <script src="/EEIT187-6/template/template.js"></script>
 </head>
 <body>
-	<jsp:include page="../HomePage.html"></jsp:include>
+	<jsp:include page="../../../HomePage.jsp"></jsp:include>
 
 	<!-- 把JSP的內容放到這個div content裡面!!! -->
 	<div class="content" id="content">
-		<jsp:include page="views/searchMembers.html"></jsp:include>
+		<jsp:include page="views/searchMembers.jsp"></jsp:include>
 	</div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {

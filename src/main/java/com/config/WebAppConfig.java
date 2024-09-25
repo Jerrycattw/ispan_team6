@@ -1,5 +1,6 @@
 package com.config;
 
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -21,6 +22,10 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
 //等於mvc-servlet.xml
@@ -45,8 +50,13 @@ public class WebAppConfig implements WebMvcConfigurer {
 		return irv;
 	}
 	
-	
-	
+	@Bean
+	public InternalResourceViewResolver irViewResolverHtml() {
+	    InternalResourceViewResolver irv = new InternalResourceViewResolver("/WEB-INF/pages/", ".html");
+	    irv.setOrder(2); // 在 JSP 之後
+	    return irv;
+	}
+		
 	@Bean
 	public ResourceBundleMessageSource messageSource() {
 		
@@ -87,7 +97,20 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/mycss/**").addResourceLocations("/WEB-INF/resources/mycss/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
 		
-		
+		//去tableware下找html檔
+		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
+
+	    registry.addResourceHandler("/menuIMG/**").addResourceLocations("file:///C:/upload/menuIMG/");
+	    
+	    registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
+			
+	    registry.addResourceHandler("/tablewareIMG/**").addResourceLocations("file:///C:/upload/tablewareIMG/");
+
+		registry.addResourceHandler("/coupon/**").addResourceLocations("/WEB-INF/resources/Html/coupon/");
+
+		registry.addResourceHandler("/ProductImg/**").addResourceLocations("file:///C:/upload/ProductImg/");
+
+
 	}
 
 
@@ -99,7 +122,24 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 //		registry.addViewController("/wonderland").setViewName("loginSystem");
 		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
+
 		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
+		registry.addViewController("/point/InsertBatchPoint").setViewName("/point/InsertBatchPoint");
+		registry.addViewController("/point/InsertPoint").setViewName("/point/InsertPoint");
+
+
+		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
+		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
+
+
+		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
+		registry.addViewController("/Shopping/SearchAllShopping").setViewName("Shopping/SearchAllShopping");
+		registry.addViewController("/Shopping/AddOrder").setViewName("Shopping/AddOrder");
+		registry.addViewController("/Shopping/ItemDetail").setViewName("Shopping/ItemDetail");
+		registry.addViewController("/Shopping/UpdateShopping").setViewName("Shopping/UpdateShopping");
+		registry.addViewController("/Shopping/UpdateItem").setViewName("Shopping/UpdateItem");
+
+
 		
 	}
 	
@@ -129,6 +169,13 @@ public class WebAppConfig implements WebMvcConfigurer {
 		return cViewResolver;
 	}
 	
+	
+	@Bean  //註冊Jackson模塊，在序列化的時候可以序列化localDate
+	public ObjectMapper objectMapper() {
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.registerModule(new JavaTimeModule());
+	    return mapper;
+	}
 	
 	
 }

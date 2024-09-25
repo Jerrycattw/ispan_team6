@@ -21,4 +21,6 @@ public interface MenuDao {
 	//查詢多筆
 	List<MenuBean> getAllFoods();
 	List<MenuBean> getFoodByName(String foodName);
+	//檢查fk衝突
+	public boolean checkFoodReferences(Integer foodId);
 }

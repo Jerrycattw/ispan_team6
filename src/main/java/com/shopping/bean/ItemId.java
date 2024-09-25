@@ -10,7 +10,7 @@ public class ItemId implements Serializable {
 
     public ItemId() {
     }
-
+ 
     public ItemId(Integer shoppingId, Integer productId) {
         this.shoppingId = shoppingId;
         this.productId = productId;

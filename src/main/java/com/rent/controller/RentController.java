@@ -1,274 +1,249 @@
 package com.rent.controller;
 
-import java.io.IOException;
+
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.members.service.MemberService;
 import com.rent.bean.Rent;
 import com.rent.bean.RentItem;
-import com.rent.bean.Tableware;
 import com.rent.service.RentItemService;
 import com.rent.service.RentService;
 import com.rent.service.TablewareService;
 import com.reserve.service.RestaurantService;
-import com.util.HibernateUtil;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/rentController/*")
-public class RentController extends HttpServlet {
+@Controller
+@RequestMapping("/Rent/*")
+public class RentController{
 
-	private static final long serialVersionUID = 1L;
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String action = request.getPathInfo().substring(1);
-		System.out.println(action);
-		switch (action) {
-		case "insert":
-			insert(request, response);
-			break;
-		case "getAll":
-			getAll(request, response);
-			break;
-		case "search":
-			search(request, response);
-			break;
-		case "getOver":
-			getOver(request, response);
-			break;
-		case "getById":
-			getById(request, response);
-			break;
-		case "update":
-			update(request, response);
-			break;
-		case "restore":
-			restore(request, response);
-			break;
-		case "delete":
-			delete(request, response);
-			break;
-		case "getOption":
-			getOption(request,response);
-			break;
-		case "searchOption":
-			searchOption(request,response);
-			break;
-		}
+	@Autowired
+	RentService rentService;
+	@Autowired
+	RestaurantService restaurantService;
+	@Autowired
+	TablewareService tablewareService;
+	@Autowired
+	RentItemService rentItemService;
+//	@Autowired
+//	MemberService memberService;
+	
+	@GetMapping("getAll")
+	protected String getAll(Model model) {
+		List<Rent> rents = rentService.getAll();
+		model.addAttribute("rent", rents);
+		return "tableware/GetAllRent";
 	}
 	
-	protected void getOption(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
-	    try {
-	        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-	        TablewareService tablewareService = new TablewareService(session);
-	        RestaurantService restaurantService = new RestaurantService();
-	        List<String> restaurantNames = restaurantService.getAllRestaurantName();
-	        List<Integer> tablewareIds = tablewareService.getTablewareIds();
-	        request.setAttribute("restaurantNames", restaurantNames);
-	        request.setAttribute("tablewareIds", tablewareIds);
-	        request.getRequestDispatcher("/rent/insert.jsp").forward(request, response);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+	@GetMapping("getOption")
+	protected String getOption(Model model) {
+		List<String> restaurantNames = restaurantService.getAllRestaurantName();
+//		List<String> memberNames = memberService.getAllMemberName();
+		List<Integer> tablewareIds = tablewareService.getTablewareIds();
+		model.addAttribute("restaurantNames", restaurantNames);
+//		model.addAttribute("memberNames", memberNames);
+		model.addAttribute("tablewareIds", tablewareIds);
+		return "tableware/InsertRent";
 	}
-
-	protected void insert(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		RentItemService rentItemService = new RentItemService(session);
-		RestaurantService restaurantService = new RestaurantService();
-		
+	
+	@SuppressWarnings("unused")
+	@GetMapping("insert")
+	protected String insert(
+			@RequestParam("rent_deposit") Integer rentDeposit,
+			@RequestParam("restaurantName") String restaurantName, 
+//			@RequestParam("memberName") String memberName,
+			@RequestParam("member_id") Integer memberId,
+			@RequestParam Map<String, String> allParams,
+			Model model) {
 		java.util.Date rentDate = new java.util.Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(rentDate);
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
 		java.util.Date dueDate = calendar.getTime();
+		String restaurantId = restaurantService.getRestaurantId(restaurantName);
+//		Integer memberId = memberService.getMemberId(memberName);
 		
-		int rentDeposit = Integer.parseInt(request.getParameter("rent_deposit"));
-		String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
-		int memberId = Integer.parseInt(request.getParameter("member_id"));
-		
-		Rent rent = rentService.insert(rentDeposit, rentDate, restaurantId, memberId, dueDate);
-		session.flush();
+		Rent rent = new Rent();
+		rent.setRentDeposit(rentDeposit);
+		rent.setRentDate(rentDate);
+		rent.setRestaurantId(restaurantId);
+		rent.setMemberId(memberId);
+		rent.setDueDate(dueDate);
+		rent.setRentStatus(1);
+		rent.setRentMemo("未歸還");
+		rentService.insert(rent);
+
 		int rentId = rent.getRentId();
 		
+		List<String> tablewareIds = new ArrayList<>();
+	    List<String> rentItemQuantities = new ArrayList<>();
+	    List<String> rentItemDeposits = new ArrayList<>();
+	    System.out.println(allParams.toString());
+	    
+	    for (Map.Entry<String, String> entry : allParams.entrySet()) {
+	        if (entry.getKey().startsWith("tablewareId")) {
+	            tablewareIds.add(entry.getValue());
+	        } else if (entry.getKey().startsWith("rentItemQuantity")) {
+	            rentItemQuantities.add(entry.getValue());
+	        } else if (entry.getKey().startsWith("rentItemDeposit")) {
+	            rentItemDeposits.add(entry.getValue());
+	        }
+	    }
+		
 		List<RentItem> rentItems = new ArrayList<>();
-		int index = 0;
-		while (true) {
-            String tablewareIdParam = request.getParameter("tablewareId" + index);
-            String rentItemQuantityParam = request.getParameter("rentItemQuantity" + index);
-            String rentItemDepositParam = request.getParameter("rentItemDeposit" + index);
+		for (int i = 0; i < tablewareIds.size(); i++) {
+	        Integer tablewareId = Integer.parseInt(tablewareIds.get(i));
+	        Integer rentItemQuantity = Integer.parseInt(rentItemQuantities.get(i));
+	        Integer rentItemDeposit = Integer.parseInt(rentItemDeposits.get(i));
 
-            if (tablewareIdParam == null) {
-                break; // 如果没有更多的tablewareIdParam，退出循环
-            }
-            System.out.println("Rent Item " + index + ":");
-            System.out.println("Tableware ID: " + tablewareIdParam);
-            System.out.println("Quantity: " + rentItemQuantityParam);
-            System.out.println("Deposit: " + rentItemDepositParam);
-
-            Integer tablewareId = Integer.parseInt(tablewareIdParam);
-            Integer rentItemQuantity = Integer.parseInt(rentItemQuantityParam);
-            Integer rentItemDeposit = Integer.parseInt(rentItemDepositParam);
-
-            RentItem rentItem = new RentItem(rentId,tablewareId,rentItemQuantity,rentItemDeposit,"未歸還",1);
-            rentItems.add(rentItem);
-            
-            index++; // 处理下一个RentItem
-        }
+	        RentItem rentItem = new RentItem(rentId, tablewareId, rentItemQuantity, rentItemDeposit, "未歸還", 1);
+	        rentItems.add(rentItem);
+	    }
 		for (RentItem rentItem : rentItems) {
-	        rentItemService.insert(rentItem.getRentId(), rentItem.getTablewareId(), rentItem.getRentItemQuantity(), rentItem.getRentItemDeposit());
+	        rentItemService.insert(rentItem);
 	    }
-		response.sendRedirect(request.getContextPath() +"/rentController/getAll");
+		return "redirect:/Rent/getAll";
 	}
-
-	protected void getById(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		int rentId = Integer.parseInt(request.getParameter("rent_id"));
+	
+	@GetMapping("getById")
+	protected String getById(
+			@RequestParam("rent_id") Integer rentId, 
+			@RequestParam("action") String action, 
+			Model model){
 		Rent rent = rentService.getById(rentId);
-		RestaurantService restaurantService = new RestaurantService();
 		List<String> restaurantNames = restaurantService.getAllRestaurantName();
-		request.setAttribute("restaurantNames", restaurantNames);
-		request.setAttribute("rent", rent);
-		String action = request.getParameter("action");
+		model.addAttribute("restaurantNames", restaurantNames);
+		model.addAttribute("rent", rent);
 		if ("update".equals(action)) {
-	        request.getRequestDispatcher("/rent/update.jsp").forward(request, response);
+			return "tableware/UpdateRent";
 	    } else if ("restore".equals(action)) {
-	        request.getRequestDispatcher("/rent/restore.jsp").forward(request, response);
+	        return "tableware/ReturnRent";
 	    }
+		return null;
 	}
 
-	protected void update(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService();
+	@GetMapping("update")
+	protected String update(
+			@RequestParam("rent_id") Integer rentId,
+			@RequestParam("rent_deposit") Integer rentDeposit,
+			@RequestParam("rent_date") String rentDateUtil,
+			@RequestParam("restaurantName") String restaurantName, 
+			@RequestParam("member_id") Integer memberId,
+			@RequestParam("due_date") String dueDateUtil,
+			@RequestParam("return_date") String returnDateUtil,
+			@RequestParam("rent_status") Integer rentStatus,
+			@RequestParam("rent_memo") String rentMemo,
+			@RequestParam("returnRestaurantName") String returnRestaurantName, 
+			Model model) {
 		try {
-			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
-			Integer rentDeposit = Integer.parseInt(request.getParameter("rent_deposit"));
-			Date rentDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("rent_date"));
-			String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
-			Integer memberId = Integer.parseInt(request.getParameter("member_id"));
-			Date dueDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("due_date"));
-			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("return_date"));
-			Integer rentStatus = Integer.parseInt(request.getParameter("rent_status"));
-			String rentMemo = request.getParameter("rent_memo");
-			String returnRestaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
-
-			Rent rent = rentService.update(rentId, rentDeposit, rentDate, restaurantId, memberId, dueDate, returnDate,
-					rentStatus, rentMemo, returnRestaurantId);
-			response.sendRedirect(request.getContextPath() +"/rentController/getAll");
+			Date rentDate = new SimpleDateFormat("yyyy-MM-dd").parse(rentDateUtil);
+			String restaurantId = restaurantService.getRestaurantId(restaurantName);
+			Date dueDate = new SimpleDateFormat("yyyy-MM-dd").parse(dueDateUtil);
+			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(returnDateUtil);
+			String returnRestaurantId = restaurantService.getRestaurantId(returnRestaurantName);
+			
+			Rent rent = new Rent();
+			rent.setRentId(rentId);
+			rent.setRentDeposit(rentDeposit);
+			rent.setRentDate(rentDate);
+			rent.setRestaurantId(restaurantId);
+			rent.setMemberId(memberId);
+			rent.setDueDate(dueDate);
+			rent.setReturnDate(returnDate);
+			rent.setRentStatus(rentStatus);
+			rent.setRentMemo(rentMemo);
+			rent.setReturnRestaurantId(returnRestaurantId);
+			rentService.update(rent);
+			return "redirect:/Rent/getAll";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
-	protected void delete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		RentItemService rentItemService = new RentItemService(session);
-		Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
-		
+	@GetMapping("delete")
+	protected String delete(
+			@RequestParam("rent_id") Integer rentId,
+			Model model) {
 		List<RentItem> rentItems = rentItemService.getById(rentId);
 		for(RentItem rentItem: rentItems) {
 			rentItemService.delete(rentItem);
 		}
 		rentService.delete(rentId);
-		response.sendRedirect(request.getContextPath() + "/rentController/getAll");
+		return "redirect:/Rent/getAll";
 	}
 
-	protected void restore(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService();
+	@GetMapping("restore")
+	protected String restore(
+			@RequestParam("rent_id") Integer rentId,
+			@RequestParam("return_date") String returnDateUtil,
+			@RequestParam("restaurantName") String restaurantName, 
+			Model model) {
 		try {
-			Integer rentId = Integer.parseInt(request.getParameter("rent_id"));
-			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("return_date"));
-			String returnRestaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName"));
+			Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(returnDateUtil);
+			String returnRestaurantId = restaurantService.getRestaurantId(restaurantName);
 			Rent rent = rentService.restore(rentId, returnDate, returnRestaurantId);
-			response.sendRedirect(request.getContextPath() +"/rentController/getAll");
+			return "redirect:/Rent/getAll";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
-	protected void getAll(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		List<Rent> rents = rentService.getAll();
-		request.setAttribute("rent", rents);
-		request.getRequestDispatcher("/rent/getAll.jsp").forward(request, response);
-	}
-	
-	protected void searchOption(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService();
+	@GetMapping("searchOption")
+	protected String searchOption(Model model) {
 		List<Integer> rentIds = rentService.getRentId();
 		List<String> restaurantNames = restaurantService.getAllRestaurantName();
-		request.setAttribute("rentIds", rentIds);
-		request.setAttribute("restaurantNames", restaurantNames);
-		request.getRequestDispatcher("/rent/search.jsp").forward(request, response);
+		model.addAttribute("rentIds", rentIds);
+		model.addAttribute("restaurantNames", restaurantNames);
+		return "tableware/SearchRent";
 	}
 
-	protected void search(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-		RestaurantService restaurantService = new RestaurantService();
+	@GetMapping("search")
+	protected String search(
+			@RequestParam(value = "rent_id" , required = false) Integer rentId,
+			@RequestParam(value = "member_id" , required = false) Integer memberId,
+			@RequestParam(value = "restaurantName" , required = false) String restaurantName, 
+			@RequestParam(value = "rent_status", required = false) Integer rentStatus,
+			@RequestParam(value = "rent_date_start", required = false) String rentDateStartStr,
+			@RequestParam(value = "rent_date_end", required = false) String rentDateEndStr,
+			Model model) {
 		try {
-			Integer rentId = request.getParameter("rentId") != null && !request.getParameter("rentId").isEmpty() 
-	                ? Integer.parseInt(request.getParameter("rentId")) : null;
-	        Integer memberId = request.getParameter("member_id") != null && !request.getParameter("member_id").isEmpty() 
-	                ? Integer.parseInt(request.getParameter("member_id")) : null;
-	        String restaurantId = restaurantService.getRestaurantId(request.getParameter("restaurantName")) != null && !restaurantService.getRestaurantId(request.getParameter("restaurantName")).isEmpty() 
-	                ?restaurantService.getRestaurantId(request.getParameter("restaurantName")) : null;
-	        Integer rentStatus = request.getParameter("rent_status") != null && !request.getParameter("rent_status").isEmpty() 
-	                ? Integer.parseInt(request.getParameter("rent_status")) : null;
-	        Date rentDateStart = request.getParameter("rent_date_start") != null && !request.getParameter("rent_date_start").isEmpty() 
-	                ? new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("rent_date_start")) : null;
-	        Date rentDateEnd = request.getParameter("rent_date_end") != null && !request.getParameter("rent_date_end").isEmpty() 
-	                ? new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("rent_date_end")) : null;
-
-			List<Rent> rents = rentService.getByMany(rentId, memberId, restaurantId, rentStatus, rentDateStart,
-					rentDateEnd);
-			request.setAttribute("rent", rents);
-			request.getRequestDispatcher("/rent/getAll.jsp").forward(request, response);
+			rentId = (rentId != null) ? rentId : null;
+			memberId = (memberId != null) ? memberId : null;
+			String restaurantId = restaurantService.getRestaurantId(restaurantName);
+	        restaurantId = (restaurantId != null && !restaurantId.isEmpty()) ? restaurantId : null;
+	        rentStatus = (rentStatus != null) ? rentStatus : null;
+	        Date rentDateStart = (rentDateStartStr != null && !rentDateStartStr.isEmpty()) ? new SimpleDateFormat("yyyy-MM-dd").parse(rentDateStartStr) : null;
+	        Date rentDateEnd = (rentDateEndStr != null && !rentDateEndStr.isEmpty()) ? new SimpleDateFormat("yyyy-MM-dd").parse(rentDateEndStr) : null;
+	        
+			List<Rent> rents = rentService.getByMany(rentId, memberId, restaurantId, rentStatus, rentDateStart,rentDateEnd);
+			model.addAttribute("rent", rents);
+			return "tableware/GetAllRent";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
-	protected void getOver(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		RentService rentService = new RentService(session);
-
+	@GetMapping("getOver")
+	protected String getOver(Model model) {
 		List<Rent> rents = rentService.getOver();
-		request.setAttribute("rent", rents);
-		request.getRequestDispatcher("/rent/getAll.jsp").forward(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
+		model.addAttribute("rent", rents);
+		return "tableware/GetAllRent";
 	}
 }
+

@@ -2,6 +2,9 @@ package com.point.dto;
 
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PointMemberDTO {
 	private Integer memberId;
 	private String memberName;

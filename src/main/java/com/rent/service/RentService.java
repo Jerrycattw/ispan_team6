@@ -4,24 +4,28 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.rent.bean.Rent;
 import com.rent.bean.RentItem;
 import com.rent.dao.RentDao;
 import com.rent.dao.RentItemDao;
-
+@Service
+@Transactional
 public class RentService {
-	private final RentDao rentDao;
-	private RentItemDao rentItemDao;
-	private final Session session;
+	@Autowired
+	private  RentDao rentDao;
+//	private  Session session;
 
-	public RentService(Session session) {
-		this.session = session;
-		this.rentDao = new RentDao(session);
-		this.rentItemDao = new RentItemDao(session);
-	}
+//	public RentService(Session session) {
+//		this.session = session;
+//		this.rentDao = new RentDao(session);
+//		this.rentItemDao = new RentItemDao(session);
+//	}
 
-	public Rent insert(int rentDeposit, Date rentDate, String restaurantId, int memberId, Date dueDate) {
-		Rent rent = new Rent(rentDeposit, rentDate, restaurantId, memberId, dueDate, null, 1, "未歸還");
+	public Rent insert(Rent rent) {
 		return rentDao.insert(rent);
 	}
 
@@ -33,22 +37,8 @@ public class RentService {
 		return rentDao.getById(rentId);
 	}
 
-	public Rent update(Integer rentId, Integer rentDeposit, Date rentDate, String restaurantId, Integer memberId,
-			Date dueDate, Date returnDate, Integer rentStatus, String rentMemo, String returnRestaurantId) {
-		Rent rent = rentDao.getById(rentId);
-		if (rent != null) {
-			rent.setRentDeposit(rentDeposit);
-			rent.setRentDate(rentDate);
-			rent.setRestaurantId(restaurantId);
-			rent.setMemberId(memberId);
-			rent.setDueDate(dueDate);
-			rent.setReturnDate(returnDate);
-			rent.setRentStatus(rentStatus);
-			rent.setRentMemo(rentMemo);
-			rent.setReturnRestaurantId(returnRestaurantId);
-			rentDao.update(rent);
-		}
-		return rent;
+	public Rent update(Rent rent) {
+		return rentDao.update(rent);
 	}
 
 	public boolean delete(Integer rentId) {

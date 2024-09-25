@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>新增訂單</title>
+<link rel="stylesheet" href="../template/template.css">
+<script src="../template/template.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+	.description {
+		padding-left: 5px;
+        color: #ADADAD;
+        font-size: 0.9em;
+    }
+    .error {
+    	padding-left: 5px;
+        color: red;
+        font-size: 0.8em;
+    }
+</style>
+</head>
+<body>
+	 <!-- 上方選單 -->
+    <div class="top-menu">
+        <a href="#" onclick="showSidebar('member')">會員管理</a>
+        <a href="#" onclick="showSidebar('store')">商城管理</a>
+        <a href="#" onclick="showSidebar('order')">訂餐管理</a>
+        <a href="#" onclick="showSidebar('rental')">租借用具管理</a>
+        <a href="#" onclick="showSidebar('reservation')">餐廳訂位管理</a>
+        <a href="#" onclick="showSidebar('points')">會員積分優惠券管理</a>
+    </div>
+<div class="sidebar" id="sidebar"></div>
+<div class="content" id="content">
+<h2>新增訂單</h2>
+<button onclick="window.location.href='/EEIT187-6/TogoController/getAll'">返回全部訂單</button><p>
+<form method="get" action="/EEIT187-6/TogoController/add" onsubmit="return validateForm()">
+	輸入會員編號 : <input type="text" name="memberId" value="1" /><span class="error" id="memberIdError"></span><br><p>
+	輸入姓名 : <input type="text" name="tgName" /><span class="error" id="tgNameError"></span><br><p>
+	輸入電話 : <input type="text" name="tgPhone" /><span class="error" id="tgPhoneError"></span><br><p>
+	輸入總金額 : <input type="text" name="totalPrice" value="0" readonly/><br><p>
+	輸入租借單號 : <input type="text" name="rentId" value="30001" /><span class="error" id="rentIdError"></span><br><p>
+	輸入訂單狀態 : <select name="togoStatus" style="width: 40px">
+	           	<option value="1">1</option>
+        		<option value="2">2</option>
+        		<option value="3">3</option>
+               </select><span class="description">1=未取餐, 2=已取餐, 3=取消訂單</span><br><p>
+	輸入餐廳編號 : <input type="text" name="restaurantId" value="1" /><span class="error" id="restaurantIdError"></span><br><p>
+	輸入訂單備註 : <textarea name="togoMemo" rows="4" cols="50"></textarea><br><p>
+	<input type="submit" value="確定" />
+</form>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+	const constraints = {
+			memberId: {
+	            numericality: {
+	            	onlyInteger: true,
+	            	greaterThanOrEqualTo: 0,
+	            	message: "會員編號格式錯誤，只能為數字" 
+	            	}
+	        },
+	        tgName: {
+	            presence: {
+	            	allowEmpty: false,
+	            	message: "姓名不能為空白" 
+	            	}
+	        },
+	        tgPhone: {
+	            format: {
+	            	onlyInteger: true,
+	                pattern: /^09\d{8}$/,
+	                message: "電話號碼格式錯誤"
+	            }
+	        },
+	        rentId: {
+	            numericality: {
+	            	onlyInteger: true,
+	            	greaterThanOrEqualTo: 0,
+	            	message: "租借單號格式錯誤，只能為數字" 
+	            	}
+	        },
+	        restaurantId: { 
+	        	numericality: {
+	            	onlyInteger: true,
+	            	greaterThan: 0,
+	            	message: "餐廳編號格式錯誤，只能為數字" 
+	            }
+	        }
+	    };	
+	function validateField(input, fieldName) {
+        const value = input.value;
+        const errors = validate({ [fieldName]: value }, { [fieldName]: constraints[fieldName] });
+        const errorSpan = document.getElementById(`${fieldName}Error`);
+
+        if (errors && errors[fieldName]) {
+            // 使用 constraints 中的 message 來顯示錯誤信息
+            if (constraints[fieldName].format){
+                errorSpan.textContent = constraints[fieldName].format.message;
+            } else if (constraints[fieldName].presence) {
+	            errorSpan.textContent = constraints[fieldName].presence.message;           	
+            } else{
+            	errorSpan.textContent = constraints[fieldName].numericality.message;
+            }
+        } else {
+            errorSpan.textContent = '';
+        }
+    }
+	const memberId = document.querySelector('input[name="memberId"]');
+	const tgName = document.querySelector('input[name="tgName"]');
+	const tgPhone = document.querySelector('input[name="tgPhone"]');
+	const rentId = document.querySelector('input[name="rentId"]');
+	const restaurantId = document.querySelector('input[name="restaurantId"]');
+	
+	memberId.addEventListener('blur', function() {
+        validateField(this, 'memberId');
+    });
+	tgName.addEventListener('blur', function() {
+        validateField(this, 'tgName');
+    });
+	tgPhone.addEventListener('blur', function() {
+        validateField(this, 'tgPhone');
+    });
+	rentId.addEventListener('blur', function() {
+        validateField(this, 'rentId');
+    });
+	restaurantId.addEventListener('blur', function() {
+        validateField(this, 'restaurantId');
+    });
+	function validateForm() {
+        const isValid = true;
+        ['memberId', 'tgName', 'tgPhone', 'rentId', 'restaurantId'].forEach(field => {
+            const input = document.querySelector(`input[name="${field}"]`);
+            validateField(input, field);
+            if (document.getElementById(`${field}Error`).textContent !== '') {
+                isValid = false;
+            }
+        });
+        return isValid;
+    }
+	document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止表單默認提交
+
+        if (validateForm()) {
+            const params = new URLSearchParams(new FormData(this)).toString(); // 將FormData轉換為URL
+
+            fetch(this.action + '?' + params, { // 用表單action屬性作為URL
+                method: 'GET'
+            }).then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            }).then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: '新增成功',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    window.location.href = '/EEIT187-6/TogoController/getAll'; 
+                });
+            }).catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: '提交失敗',
+                    text: error.message
+                });
+            });
+        }
+    });
+	
+});
+
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showSidebar('order');
+    });
+</script>
+</body>
+</html>

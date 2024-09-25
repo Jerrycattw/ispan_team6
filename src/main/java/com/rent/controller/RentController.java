@@ -91,7 +91,8 @@ public class RentController{
 		List<String> tablewareIds = new ArrayList<>();
 	    List<String> rentItemQuantities = new ArrayList<>();
 	    List<String> rentItemDeposits = new ArrayList<>();
-
+	    System.out.println(allParams.toString());
+	    
 	    for (Map.Entry<String, String> entry : allParams.entrySet()) {
 	        if (entry.getKey().startsWith("tablewareId")) {
 	            tablewareIds.add(entry.getValue());

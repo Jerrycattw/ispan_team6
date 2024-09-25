@@ -23,7 +23,7 @@
                 <div style="color: red;">${error}</div>
             </c:if>
 
-            <form id="addAdminForm" action="${pageContext.request.contextPath}/admin/add" method="POST">
+            <form id="addAdminForm" action="EEIT187-6/admin/add" method="POST">
                 <div class="form-group">
                     <label for="adminName">管理員名稱</label>
                     <input type="text" id="adminName" name="adminName" placeholder="輸入管理員名稱" required>

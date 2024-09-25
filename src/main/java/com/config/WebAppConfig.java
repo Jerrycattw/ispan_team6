@@ -99,24 +99,16 @@ public class WebAppConfig implements WebMvcConfigurer {
 		
 		//去tableware下找html檔
 		registry.addResourceHandler("/tableware/**").addResourceLocations("/WEB-INF/pages/tableware/");
-		
-		
 
-		
-
-    registry.addResourceHandler("/menuIMG/**").addResourceLocations("file:///C:/upload/menuIMG/");
-    
-    registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
-
-		
-    registry.addResourceHandler("/tablewareIMG/**").addResourceLocations("file:///C:/upload/tablewareIMG/");
+	    registry.addResourceHandler("/menuIMG/**").addResourceLocations("file:///C:/upload/menuIMG/");
+	    
+	    registry.addResourceHandler("/restaurantIMG/**").addResourceLocations("file:///C:/upload/restaurantIMG/");
+			
+	    registry.addResourceHandler("/tablewareIMG/**").addResourceLocations("file:///C:/upload/tablewareIMG/");
 
 		registry.addResourceHandler("/coupon/**").addResourceLocations("/WEB-INF/resources/Html/coupon/");
 
-		
-		
-
-		registry.addResourceHandler("/ProductImg/**").addResourceLocations("file:///C:/upload/ProductImg");
+		registry.addResourceHandler("/ProductImg/**").addResourceLocations("file:///C:/upload/ProductImg/");
 
 
 	}

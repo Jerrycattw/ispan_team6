@@ -8,6 +8,111 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>會員搜尋</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* 深黑色背景 */
+    color: #e0e0e0; /* 淺灰色文字 */
+    margin: 0;
+}
+
+header {
+    background-color: #1f1f1f; /* 深灰色背景 */
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #333; /* 深灰色底邊框 */
+}
+
+h1 {
+    margin: 0;
+    color: #ffffff; /* 白色文字 */
+}
+
+main {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-form {
+    background-color: #1f1f1f; /* 深灰色背景 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* 白色陰影 */
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 元素之間的間距 */
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 標籤和選項之間的間距 */
+    margin-bottom: 15px;
+}
+
+label {
+    color: #b0b0b0; /* 較淺的灰色文字 */
+    margin: 0;
+    width: 120px; /* 限制標籤寬度 */
+    text-align: right; /* 右對齊 */
+}
+
+input[type="text"], input[type="email"], input[type="date"] {
+    width: 100%;
+    max-width:450px; /* 限制輸入欄位最大寬度 */
+    padding: 10px;
+    border: 1px solid #333; /* 更深的灰色邊框 */
+    border-radius: 4px;
+    background-color: #2c2c2c; /* 較深的背景色 */
+    color: #e0e0e0; /* 淺灰色文字 */
+    box-sizing: border-box; /* 包含邊框和內邊距在總寬度內 */
+}
+
+input::placeholder {
+    color: #777; /* 較淺的灰色佔位文字 */
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 15px; /* 選項之間的間距 */
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    color: #e0e0e0; /* 淺灰色文字 */
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #333; /* 深灰色按鈕背景 */
+    border: none;
+    border-radius: 4px;
+    color: #ffffff; /* 白色文字 */
+    font-size: 18px;
+    cursor: pointer;
+    box-sizing: border-box; /* 包含邊框和內邊距在總寬度內 */
+}
+
+button:hover {
+    background-color: #444; /* 按鈕懸停時變為較淺的灰色 */
+}
+
+#results {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    background-color: #1f1f1f; /* 深灰色背景 */
+    padding: 10px;
+    border-radius: 4px;
+    color: #e0e0e0; /* 淺灰色文字 */
+}
+</style>
 <link rel="stylesheet" href="views/css/searchMembers.css">
 </head>
 

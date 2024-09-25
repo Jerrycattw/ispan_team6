@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TogoOrder.bean.MenuBean;
+import com.TogoOrder.dao.MenuDao;
 import com.TogoOrder.dao.MenuDaoImpl;
 
 import jakarta.transaction.Transactional;
@@ -14,8 +15,10 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class MenuServiceImpl implements MenuService {
 	
+//	@Autowired
+//	private MenuDaoImpl menuDao;
 	@Autowired
-	private MenuDaoImpl menuDao;
+	private MenuDao menuDao;
 	
 	@Override
 	public MenuBean addFood(MenuBean food) {
@@ -25,9 +28,9 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public boolean deleteFoodById(Integer foodId) {
-		if (menuDao.checkFoodReferences(foodId)) {
-			return false;
-		}
+//		if (menuDao.checkFoodReferences(foodId)) {
+//			return false;
+//		}
 		return menuDao.deleteFoodById(foodId);
 	}
 

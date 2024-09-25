@@ -128,7 +128,7 @@ public class ProductController {
 				uploadDirFile.mkdirs();
 			}
 			file.transferTo(new File(uploadDir, filename));
-			productPicture = "/EEIT187-6/Product/ProductImg/" + filename;
+			productPicture = "/EEIT187-6/ProductImg/" + filename;
 		}
 
 		product.setProductName(productName);

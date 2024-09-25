@@ -1,15 +1,19 @@
 package com.members.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
+
 
 import com.members.bean.Member;
 import com.members.dao.MemberDao;
+
 
 @Service
 public class MemberService {
@@ -134,5 +138,6 @@ public class MemberService {
         String newHashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         return memberDao.updatePassword(account, newHashedPassword);
     }
+
 }
  

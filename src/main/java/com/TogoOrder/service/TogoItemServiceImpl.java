@@ -2,17 +2,19 @@ package com.TogoOrder.service;
 
 import java.util.List;
 
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.TogoOrder.bean.TogoItemBean;
-import com.TogoOrder.dao.TogoItemDaoImpl;
+import com.TogoOrder.dao.TogoItemDao;
 
+@Service
+@Transactional
 public class TogoItemServiceImpl implements TogoItemService {
-	private TogoItemDaoImpl togoItemDao;
 	
-	public TogoItemServiceImpl(Session session) {
-		togoItemDao = new TogoItemDaoImpl(session);
-	}
+	@Autowired
+	private TogoItemDao togoItemDao;
 	
 	@Override
 	public TogoItemBean addTogoItem(TogoItemBean togoItem) {

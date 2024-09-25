@@ -1,5 +1,8 @@
 package com.coupon.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TagDTO {
 	private String tagName;
     private String tagType;

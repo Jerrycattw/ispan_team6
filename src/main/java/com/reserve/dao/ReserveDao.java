@@ -28,19 +28,24 @@ public class ReserveDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-//	private Session session;
-//
-//	public ReserveDao(Session session) {
-//		super();
-//		this.session = session;
-//	}
 
+//	// 依ID查詢單筆訂位訂單
+//	public Reserve selectById(String reserveId) {
+//		Session session = sessionFactory.getCurrentSession();
+//		return session.get(Reserve.class, reserveId);
+//	}
+	
 	// 依ID查詢單筆訂位訂單
 	public Reserve selectById(String reserveId) {
-		
 		Session session = sessionFactory.getCurrentSession();
-		return session.get(Reserve.class, reserveId);
+	    String hql = "SELECT r FROM Reserve r JOIN FETCH r.member JOIN FETCH r.restaurant WHERE r.id = :reserveId";
+	    Query<Reserve> query = session.createQuery(hql, Reserve.class);
+	    query.setParameter("reserveId", reserveId);
+	    return query.uniqueResult();
 	}
+	
+	
+	
 
 	// 查詢所有訂位訂單
 	public List<Reserve> selectAll() {
@@ -60,6 +65,10 @@ public class ReserveDao {
 		}
 		return null;
 	}
+	
+	
+	
+	
 
 	// 更新訂位資料
 	public Reserve update(Reserve reserve) {
@@ -153,7 +162,8 @@ public class ReserveDao {
 
 		
 	    StringBuilder hql = new StringBuilder(
-	            "SELECT r FROM Reserve r JOIN r.restaurant rt JOIN r.member m WHERE 1=1");
+	    		
+	            "SELECT r FROM Reserve r JOIN FETCH r.restaurant rt JOIN FETCH r.member m WHERE 1=1");
 	    
 	    if (memberName != null && !memberName.isEmpty()) {
 	        hql.append(" AND m.name LIKE :memberName");

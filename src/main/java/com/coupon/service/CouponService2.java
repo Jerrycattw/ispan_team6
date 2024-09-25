@@ -1,28 +1,58 @@
 package com.coupon.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.coupon.bean.CouponBean;
 import com.coupon.bean.TagBean;
 import com.coupon.bean.TagId;
 import com.coupon.dao.CouponDao2;
 import com.coupon.dto.CouponDTO;
+import com.coupon.dto.CouponDistributeDTO;
 import com.coupon.dto.TagDTO;
 
+
+@Service
+@Transactional
 public class CouponService2 {
+	
+	@Autowired
 	private CouponDao2 couponDao2;
-
-	public CouponService2(Session session) {
-		couponDao2 = new CouponDao2(session);
+	
+	@Autowired
+    private CouponService2 self;
+	
+	//convert distributeDTO
+	public CouponDistributeDTO convertCouponDistributeDTO(CouponBean couponBean) {
+		return new CouponDistributeDTO(
+				couponBean.getCouponId(),
+				couponBean.getCouponCode()+couponBean.getCouponDescription(),//selectOption
+				couponBean.getReceivedAmount(),
+				couponBean.getMaxCoupon()
+		);
 	}
-
-	//convert DTO
+	
+	//convert distributeDTOs
+	public List<CouponDistributeDTO> conCouponDistributeDTO(List<CouponBean> couponBeans){
+		return couponBeans.stream()
+				.map(couponBean -> convertCouponDistributeDTO(couponBean))
+				.collect(Collectors.toList());
+	}
+	
+	
+	
+	//convert couponDTO
 	public CouponDTO convertCouponDTO(CouponBean couponBean) {
 		List<TagDTO> tagDTOs = couponBean.getTags().stream()
 				.map(tagBean -> new TagDTO(tagBean.getTagId().getTagName(), tagBean.getTagType()))
@@ -47,7 +77,7 @@ public class CouponService2 {
 		);
 	}
 	
-	//convert DTOs
+	//convert couponDTOs
 	public List<CouponDTO> convertCouponDTO(List<CouponBean> couponBeans) {
 	    return couponBeans.stream()
 	            .map(couponBean -> convertCouponDTO(couponBean))
@@ -88,8 +118,8 @@ public class CouponService2 {
 	
 	//insert Coupon
 	public void insertCoupon(CouponBean couponBean,String[] productTags, String[] togoTags) {
-		addTags(couponBean,productTags,"product");
-		addTags(couponBean,togoTags,"togo");	
+		self.addTags(couponBean,productTags,"product");
+		self.addTags(couponBean,togoTags,"togo");
 		couponDao2.insertCoupon(couponBean);
 	}
 	
@@ -101,20 +131,52 @@ public class CouponService2 {
 	
 	
 	//update
-		public void updateCoupon(CouponBean couponBean, String[] productTags, String[] togoTags) {	
-			addTags(couponBean,productTags,"product");
-			addTags(couponBean,togoTags,"togo");
-			couponDao2.updateCoupon(couponBean);
+	public void updateCoupon(CouponBean couponBean, String[] productTags, String[] togoTags) {
+		System.out.println("touch");
+		self.addTags(couponBean,productTags,"product");
+		self.addTags(couponBean,togoTags,"togo");
+		System.out.println("addtags done");
+		couponDao2.updateCoupon(couponBean);
+		System.out.println("dao DONE");
+	}
+	
+	//search coupon
+		public List<CouponDTO> searchCoupons(String keyWord){
+			List<CouponBean> searchBeans = couponDao2.searchCoupons(keyWord);
+			return convertCouponDTO(searchBeans);
+		}
+	
+	//distrubute option
+		public List<CouponDistributeDTO> getDistributeOption(String memberIds){
+			String[] arrayMemberIds=memberIds.split(",");
+			int distributeAmount=arrayMemberIds.length;
+			
+			List<CouponBean> allCoupon = couponDao2.getAllCoupon();
+			List<CouponBean> couponOption = new ArrayList<CouponBean>();
+			for (CouponBean couponBean : couponOption) {
+				int maxAmount = couponBean.getMaxCoupon();
+				int receivedAmount = couponBean.getMembers().size();
+				int usageAmount = maxAmount-receivedAmount;
+				
+				//0表示無發放限制
+				if(maxAmount==0) {    
+					couponOption.add(couponBean);
+				}else if(usageAmount>= distributeAmount){
+					couponOption.add(couponBean);
+				}
+			}
+			return conCouponDistributeDTO(couponOption);
+			
 		}
 		
 	//coupon add tags (before CRUD)	
-	private void addTags(CouponBean coupon, String[] tags, String tagType) {
+	public void addTags(CouponBean coupon, String[] tags, String tagType) {
 	    if (tags != null) {
 	        for (String tag : tags) {
 	            TagBean tagBean = new TagBean();
 	            tagBean.setTagType(tagType);
 	            
-	            if (coupon.getCouponId() > 0) {
+	            if (coupon.getCouponId() != null) {
 	            	tagBean.setTagId(new TagId(coupon.getCouponId(),tag));//修改透過coupon的ID
 	            }else {
 	            	tagBean.setTagId(new TagId(tag));//新增的COUPON沒有ID，透過關聯coupon identity新增

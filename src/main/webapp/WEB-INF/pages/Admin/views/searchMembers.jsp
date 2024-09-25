@@ -123,7 +123,9 @@ button:hover {
 	</header>
 
 	<main>
-		        <form class="search-form" id="searchForm" action="EEIT187-6/admin/memberSearch" method="GET">
+
+     <form class="search-form" id="searchForm" action="../admin/memberSearch" method="GET">
+
 			<div class="form-group">
 				<label for="memberName">會員名稱:</label> <input type="text"
 					id="memberName" name="memberName" placeholder="輸入會員名稱">

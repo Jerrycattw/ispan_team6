@@ -7,7 +7,58 @@
 <head>
 <meta charset="UTF-8">
 <title>會員搜尋結果</title>
-<link rel="stylesheet" href="EEIT187-6/Admin/views/css/memberSearchResult.css">
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #121212; /* 深黑色背景 */
+	color: #e0e0e0; /* 淺灰色文字 */
+}
+
+h2 {
+	color: #ffffff; /* 白色文字 */
+	border-bottom: 2px solid #333; /* 深灰色底邊框 */
+	padding-bottom: 10px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	background-color: #1f1f1f; /* 深灰色背景 */
+	color: #e0e0e0; /* 淺灰色文字 */
+}
+
+th, td {
+	border: 1px solid #333; /* 更深的灰色邊框 */
+	padding: 8px;
+	text-align: left;
+}
+
+th {
+	background-color: #2c2c2c; /* 更深的灰色背景 */
+	color: #ffffff; /* 白色文字 */
+}
+
+tr:hover {
+	background-color: #333; /* 按行懸停時變為深灰色 */
+	cursor: pointer; /* 手形光標 */
+}
+
+button {
+	background-color: #333; /* 按鈕背景色 */
+	color: #e0e0e0; /* 按鈕文字顏色 */
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 3px;
+}
+
+button:hover {
+	background-color: #444; /* 按鈕懸停背景色 */
+}
+</style>
+<link rel="stylesheet"
+	href="EEIT187-6/Admin/views/css/memberSearchResult.css">
 </head>
 <body>
 	<h2>搜尋結果</h2>

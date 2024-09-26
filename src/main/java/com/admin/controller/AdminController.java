@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -111,28 +115,39 @@ public class AdminController {
 		model.addAttribute("members", members);
 		return "Admin/memberSearchResult"; // 返回會員搜尋結果頁面
 	}
+	
+	//更新會員狀態
+	@PostMapping("/updateStatus")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> updateMemberStatus(@RequestBody Map<String, String> requestData) {
+	    int memberId = Integer.parseInt(requestData.get("memberId"));
+	    String newStatus = requestData.get("status");
 
-	// 更新會員狀態
-	@PostMapping("/updateMemberStatus")
-	public String updateMemberStatus(@RequestParam int memberId, @RequestParam String status, Model model) {
-		boolean isUpdated = adminService.updateMemberStatus(memberId, status);
+	    boolean isUpdated = adminService.updateMemberStatus(memberId, newStatus);
 
-		if (isUpdated) {
-			model.addAttribute("message", "會員狀態更新成功！");
-		} else {
-			model.addAttribute("message", "更新失敗，請重試！");
-		}
+	    Map<String, Object> response = new HashMap<>();
+	    if (isUpdated) {
+	        response.put("success", true);
+	    } else {
+	        response.put("success", false);
+	        response.put("message", "更新失敗，請重試！");
+	    }
 
-		return "memberDetail"; // 更新後返回會員詳細頁面
+	    return ResponseEntity.ok(response);
 	}
 
-	// 顯示管理員詳細資訊
-	@GetMapping("/adminDetail/{adminId}")
-	public String adminDetail(@PathVariable int adminId, Model model) {
-		Admin admin = adminService.findAdminById(adminId);
-		model.addAttribute("admin", admin);
-		return "adminDetail"; // 返回管理員詳細頁面
-	}
+	
+    // 獲取管理員詳細資料
+    @GetMapping("/adminDetail/{adminId}")
+    @ResponseBody
+    public ResponseEntity<Admin> getAdminDetail(@PathVariable("adminId") Integer adminId) {
+        Admin admin = adminService.findAdminById(adminId);
+        if (admin != null) {
+            return new ResponseEntity<>(admin, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 	// 更新管理員
 	@PostMapping("/updateAdmin")
@@ -155,4 +170,25 @@ public class AdminController {
 
 		return "adminDetail"; // 更新後返回管理員詳細頁面
 	}
+	
+	// 更新管理員狀態
+    @PostMapping("/updateAdminStatus")
+    public ResponseEntity<Map<String, Object>> updateAdminStatus(@RequestBody Map<String, String> requestData) {
+        int adminId = Integer.parseInt(requestData.get("adminId"));
+        String newStatus = requestData.get("status");
+
+        boolean isUpdated = adminService.updateAdminStatus(adminId, newStatus);
+
+        Map<String, Object> response = new HashMap<>();
+        if (isUpdated) {
+            response.put("success", true);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.put("success", false);
+            response.put("message", "更新失敗，請重試！");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+	
+	
 }

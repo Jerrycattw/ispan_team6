@@ -56,7 +56,7 @@ public class ShoppingController  {
 	}
 	
 	@GetMapping("showItemDetail")
-    public String showItemDetail(@RequestParam("shoppingId") Integer shoppingId, Model m) {
+    public String showItemDetail(@RequestParam(name="shoppingId") Integer shoppingId, Model m) {
 
 		List<ItemBean> items = shoppingService.searchItemsByShoppingId(shoppingId);
 		List<ProductDTO> productList = productService.searchAllProduct();
@@ -74,9 +74,9 @@ public class ShoppingController  {
 	
 	 
 	 @PostMapping("addOrder")
-	 public String addOrder(@RequestParam Integer memberId,
-	                        @RequestParam Integer productId,
-	                        @RequestParam Integer shoppingItemQuantity,
+	 public String addOrder(@RequestParam(name="memberId") Integer memberId,
+	                        @RequestParam(name="productId") Integer productId,
+	                        @RequestParam(name="shoppingItemQuantity") Integer shoppingItemQuantity,
 	                        Model m) {
 
 			
@@ -91,7 +91,7 @@ public class ShoppingController  {
 	
 
 	 @PostMapping("/delOrder")
-	    public String delOrder(@RequestParam int shoppingId, Model model) {
+	    public String delOrder(@RequestParam(name="shoppingId") Integer shoppingId, Model model) {
 	        boolean deleteAllItem = itemService.deleteAllItem(shoppingId);
 	        System.out.println(deleteAllItem);
 
@@ -103,7 +103,7 @@ public class ShoppingController  {
 
 
 	@PostMapping("updateShopping")
-    public String updateShopping(@RequestParam("shoppingId") int shoppingId, Model m) {
+    public String updateShopping(@RequestParam(name="shoppingId") Integer shoppingId, Model m) {
         ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
         m.addAttribute("shoppingBean", shopping);
         return "Shopping/UpdateShopping"; 
@@ -111,10 +111,10 @@ public class ShoppingController  {
 
 	
 	@PostMapping("updateDataShopping")
-	 public String updateDataShopping(@RequestParam("shoppingId") int shoppingId,
-	                                      @RequestParam("memberId") int memberId,
-	                                      @RequestParam("shoppingStatus") int shoppingStatus,
-	                                      @RequestParam("shoppingMemo") String shoppingMemo) {
+	 public String updateDataShopping(@RequestParam(name="shoppingId") Integer shoppingId,
+	                                      @RequestParam(name="memberId") Integer memberId,
+	                                      @RequestParam(name="shoppingStatus") Integer shoppingStatus,
+	                                      @RequestParam(name="shoppingMemo") String shoppingMemo) {
 	        int shoppingTotal = shoppingService.calculateTotalAmount(shoppingId);
 	        ShoppingBean shopping = shoppingService.searchByShoppingId(shoppingId);
 

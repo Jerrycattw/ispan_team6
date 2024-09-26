@@ -41,9 +41,9 @@ public class ItemController {
 	
 	 
 	 @GetMapping("addItem")
-	 public String addItem(@RequestParam(required = false) Integer shoppingId,
-	                       @RequestParam int productId,
-	                       @RequestParam int shoppingItemQuantity,
+	 public String addItem(@RequestParam(name="shoppingId",required = false) Integer shoppingId,
+	                       @RequestParam(name="productId") Integer productId,
+	                       @RequestParam(name="shoppingItemQuantity") Integer shoppingItemQuantity,
 	                       Model m) {
 
 
@@ -69,9 +69,9 @@ public class ItemController {
 	 }
 
 	 @PostMapping("addItemD")
-	 public String addItemD(@RequestParam(required = false) Integer shoppingId,
-	                       @RequestParam int productId,
-	                       @RequestParam int shoppingItemQuantity,
+	 public String addItemD(@RequestParam(name="shoppingId",required = false) Integer shoppingId,
+	                       @RequestParam(name="productId") Integer productId,
+	                       @RequestParam(name="shoppingItemQuantity") Integer shoppingItemQuantity,
 	                       Model m) {
 
 
@@ -115,8 +115,8 @@ public class ItemController {
 
 	
 	@PostMapping("/delItem")
-    public String delItem(@RequestParam int shoppingId,
-                          @RequestParam int productId,
+    public String delItem(@RequestParam(name="shoppingId") Integer shoppingId,
+                          @RequestParam(name="productId") Integer productId,
                           Model m) {
         
         System.out.println(shoppingId);
@@ -134,8 +134,8 @@ public class ItemController {
 
 
 	@PostMapping("showUpdateItem")
-	public String showUpdateItem(@RequestParam String shoppingId,
-	                              @RequestParam String productId,
+	public String showUpdateItem(@RequestParam(name="shoppingId") String shoppingId,
+	                              @RequestParam(name="productId") String productId,
 	                              Model m) {
 
 	    System.out.println(shoppingId);
@@ -152,13 +152,13 @@ public class ItemController {
 	    
 	    return "Shopping/UpdateItem"; 
 	}
-	
+	 
 	
 
 	@PostMapping("updateItem")
-	public String updateItem(@RequestParam int shoppingItemQuantity,
-	                         @RequestParam int productId,
-	                         @RequestParam int shoppingId) {
+	public String updateItem(@RequestParam(name="shoppingItemQuantity") Integer shoppingItemQuantity,
+	                         @RequestParam(name="productId") Integer productId,
+	                         @RequestParam(name="shoppingId") Integer shoppingId) {
 
 	    itemService.updateItem(shoppingItemQuantity, productId, shoppingId);
 	    itemService.updateShoppingTotal(shoppingId);

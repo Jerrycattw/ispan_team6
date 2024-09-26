@@ -16,13 +16,8 @@ import com.reserve.dao.RestaurantTableDao;
 @Transactional
 public class RestaurantTableService {
 	
-	
 	@Autowired
 	private RestaurantTableDao restaurantTableDao;
-	
-//	public RestaurantTableService(Session session) {
-//		restaurantTableDao = new RestaurantTableDao(session);
-//	}
 	
 	//新增單筆餐廳桌位種類
 	public RestaurantTable insert(RestaurantTable restaurantTable) {

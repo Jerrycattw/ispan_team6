@@ -18,10 +18,6 @@ public class TableTypeService {
 	@Autowired
 	private TableTypeDao tableTypeDao;
 	
-//	public TableTypeService(Session session) {
-//		tableTypeDao = new TableTypeDao(session);
-//	}
-//	
 	//新增單筆桌位種類
 	public TableType insert(TableType tableType) {
 		return tableTypeDao.insert(tableType);

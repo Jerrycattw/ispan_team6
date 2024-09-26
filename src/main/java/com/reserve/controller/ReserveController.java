@@ -6,15 +6,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,37 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.members.bean.Member;
 import com.reserve.bean.Reserve;
 import com.reserve.bean.ReserveCheckBean;
 import com.reserve.bean.ReserveDTO;
-import com.reserve.bean.Restaurant;
 import com.reserve.bean.TableType;
 import com.reserve.service.ReserveService;
 import com.reserve.service.RestaurantService;
 import com.reserve.service.RestaurantTableService;
 import com.reserve.service.TableTypeService;
-import com.util.HibernateUtil;
 
-//import com.fatboyindustrial.gsonjavatime.Converters;
-//import com.fatboyindustrial.gsonjavatime.LocalDateConverter;
-//import com.fatboyindustrial.gsonjavatime.LocalDateTimeConverter;
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-//import com.reserve.bean.ReserveBean;
-//import com.reserve.bean.ReserveCheckBean;
-//import com.reserve.bean.RestaurantBean;
-//import com.reserve.bean.TableTypeBean;
-//import com.reserve.dao.ReserveDao;
-//import com.reserve.dao.RestaurantDao;
-//import com.reserve.dao.TableTypeDao;
-//import com.reserve.service.ReserveService;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -70,7 +42,6 @@ public class ReserveController{
 	ReserveService reserveService;
 	@Autowired
 	RestaurantTableService restaurantTableService;
-	
 	
 	
 	@GetMapping("getAllRestaurantName")

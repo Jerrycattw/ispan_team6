@@ -118,15 +118,15 @@ h2 {
         	</label>
         	
             <label>餐廳名稱 : 
-            <input type="text" name="rname" id="rname" value="${restaurant.restaurantName}"/><span id="rnamespan"></span><br>
+            <input type="text" name="restaurantName" id="rname" value="${restaurant.restaurantName}"/><span id="rnamespan"></span><br>
             </label>
             
             <label>餐廳地址 : 
-            <input type="text" name="raddress" id="raddress" value="${restaurant.restaurantAddress}"/><span id="raddressspan"></span><br>
+            <input type="text" name="restaurantAddress" id="raddress" value="${restaurant.restaurantAddress}"/><span id="raddressspan"></span><br>
             </label>
             
             <label>餐廳電話 :
-            <input type="text" name="rphone" id="rphone" value="${restaurant.restaurantPhone}"/><span id="rphonespan"></span><br>
+            <input type="text" name="restaurantPhone" id="rphone" value="${restaurant.restaurantPhone}"/><span id="rphonespan"></span><br>
             </label> 
             
             <label>開始營業時間 : 
@@ -138,7 +138,7 @@ h2 {
             </label>
             
             <label>用餐時間限制 : 
-            <input type="number" name="reattime" min="30" max="180" step="30" value="${restaurant.eattime}"/><br>
+            <input type="number" name="eattime" min="30" max="180" step="30" value="${restaurant.eattime}"/><br>
             </label>
             
             <label>餐廳狀態 : 

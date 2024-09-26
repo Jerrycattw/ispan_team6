@@ -1,13 +1,9 @@
 package com.reserve.controller;
 
-import java.io.IOException;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,18 +15,7 @@ import com.reserve.service.ReserveService;
 import com.reserve.service.RestaurantService;
 import com.reserve.service.RestaurantTableService;
 import com.reserve.service.TableTypeService;
-import com.util.HibernateUtil;
 
-//import com.reserve.bean.RestaurantBean;
-//import com.reserve.bean.TableTypeBean;
-//import com.reserve.dao.RestaurantDao;
-//import com.reserve.dao.TableTypeDao;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -68,7 +53,6 @@ public class TableTypeController {
     }
     
     
-
 	
 	
 }

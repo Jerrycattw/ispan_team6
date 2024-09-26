@@ -42,7 +42,6 @@ public class RestaurantTableController {
 		model.addAttribute("restaurantName", restaurantName);
 		List<TableType> tableTypes = tableTypeService.selectAll();
 		model.addAttribute("allTypes", tableTypes);
-
 		return "reserve/AddTable";
 	}
 
@@ -55,15 +54,11 @@ public class RestaurantTableController {
 		TableType tableType = tableTypeService.selectById(tableTypeId);
 		String tableTypeName = tableTypeService.getTableTypeName(tableTypeId);
 		tableType.setTableTypeName(tableTypeName);
-
 		System.out.println(tableTypeName);
 		model.addAttribute("tableTypeName", tableTypeName);
-
 		RestaurantTableId restaurantTableId = new RestaurantTableId(Integer.parseInt(restaurantId), tableTypeId);
 		RestaurantTable restaurantTable = new RestaurantTable(restaurantTableId, tableTypeNumber);
-
 		restaurantTableService.insert(restaurantTable);
-
 		return "redirect:/Table/getAll?restaurantId=" + restaurantId ;
 	
 	}

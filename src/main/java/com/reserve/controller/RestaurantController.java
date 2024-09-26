@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,55 +33,42 @@ public class RestaurantController{
 	private RestaurantService restaurantService;
 	
 	
-	
 	@PostMapping("add")
-	   public String addRestaurant(
-	            @RequestParam("rname") String rname,
-	            @RequestParam("raddress") String raddress,
-	            @RequestParam("rphone") String rphone,
-	            @RequestParam("ropen") String ropenStr,
-	            @RequestParam("rclose") String rcloseStr,
-	            @RequestParam("reattime") Integer eattime,
-	            @RequestParam("rimg") MultipartFile rimg,
-	            Model model) throws IOException {
+	public String addRestaurant(@ModelAttribute Restaurant restaurant,
+	                             @RequestParam("ropen") String ropenStr,
+	                             @RequestParam("rclose") String rcloseStr,
+	                             @RequestParam("rimg") MultipartFile rimg) throws IOException {
 
-	        Integer defaultStatus = 3;
+	    // 處理開關時間
+	    LocalTime ropen = LocalTime.parse(ropenStr);
+	    LocalTime rclose = LocalTime.parse(rcloseStr);
+	    restaurant.setRestaurantOpentime(ropen);
+	    restaurant.setRestaurantClosetime(rclose);
+	    restaurant.setRestaurantStatus(3); // 設定預設狀態
 
-	        // 創建 Restaurant 物件並設置參數
-	        Restaurant restaurant = new Restaurant();
-	        restaurant.setRestaurantName(rname);
-	        restaurant.setRestaurantAddress(raddress);
-	        restaurant.setRestaurantPhone(rphone);
-	        LocalTime ropen = LocalTime.parse(ropenStr);
-	        LocalTime rclose = LocalTime.parse(rcloseStr);
-	        restaurant.setRestaurantOpentime(ropen);
-	        restaurant.setRestaurantClosetime(rclose);
-	        restaurant.setEattime(eattime);
-	        restaurant.setRestaurantStatus(defaultStatus);
-
-	        // 處理圖片上傳
-	        String uploadPath = "C:/upload/restaurantIMG";
-	        File fileSaveDir = new File(uploadPath);
-	        if (!fileSaveDir.exists()) {
-	            fileSaveDir.mkdirs();
-	        }
-
-	        if (!rimg.isEmpty()) {
-	            String fileName = rimg.getOriginalFilename();
-	            String extension = fileName.substring(fileName.lastIndexOf("."));
-	            String newFileName = rname + "_" + System.currentTimeMillis() + extension;
-
-	            // 將檔案寫入指定路徑
-	            File fileToSave = new File(uploadPath + File.separator + newFileName);
-	            rimg.transferTo(fileToSave);
-
-	            restaurant.setRestaurantImg("/EEIT187-6/restaurantIMG/" + newFileName);
-	        }
-
-	        restaurantService.insert(restaurant);
-
-	        return "redirect:/Restaurant/getAll";
+	    // 處理圖片上傳
+	    String uploadPath = "C:/upload/restaurantIMG";
+	    File fileSaveDir = new File(uploadPath);
+	    if (!fileSaveDir.exists()) {
+	        fileSaveDir.mkdirs();
 	    }
+
+	    if (!rimg.isEmpty()) {
+	        String fileName = rimg.getOriginalFilename();
+	        String extension = fileName.substring(fileName.lastIndexOf("."));
+	        String newFileName = restaurant.getRestaurantName() + "_" + System.currentTimeMillis() + extension;
+
+	        // 將檔案寫入指定路徑
+	        File fileToSave = new File(uploadPath + File.separator + newFileName);
+	        rimg.transferTo(fileToSave);
+	        restaurant.setRestaurantImg("/EEIT187-6/restaurantIMG/" + newFileName);
+	    }
+
+	    restaurantService.insert(restaurant);
+	    return "redirect:/Restaurant/getAll";
+	}
+
+	
 	
 	
 	
@@ -148,32 +136,17 @@ public class RestaurantController{
 	}
 	
 	
-	
 	@PostMapping("set2")
-	public String setRestaurant2(
-	        @RequestParam("restaurantId") String restaurantId,
-	        @RequestParam("rname") String rname,
-	        @RequestParam("raddress") String raddress,
-	        @RequestParam("rphone") String rphone,
-	        @RequestParam("ropen") String ropenStr,
-	        @RequestParam("rclose") String rcloseStr,
-	        @RequestParam("reattime") Integer eattime,
-	        @RequestParam("restaurantStatus") Integer restaurantStatus,
-	        @RequestParam("rimg") MultipartFile rimg,
-	        Model model) throws IOException {
+	public String setRestaurant2(@ModelAttribute Restaurant restaurant,
+	                              @RequestParam("ropen") String ropenStr,
+	                              @RequestParam("rclose") String rcloseStr,
+	                              @RequestParam("rimg") MultipartFile rimg) throws IOException {
 
-	    // 創建 Restaurant 物件並設置參數
-	    Restaurant restaurant = new Restaurant();
-	    restaurant.setRestaurantId(restaurantId);
-	    restaurant.setRestaurantName(rname);
-	    restaurant.setRestaurantAddress(raddress);
-	    restaurant.setRestaurantPhone(rphone);
+	    // 設置開關時間
 	    LocalTime ropen = LocalTime.parse(ropenStr);
 	    LocalTime rclose = LocalTime.parse(rcloseStr);
 	    restaurant.setRestaurantOpentime(ropen);
 	    restaurant.setRestaurantClosetime(rclose);
-	    restaurant.setEattime(eattime);
-	    restaurant.setRestaurantStatus(restaurantStatus);
 
 	    // 處理圖片上傳
 	    String uploadPath = "C:/upload/restaurantIMG";
@@ -185,16 +158,15 @@ public class RestaurantController{
 	    if (!rimg.isEmpty()) {
 	        String fileName = rimg.getOriginalFilename();
 	        String extension = fileName.substring(fileName.lastIndexOf("."));
-	        String newFileName = rname + "_" + System.currentTimeMillis() + extension;
+	        String newFileName = restaurant.getRestaurantName() + "_" + System.currentTimeMillis() + extension;
 
 	        // 將檔案寫入指定路徑
 	        File fileToSave = new File(uploadPath + File.separator + newFileName);
 	        rimg.transferTo(fileToSave);
-
 	        restaurant.setRestaurantImg("/EEIT187-6/restaurantIMG/" + newFileName);
 	    } else {
 	        // 如果沒有上傳新的圖片，保留現有圖片
-	        Restaurant existingRestaurant = restaurantService.selectById(restaurantId);
+	        Restaurant existingRestaurant = restaurantService.selectById(restaurant.getRestaurantId());
 	        if (existingRestaurant != null) {
 	            restaurant.setRestaurantImg(existingRestaurant.getRestaurantImg());
 	        }
@@ -202,9 +174,11 @@ public class RestaurantController{
 
 	    // 更新餐廳資料
 	    restaurantService.update(restaurant);
-
 	    return "redirect:/Restaurant/getAll";
 	}
+
+	
+	
 	
 }
 

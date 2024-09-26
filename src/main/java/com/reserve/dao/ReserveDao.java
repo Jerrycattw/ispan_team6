@@ -29,11 +29,6 @@ public class ReserveDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-//	// 依ID查詢單筆訂位訂單
-//	public Reserve selectById(String reserveId) {
-//		Session session = sessionFactory.getCurrentSession();
-//		return session.get(Reserve.class, reserveId);
-//	}
 	
 	// 依ID查詢單筆訂位訂單
 	public Reserve selectById(String reserveId) {

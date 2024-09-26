@@ -1,6 +1,5 @@
 package com.config;
 
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -40,6 +39,8 @@ public class WebAppConfig implements WebMvcConfigurer {
 		//依這邊設定為主
 		configurer.enable();		
 	}
+	
+	
 	
 	@Bean
 	public InternalResourceViewResolver irViewResolver() {
@@ -120,16 +121,13 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addRedirectViewController("/", "HomePage.jsp");
 		
 		
-//		registry.addViewController("/wonderland").setViewName("loginSystem");
 		registry.addViewController("/reserve/AddRestaurant").setViewName("reserve/AddRestaurant");
-
-		registry.addViewController("/reserve/GetListRestaurants").setViewName("/reserve/GetListRestaurants");
-		registry.addViewController("/point/InsertBatchPoint").setViewName("/point/InsertBatchPoint");
-		registry.addViewController("/point/InsertPoint").setViewName("/point/InsertPoint");
-
-
 		registry.addViewController("/reserve/AddTableType").setViewName("reserve/AddTableType");
 		registry.addViewController("/reserve/GetListRestaurants").setViewName("reserve/GetListRestaurants");
+		
+		
+		registry.addViewController("/point/InsertBatchPoint").setViewName("/point/InsertBatchPoint");
+		registry.addViewController("/point/InsertPoint").setViewName("/point/InsertPoint");
 
 
 		registry.addViewController("/Product/AddProduct").setViewName("Product/AddProduct");
@@ -159,7 +157,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 	}
 	
 	
-	
 	@Bean
 	public ContentNegotiatingViewResolver cViewResolver() {
 		ContentNegotiatingViewResolver cViewResolver = new ContentNegotiatingViewResolver();
@@ -176,6 +173,5 @@ public class WebAppConfig implements WebMvcConfigurer {
 	    mapper.registerModule(new JavaTimeModule());
 	    return mapper;
 	}
-	
 	
 }

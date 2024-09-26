@@ -18,15 +18,10 @@ import com.reserve.bean.RestaurantTableId;
 @Transactional
 public class RestaurantTableDao {
 	
-	
-//	private Session session;
 	@Autowired
 	private SessionFactory sessionFactory;
 	
 	
-//	public RestaurantTableDao(Session session) {
-//		this.session = session;
-//	}
 	
 	//依ID查詢單筆餐廳桌位種類
 	public RestaurantTable selectById(RestaurantTableId restaurantTableId) {

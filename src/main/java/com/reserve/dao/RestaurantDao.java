@@ -16,14 +16,9 @@ import com.reserve.bean.Restaurant;
 @Transactional
 public class RestaurantDao {
 	
-//	private Session session;
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	//建立RestaurantDao的時候傳入session，不要在dao內建立關閉session及transaction物件
-//	public RestaurantDao(Session session) {
-//		this.session = session;
-//	}
 	
 	//依ID查詢單筆餐廳
 	public Restaurant selectById(String restaurantId) {

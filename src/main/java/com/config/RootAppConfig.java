@@ -30,6 +30,7 @@ public class RootAppConfig {
 	public DataSource dataSource() throws IllegalArgumentException, NamingException {
 		JndiObjectFactoryBean jndiBean = new JndiObjectFactoryBean();
 		//jndiBean.setJndiName("java:comp/env/connectMySQLConn/OrderSystem");
+		//jndiBean.setJndiName("java:comp/env/connectSQLServerConn/OrderSystem");
 		jndiBean.setJndiName("java:comp/env/hibernate/EEIT187-6");
 		jndiBean.afterPropertiesSet();
 		DataSource dataSource = (DataSource)jndiBean.getObject();

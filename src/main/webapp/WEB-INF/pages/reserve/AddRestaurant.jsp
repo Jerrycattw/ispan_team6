@@ -26,13 +26,13 @@ float: right;
 	<h2>新增餐廳資料</h2>
 	<form method="post" action="/EEIT187-6/Restaurant/add" enctype="multipart/form-data">
     <label for="rname">輸入餐廳名稱 : <span id="rnamespan"></span></label>
-    <input type="text" name="rname" id="rname" />
+    <input type="text" name="restaurantName" id="rname" />
 	
     <label for="raddress">輸入餐廳地址 : <span id="raddressspan"></span></label>
-    <input type="text" name="raddress" id="raddress"/>
+    <input type="text" name="restaurantAddress" id="raddress"/>
 
     <label for="rphone">輸入餐廳電話 : <span id="rphonespan"></span></label>
-    <input type="text" name="rphone" id="rphone"/>
+    <input type="text" name="restaurantPhone" id="rphone"/>
 
     <label>輸入餐廳開始營業時間 :</label>
     <input name="ropen" class="timepicker"/>
@@ -42,7 +42,7 @@ float: right;
     <input name="rclose" class="timepicker"/>
 
     <label>輸入餐廳用餐時間限制 :</label>
-    <input type="number" name="reattime" min="30" max="180" step="30"/>
+    <input type="number" name="eattime" min="30" max="180" step="30"/>
     
     <label>上傳餐廳照片 :<input type="file" name="rimg" /></label>
 

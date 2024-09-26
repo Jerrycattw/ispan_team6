@@ -17,15 +17,10 @@ import com.reserve.bean.TableType;
 @Transactional
 public class TableTypeDao {
 	
-	
-//	private Session session;
 	@Autowired
 	private SessionFactory sessionFactory;
 	
 	
-//	public TableTypeDao(Session session) {
-//		this.session = session;
-//	}
 	
 	//依ID查詢單筆桌位種類
 	public TableType selectById(String tableTypeId) {

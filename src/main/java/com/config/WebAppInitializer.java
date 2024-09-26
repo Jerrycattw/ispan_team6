@@ -15,6 +15,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	@Override //設定註冊=beans.config.xml 整個應用程式的相關設定
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class[] {RootAppConfig.class};
+
 	}
 
 	@Override //設定註冊=mvc.servlet.xml Spring MVC的設定
@@ -33,10 +34,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	protected Filter[] getServletFilters() {
 		
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter("UTF-8",true);
-//		OpenSessionInViewFilter openSessionInViewFilter = new OpenSessionInViewFilter();
-		return new Filter[] {characterEncodingFilter};	
+		return new Filter[] {characterEncodingFilter};
 	}
 
+	
 	
 	
 
